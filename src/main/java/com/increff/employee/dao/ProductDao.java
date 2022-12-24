@@ -1,12 +1,13 @@
 package com.increff.employee.dao;
 
 import com.increff.employee.pojo.ProductPojo;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 import java.util.List;
-
+@Repository
 public class ProductDao extends AbstractDao{
     private static String delete_id = "delete from ProductPojo productPojo where id=:id";
     private static String select_id = "select productPojo from ProductPojo productPojo where id=:id";

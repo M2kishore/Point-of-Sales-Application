@@ -21,5 +21,9 @@ public class AppUiController extends AbstractUiController {
 	public ModelAndView admin() {
 		return modelAndView("user.html");
 	}
+	@RequestMapping(value = "/ui/brand")
+	public ModelAndView brand() {
+		return modelAndView("brand.html");
+	}
 
 }
