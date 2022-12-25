@@ -51,7 +51,6 @@ public class ProductApiController {
         ProductPojo updatedProductPojo = convertFormToPojo(productForm);
         productService.update(id, updatedProductPojo);
     }
-
     private static ProductData convertPojoToData(ProductPojo productPojo) {
         ProductData productData = new ProductData();
         productData.setBarcode(productPojo.getBarcode());

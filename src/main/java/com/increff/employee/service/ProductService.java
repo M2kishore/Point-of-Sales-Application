@@ -56,5 +56,6 @@ public class ProductService {
     protected static void normalize(ProductPojo productPojo) {
         productPojo.setBarcode(StringUtil.toLowerCase(productPojo.getBarcode()));
         productPojo.setName(StringUtil.toLowerCase(productPojo.getName()));
+        productPojo.setName(StringUtil.toLowerCase(productPojo.getName()));
     }
 }

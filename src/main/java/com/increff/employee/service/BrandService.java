@@ -17,7 +17,7 @@ public class BrandService {
     public void add(BrandPojo brandPojo) throws ApiException {
         normalize(brandPojo);
         if(StringUtil.isEmpty(brandPojo.getBrand()) || StringUtil.isEmpty(brandPojo.getCategory())) {
-            throw new ApiException("brand-name or brand-category cannot be empty");
+            throw new ApiException("name or category cannot be empty");
         }
         brandDao.insert(brandPojo);
     }
