@@ -53,12 +53,12 @@ public class BrandApiController {
         brandService.update(id, updatedBrandPojo);
     }
 
-    private static BrandData convertPojoToData(BrandPojo p) {
-        BrandData d = new BrandData();
-        d.setBrand(p.getBrand());
-        d.setCategory(p.getCategory());
-        d.setId(p.getId());
-        return d;
+    private static BrandData convertPojoToData(BrandPojo brandPojo) {
+        BrandData brandData = new BrandData();
+        brandData.setBrand(brandPojo.getBrand());
+        brandData.setCategory(brandPojo.getCategory());
+        brandData.setId(brandPojo.getId());
+        return brandData;
     }
     private static BrandPojo convertFormToPojo(BrandForm brandForm) {
         BrandPojo newBrandPojo = new BrandPojo();

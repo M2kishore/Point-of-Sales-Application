@@ -2,8 +2,10 @@ package com.increff.employee.controller.api;
 
 import com.increff.employee.model.data.ProductData;
 import com.increff.employee.model.form.ProductForm;
+import com.increff.employee.pojo.InventoryPojo;
 import com.increff.employee.pojo.ProductPojo;
 import com.increff.employee.service.ApiException;
+import com.increff.employee.service.InventoryService;
 import com.increff.employee.service.ProductService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
