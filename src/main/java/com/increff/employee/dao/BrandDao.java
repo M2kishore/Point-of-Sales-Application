@@ -15,7 +15,6 @@ public class BrandDao extends AbstractDao {
     private static String select_brand = "select brandPojo from BrandPojo brandPojo where brand=:brand";
     private static String select_all = "select brandPojo from BrandPojo brandPojo";
 
-
     @Transactional
     public void insert(BrandPojo brandPojo) {
         entityManager().persist(brandPojo);
