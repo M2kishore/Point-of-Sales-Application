@@ -54,13 +54,12 @@ public class InventoryApiController {
     }
 
     private static InventoryData convertPojoToData(InventoryPojo inventoryPojo) {
-        InventoryData inventoryData = new InventoryData();
-        inventoryData.setQuantity(inventoryPojo.getQuantity());
-        inventoryData.setId(inventoryPojo.getId());
+        InventoryData inventoryData = new InventoryData(inventoryPojo.getId(),inventoryPojo.getQuantity());
         return inventoryData;
     }
     private static InventoryPojo convertFormToPojo(InventoryForm inventoryForm) {
         InventoryPojo inventoryPojo = new InventoryPojo();
+        inventoryPojo.setId(inventoryForm.getId());
         inventoryPojo.setQuantity(inventoryForm.getQuantity());
         return inventoryPojo;
     }

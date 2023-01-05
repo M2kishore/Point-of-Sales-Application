@@ -37,7 +37,10 @@ function updateInventory(event){
 function addInventory(event){
 	var $form = $("#inventory-form");
     var json = toJson($form);
-    console.log("lol",json[0]);
+    console.log("add");
+    console.log(json);
+    console.log(json.id);
+    console.log("add");
     var url = getInventoryUrl();
 
     $.ajax({
@@ -220,17 +223,12 @@ function displayInventory(data){
 	$("#inventory-edit-form input[name=id]").val(data.id);
 	$('#edit-inventory-modal').modal('toggle');
 }
-function testButton(){
-    console.log("test button click");
-}
-
 //INITIALIZATION CODE
 function init(){
-    $('#test-button').click(testButton);
 	$('#update-inventory').click(updateInventory);
-	$('#add-inventory').click(updateInventory);
+	$('#add-inventory').click(addInventory);
 	$('#refresh-data').click(getInventoryList);
-	$('#upload-data').click(testButton);
+	$('#upload-data').click(displayUploadData);
 	$('#process-data').click(processData);
 	$('#download-errors').click(downloadErrors);
     $('#inventoryFile').on('change', updateFileName)

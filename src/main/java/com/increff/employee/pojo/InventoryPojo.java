@@ -7,10 +7,10 @@ import javax.persistence.ManyToOne;
 import java.io.Serializable;
 
 @Entity
-public class InventoryPojo implements Serializable{
+public class InventoryPojo{
     @Id
-    @ManyToOne(targetEntity = ProductPojo.class)
-    @JoinColumn(referencedColumnName = "id")
+//    @ManyToOne(targetEntity = ProductPojo.class)
+//    @JoinColumn(referencedColumnName = "id")
     private int id;
     private int quantity;
     public InventoryPojo(int id, int quantity) {
