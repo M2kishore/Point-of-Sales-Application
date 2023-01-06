@@ -11,7 +11,6 @@ function getProductUrl(){
 //BUTTON ACTIONS
 function updateInventory(event){
 	//Get the ID
-	console.log("clicked updateInventory");
 	var id = $("#inventory-edit-form input[name=id]").val();
 	var url = getInventoryUrl() + "/" + id;
 
@@ -35,12 +34,8 @@ function updateInventory(event){
 	return false;
 }
 function addInventory(event){
-	var $form = $("#inventory-form");
+	var $form = $("#inventory-edit-form");
     var json = toJson($form);
-    console.log("add");
-    console.log(json);
-    console.log(json.id);
-    console.log("add");
     var url = getInventoryUrl();
 
     $.ajax({
@@ -159,12 +154,10 @@ function displayInventoryList(productData,inventoryData){
     for (var i = 0; i < productData.length; i++) {
       result[productData[i].id] = productData[i].name;
     }
-    console.log(result);
 	$tbody.empty();
 	for(var i in inventoryData){
 		var e = inventoryData[i];
 		var buttonHtml = '<button onclick="deleteInventory(' + e.id + ')">delete</button>'
-		buttonHtml += ' <button onclick="displayEditInventory(' + e.id + ')">edit</button>'
 		var row = '<tr>'
 		+ '<td>' + e.id + '</td>'
 		+ '<td>' + result[e.id] + '</td>'
@@ -173,18 +166,6 @@ function displayInventoryList(productData,inventoryData){
 		+ '</tr>';
         $tbody.append(row);
 	}
-}
-
-function displayEditInventory(id){
-	var url = getInventoryUrl() + "/" + id;
-	$.ajax({
-	   url: url,
-	   type: 'GET',
-	   success: function(data) {
-	   		displayInventory(data);
-	   },
-	   error: handleAjaxError
-	});
 }
 
 function resetUploadDialog(){
@@ -218,8 +199,7 @@ function displayUploadData(){
 }
 
 function displayInventory(data){
-	$("#inventory-edit-form input[name=inventory]").val(data.inventory);
-	$("#inventory-edit-form input[name=category]").val(data.category);
+	$("#inventory-edit-form input[name=quantity]").val(data.quantity);
 	$("#inventory-edit-form input[name=id]").val(data.id);
 	$('#edit-inventory-modal').modal('toggle');
 }

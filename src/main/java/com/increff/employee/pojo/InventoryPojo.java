@@ -1,18 +1,18 @@
 package com.increff.employee.pojo;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import java.io.Serializable;
-
 @Entity
 public class InventoryPojo{
+    //    @ManyToOne(targetEntity = ProductPojo.class)
+    //    @JoinColumn(referencedColumnName = "id"
     @Id
-//    @ManyToOne(targetEntity = ProductPojo.class)
-//    @JoinColumn(referencedColumnName = "id")
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    private int sno;
     private int id;
+    @Column()
     private int quantity;
+
     public InventoryPojo(int id, int quantity) {
         this.id = id;
         this.quantity = quantity;
@@ -23,6 +23,16 @@ public class InventoryPojo{
     }
 
     public InventoryPojo() {
+        this.id = -1;
+        this.quantity = 0;
+    }
+
+    public int getSno() {
+        return sno;
+    }
+
+    public void setSno(int sno) {
+        this.sno = sno;
     }
 
     public int getId() {

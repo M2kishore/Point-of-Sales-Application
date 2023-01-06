@@ -26,14 +26,14 @@ public class InventoryApiController {
         inventoryService.add(newInventoryPojo);
     }
     @ApiOperation(value="Deletes a inventory")
-    @RequestMapping(path="/api/inventory/{id}",method = RequestMethod.DELETE)
-    public void delete(@PathVariable int id){
-        inventoryService.delete(id);
+    @RequestMapping(path="/api/inventory/{sno}",method = RequestMethod.DELETE)
+    public void delete(@PathVariable int sno){
+        inventoryService.delete(sno);
     }
-    @ApiOperation(value = "Gets a inventory by ID")
-    @RequestMapping(path ="/api/inventory/{id}",method = RequestMethod.GET)
-    public InventoryData get(@PathVariable int id) throws ApiException {
-        InventoryPojo inventoryPojo = inventoryService.get(id);
+    @ApiOperation(value = "Gets a inventory by Sno")
+    @RequestMapping(path ="/api/inventory/{sno}",method = RequestMethod.GET)
+    public InventoryData get(@PathVariable int sno) throws ApiException {
+        InventoryPojo inventoryPojo = inventoryService.get(sno);
         return convertPojoToData(inventoryPojo);
     }
     @ApiOperation(value = "Gets list of all inventory")
@@ -47,14 +47,16 @@ public class InventoryApiController {
         return list2;
     }
     @ApiOperation(value = "Updates a inventory")
-    @RequestMapping(path = "/api/inventory/{id}", method = RequestMethod.PUT)
-    public void update(@PathVariable int id, @RequestBody InventoryForm inventoryForm) throws ApiException {
+    @RequestMapping(path = "/api/inventory/{sno}", method = RequestMethod.PUT)
+    public void update(@PathVariable int sno, @RequestBody InventoryForm inventoryForm) throws ApiException {
         InventoryPojo updatedInventoryPojo = convertFormToPojo(inventoryForm);
-        inventoryService.update(id, updatedInventoryPojo);
+        inventoryService.update(sno, updatedInventoryPojo);
     }
 
     private static InventoryData convertPojoToData(InventoryPojo inventoryPojo) {
-        InventoryData inventoryData = new InventoryData(inventoryPojo.getId(),inventoryPojo.getQuantity());
+        InventoryData inventoryData = new InventoryData();
+        inventoryData.setId(inventoryPojo.getId());
+        inventoryData.setQuantity(inventoryPojo.getQuantity());
         return inventoryData;
     }
     private static InventoryPojo convertFormToPojo(InventoryForm inventoryForm) {

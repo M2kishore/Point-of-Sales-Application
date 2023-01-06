@@ -3,17 +3,13 @@ package com.increff.employee.model.data;
 import com.increff.employee.model.form.InventoryForm;
 
 public class InventoryData extends InventoryForm {
-    private int id;
-
-    public InventoryData(int id, int quantity) {
-        super(id, quantity);
+    private int sno;
+    public int getSno() {
+        return sno;
     }
 
-    public int getId() {
-        return id;
+    public void setSno(int sno) {
+        this.sno = sno;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
 }
