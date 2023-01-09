@@ -4,13 +4,23 @@ function getProductUrl(){
 	var baseUrl = $("meta[name=baseUrl]").attr("content")
 	return baseUrl + "/api/product";
 }
+function getInventoryUrl(){
+
+	var baseUrl = $("meta[name=baseUrl]").attr("content")
+	return baseUrl + "/api/inventory";
+}
 
 //BUTTON ACTIONS
 function addProduct(event){
 	//Set the values to update
 	var $form = $("#product-form");
 	var json = toJson($form);
+	var jsonObject = JSON.parse(json);
+	var inventoryData = {"id":jsonObject.id,"quantity":0}
+	var inventoryDataJson = JSON.stringify(inventoryData);
+	console.log(inventoryData);
 	var url = getProductUrl();
+	var inventoryUrl = getInventoryUrl();
 	$.ajax({
 	   url: url,
 	   type: 'POST',
@@ -23,6 +33,19 @@ function addProduct(event){
 	   },
 	   error: handleAjaxError
 	});
+
+	$.ajax({
+    	   url: inventoryUrl,
+    	   type: 'POST',
+    	   data: inventoryDataJson,
+    	   headers: {
+           	'Content-Type': 'application/json'
+           },
+    	   success: function(response) {
+    	   		getProductList();
+    	   },
+    	   error: handleAjaxError
+    	});
 
 	return false;
 }

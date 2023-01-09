@@ -14,7 +14,6 @@ import java.util.List;
 public class ProductService {
     @Autowired
     private ProductDao productDao;
-    private InventoryService inventoryService;
     @Transactional(rollbackOn = ApiException.class)
     public void add(ProductPojo newProductPojo) throws ApiException {
         normalize(newProductPojo);
@@ -25,8 +24,6 @@ public class ProductService {
             throw new ApiException("empty string detected cannot be empty");
         }
         productDao.insert(newProductPojo);
-        //inventoryService.add(new InventoryPojo(newProductPojo.getId()));
-        //inventoryDao.insert(new InventoryPojo(newProductPojo.getId(), 0));
     }
     @Transactional
     public void delete(int id) {
