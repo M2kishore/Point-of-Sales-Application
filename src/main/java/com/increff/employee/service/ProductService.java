@@ -1,8 +1,6 @@
 package com.increff.employee.service;
 
-import com.increff.employee.dao.InventoryDao;
 import com.increff.employee.dao.ProductDao;
-import com.increff.employee.pojo.InventoryPojo;
 import com.increff.employee.pojo.ProductPojo;
 import com.increff.employee.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,7 +55,6 @@ public class ProductService {
     }
     protected static void normalize(ProductPojo productPojo) {
         productPojo.setBarcode(StringUtil.toLowerCase(productPojo.getBarcode()));
-        productPojo.setName(StringUtil.toLowerCase(productPojo.getName()));
         productPojo.setName(StringUtil.toLowerCase(productPojo.getName()));
     }
 }
