@@ -13,7 +13,7 @@ public class ProductService {
     @Autowired
     private ProductDao productDao;
     @Transactional(rollbackOn = ApiException.class)
-    public void add(ProductPojo newProductPojo) throws ApiException {
+    public int add(ProductPojo newProductPojo) throws ApiException {
         normalize(newProductPojo);
         if(StringUtil.isEmpty(newProductPojo.getBarcode()) ||
                 StringUtil.isEmpty(String.valueOf(newProductPojo.getBrandCategory())) ||
@@ -21,7 +21,7 @@ public class ProductService {
                 StringUtil.isEmpty(String.valueOf(newProductPojo.getMrp()))) {
             throw new ApiException("empty string detected cannot be empty");
         }
-        productDao.insert(newProductPojo);
+        return productDao.insert(newProductPojo);
     }
     @Transactional
     public void delete(int id) {

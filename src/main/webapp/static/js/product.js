@@ -35,18 +35,18 @@ function addProduct(event){
 	   error: handleAjaxError
 	});
 
-	$.ajax({
-    	   url: inventoryUrl,
-    	   type: 'POST',
-    	   data: inventoryDataJson,
-    	   headers: {
-           	'Content-Type': 'application/json'
-           },
-    	   success: function(response) {
-    	   		getProductList();
-    	   },
-    	   error: handleAjaxError
-    	});
+//	$.ajax({
+//    	   url: inventoryUrl,
+//    	   type: 'POST',
+//    	   data: inventoryDataJson,
+//    	   headers: {
+//           	'Content-Type': 'application/json'
+//           },
+//    	   success: function(response) {
+//    	   		getProductList();
+//    	   },
+//    	   error: handleAjaxError
+//    	});
 
 	return false;
 }

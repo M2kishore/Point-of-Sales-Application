@@ -20,11 +20,17 @@ import java.util.List;
 public class ProductApiController {
     @Autowired
     private ProductService productService;
+    @Autowired
+    private InventoryService inventoryService;
     @ApiOperation(value = "Add a Product")
     @RequestMapping(path = "/api/product", method = RequestMethod.POST)
     public void add(@RequestBody ProductForm form) throws ApiException {
         ProductPojo newProductPojo = convertFormToPojo(form);
-        productService.add(newProductPojo);
+        int id = productService.add(newProductPojo);
+        InventoryPojo inventoryPojo = new InventoryPojo();
+        inventoryPojo.setId(id);
+        inventoryPojo.setQuantity(0);
+        inventoryService.add(inventoryPojo);
     }
     @ApiOperation(value="Deletes a product")
     @RequestMapping(path="/api/product/{id}",method = RequestMethod.DELETE)

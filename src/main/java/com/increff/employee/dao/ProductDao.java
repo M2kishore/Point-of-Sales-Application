@@ -17,8 +17,10 @@ public class ProductDao extends AbstractDao{
 
 
     @Transactional
-    public void insert(ProductPojo productPojo) {
+    public int insert(ProductPojo productPojo) {
         entityManager().persist(productPojo);
+        entityManager().flush();
+        return productPojo.getId();
     }
 
     public int delete(int id) {
