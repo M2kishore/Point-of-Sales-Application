@@ -31,11 +31,19 @@ public class ProductService {
     public ProductPojo get(int id) throws ApiException {
         return getCheck(id);
     }
+    @Transactional(rollbackOn = ApiException.class)
+    public ProductPojo getBarcode(String barcode) throws ApiException {
+        ProductPojo productPojo = productDao.selectBarcode(barcode);
+        if (productPojo == null) {
+            throw new ApiException("Product with given Barcode does not exit, barcode: " + barcode);
+        }
+        return productPojo;
+    }
     @Transactional
     public ProductPojo getCheck(int id) throws ApiException {
         ProductPojo productPojo = productDao.select(id);
         if (productPojo == null) {
-            throw new ApiException("Brand with given ID does not exit, id: " + id);
+            throw new ApiException("Product with given ID does not exit, id: " + id);
         }
         return productPojo;
     }

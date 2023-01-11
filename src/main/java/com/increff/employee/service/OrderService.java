@@ -37,4 +37,8 @@ public class OrderService {
         }
         return orderItemPojo;
     }
+    @Transactional
+    public void delete(int id){
+        orderDao.delete(id);
+    }
 }
