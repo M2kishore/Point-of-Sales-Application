@@ -16,6 +16,9 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Api
 @RestController
 public class OrderApiController {
@@ -24,6 +27,22 @@ public class OrderApiController {
     @Autowired
     private ProductService productService;
 
+    @ApiOperation(value="Gets a product by Barcode")
+    @RequestMapping(path="/api/order",method = RequestMethod.GET)
+    public OrderItemData get(@RequestParam String barcode) throws ApiException {
+        ProductPojo productPojo = productService.getBarcode(barcode);
+        return convertPojoToData(productPojo);
+    }
+    @ApiOperation(value = "Gets list of all Orders")
+    @RequestMapping(path = "/api/order/all", method = RequestMethod.GET)
+    public List<OrderData> getAll() {
+        List<OrderItemPojo> list = orderService.getAll();
+        List<OrderData> list2 = new ArrayList<OrderData>();
+        for (OrderItemPojo orderItemPojo : list) {
+            list2.add(convertPojoToData(orderItemPojo));
+        }
+        return list2;
+    }
     @ApiOperation(value = "add date and time for orders")
     @RequestMapping(path="/api/order",method = RequestMethod.POST)
     public int add(@RequestBody OrderForm form)throws ApiException{
@@ -36,13 +55,6 @@ public class OrderApiController {
     public void add(@RequestBody OrderItemForm form)throws ApiException{
         OrderItemPojo newOrderItemPojo = convertFormToPojo(form);
         orderService.add(newOrderItemPojo);
-    }
-
-    @ApiOperation(value="Gets a product by Barcode")
-    @RequestMapping(path="/api/order",method = RequestMethod.GET)
-    public OrderItemData get(@RequestParam String barcode) throws ApiException {
-        ProductPojo productPojo = productService.getBarcode(barcode);
-        return convertPojoToData(productPojo);
     }
     @ApiOperation(value="Deletes a Cancelled Order")
     @RequestMapping(path="/api/order/{id}",method = RequestMethod.DELETE)
@@ -67,9 +79,18 @@ public class OrderApiController {
         OrderItemData orderItemData = new OrderItemData();
         orderItemData.setName(productPojo.getName());
         orderItemData.setBarcode(productPojo.getBarcode());
-        orderItemData.setPrice(productPojo.getMrp());
+        orderItemData.setSellingPrice(productPojo.getMrp());
         orderItemData.setProductId(productPojo.getId());
         return orderItemData;
+    }
+
+    private OrderData convertPojoToData(OrderItemPojo orderItemPojo) {
+        OrderData orderData = new OrderData();
+        orderData.setId(orderItemPojo.getId());
+        orderData.setOrderId(orderItemPojo.getOrderId());
+        orderData.setProductId(orderItemPojo.getProductId());
+        orderData.setSellingPrice(orderItemPojo.getSellingPrice());
+        return orderData;
     }
 
 }

@@ -5,33 +5,25 @@ function getOrderUrl(){
 	var baseUrl = $("meta[name=baseUrl]").attr("content")
 	return baseUrl + "/api/order";
 }
-
-function getProductUrl(){
-
-	var baseUrl = $("meta[name=baseUrl]").attr("content")
-	return baseUrl + "/api/product";
-}
 //BUTTON ACTIONS
-function addOrder(event){
+function addOrder(){
 console.log(currentOrder);
-	//Set the values to update
-//	var $form = $("#order-form");
-//	var json = toJson($form);
-//	var url = getOrderUrl();
-//	$.ajax({
-//	   url: url,
-//	   type: 'POST',
-//	   data: json,
-//	   headers: {
-//       	'Content-Type': 'application/json'
-//       },
-//	   success: function(response) {
-//	   		getOrderList();
-//	   },
-//	   error: handleAjaxError
-//	});
-//
-//	return false;
+var json = JSON.stringify(currentOrder);
+var url = getOrderUrl()+"/order";
+$.ajax({
+       url: url,
+       type: 'POST',
+       data: json,
+       headers: {
+        'Content-Type': 'application/json'
+       },
+       success: function(response) {
+           console.log(response);
+           getOrderList();
+       },
+       error: handleAjaxError
+    });
+
 }
 
 function updateOrder(event){
@@ -62,32 +54,16 @@ function updateOrder(event){
 
 
 function getOrderList(){
-	var url = getOrderUrl();
-	const now = Date.now();
-	var data = {"date": now}
-	var dataJson = JSON.stringify(data);
-	console.log(dataJson);
+var url = getOrderUrl() + "/" + "all";
+
 	$.ajax({
-       url: url,
-       type: 'POST',
-       data: dataJson,
-       headers: {
-         'Content-Type': 'application/json'
-       },
-       success: function(data) {
-            currentOrder.id = data;
-            console.log(currentOrder);
-       },
-       error: handleAjaxError
-    });
-//	$.ajax({
-//	   url: url,
-//	   type: 'GET',
-//	   success: function(data) {
-//	   		displayOrderList(data);
-//	   },
-//	   error: handleAjaxError
-//	});
+	   url: url,
+	   type: 'GET',
+	   success: function(data) {
+	   		displayOrderList(data);
+	   },
+	   error: handleAjaxError
+	});
 }
 
 function deleteOrder(id){
@@ -107,16 +83,16 @@ function updatePrice(){
     let quantity = $("#inputQuantity").val();
     let barcode = $("#inputBarcode").val();
     var url = getOrderUrl() + "?" + "barcode=" + barcode;
-    console.log(url);
-    console.log(quantity,barcode,"lol");
     $.ajax({
        url: url,
        type: 'GET',
        success: function(data) {
-       let price = data.price*quantity;
-       console.log(data,quantity);
-       console.log(price);
+       console.log(data);
+       let price = data.sellingPrice*quantity;
        $('#inputPrice').val(price);
+       currentOrder.sellingPrice = price;
+       currentOrder.quantity = quantity;
+       currentOrder.productId = data.productId;
        },
        error: handleAjaxError
     });
@@ -184,14 +160,12 @@ function displayOrderList(data){
 	$tbody.empty();
 	for(var i in data){
 		var e = data[i];
-		var buttonHtml = '<button onclick="deleteOrder(' + e.id + ')">delete</button>'
-		buttonHtml += ' <button onclick="displayEditOrder(' + e.id + ')">edit</button>'
+		var buttonHtml = ' <button onclick="displayEditOrder(' + e.id + ')">edit</button>'
 		var row = '<tr>'
-		+ '<td>' + e.id + '</td>'
-		+ '<td>' + e.barcode + '</td>'
-		+ '<td>'  + e.brandCategory + '</td>'
-		+ '<td>' + e.name + '</td>'
-		+ '<td>' + e.mrp + '</td>'
+		+ '<td>' + e.orderId + '</td>'
+		+ '<td>' + e.productId + '</td>'
+		+ '<td>'  + e.quantity + '</td>'
+		+ '<td>' + e.sellingPrice + '</td>'
 		+ '<td>' + buttonHtml + '</td>'
 		+ '</tr>';
         $tbody.append(row);
@@ -244,7 +218,7 @@ function displayOrder(data){
 	$("#order-edit-form input[name=barcode]").val(data.barcode);
 	$("#order-edit-form input[name=quantity]").val(data.quantity);
 	$("#order-edit-form input[name=name]").val(data.name);
-	$("#order-edit-form input[name=price]").val(data.price);
+	$("#order-edit-form input[name=price]").val(data.sellingPrice);
 	$("#order-edit-form input[name=id]").val(data.id);
 	$('#edit-order-modal').modal('toggle');
 }
@@ -263,6 +237,27 @@ function init(){
     $("#inputBarcode").on('change',updatePrice);
 }
 
+function getOrderId(){
+    var url = getOrderUrl();
+    const now = Date.now();
+    var data = {"date": now}
+    var dataJson = JSON.stringify(data);
+    $.ajax({
+       url: url,
+       type: 'POST',
+       data: dataJson,
+       headers: {
+         'Content-Type': 'application/json'
+       },
+       success: function(data) {
+            currentOrder.orderId = data;
+            $('#orderNumber').html("#"+data);
+       },
+       error: handleAjaxError
+    });
+}
+
 $(document).ready(init);
+$(document).ready(getOrderId);
 $(document).ready(getOrderList);
 

@@ -16,7 +16,8 @@ function addProduct(event){
 	var $form = $("#product-form");
 	var json = toJson($form);
 	var jsonObject = JSON.parse(json);
-	var inventoryData = {"id":jsonObject.id,"quantity":0}
+	console.log(jsonObject);
+	var inventoryData = {"id":jsonObject.brandCategory,"quantity":0}
 	var inventoryDataJson = JSON.stringify(inventoryData);
 	console.log(inventoryData);
 	var url = getProductUrl();
@@ -164,8 +165,7 @@ function displayProductList(data){
 	$tbody.empty();
 	for(var i in data){
 		var e = data[i];
-		var buttonHtml = '<button onclick="deleteProduct(' + e.id + ')">delete</button>'
-		buttonHtml += ' <button onclick="displayEditProduct(' + e.id + ')">edit</button>'
+		var buttonHtml =  '<button onclick="displayEditProduct(' + e.id + ')">edit</button>';
 		var row = '<tr>'
 		+ '<td>' + e.id + '</td>'
 		+ '<td>' + e.barcode + '</td>'

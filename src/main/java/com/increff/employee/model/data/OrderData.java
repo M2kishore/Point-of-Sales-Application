@@ -1,10 +1,19 @@
 package com.increff.employee.model.data;
 
 public class OrderData {
+    private int id;
     private int orderId;
     private int productId;
     private int quantity;
-    private int sellingPrice;
+    private double sellingPrice;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public int getOrderId() {
         return orderId;
@@ -30,11 +39,11 @@ public class OrderData {
         this.quantity = quantity;
     }
 
-    public int getSellingPrice() {
+    public double getSellingPrice() {
         return sellingPrice;
     }
 
-    public void setSellingPrice(int sellingPrice) {
+    public void setSellingPrice(double sellingPrice) {
         this.sellingPrice = sellingPrice;
     }
 }

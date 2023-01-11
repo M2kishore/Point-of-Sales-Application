@@ -7,7 +7,7 @@ public class OrderItemData extends OrderItemForm {
    private int productId;
    private String name;
    private String barcode;
-   private double price;
+   private double sellingPrice;
 
     public int getProductId() {
         return productId;
@@ -33,11 +33,11 @@ public class OrderItemData extends OrderItemForm {
         this.barcode = barcode;
     }
 
-    public double getPrice() {
-        return price;
+    public double getSellingPrice() {
+        return sellingPrice;
     }
 
-    public void setPrice(double price) {
-        this.price = price;
+    public void setSellingPrice(double sellingPrice) {
+        this.sellingPrice = sellingPrice;
     }
 }

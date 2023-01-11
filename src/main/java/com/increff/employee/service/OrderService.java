@@ -38,6 +38,10 @@ public class OrderService {
         return orderItemPojo;
     }
     @Transactional
+    public List<OrderItemPojo> getAll(){
+        return orderItemDao.selectAll();
+    }
+    @Transactional
     public void delete(int id){
         orderDao.delete(id);
     }
