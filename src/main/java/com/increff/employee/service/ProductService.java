@@ -21,7 +21,11 @@ public class ProductService {
                 StringUtil.isEmpty(String.valueOf(newProductPojo.getMrp()))) {
             throw new ApiException("empty string detected cannot be empty");
         }
-        return productDao.insert(newProductPojo);
+        try {
+            return productDao.insert(newProductPojo);
+        }catch (Exception e){
+            throw new ApiException("Duplicate barcode");
+        }
     }
     @Transactional
     public void delete(int id) {

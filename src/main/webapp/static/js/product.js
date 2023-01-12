@@ -1,4 +1,4 @@
-
+let brandList = [];
 function getProductUrl(){
 
 	var baseUrl = $("meta[name=baseUrl]").attr("content")
@@ -9,45 +9,36 @@ function getInventoryUrl(){
 	var baseUrl = $("meta[name=baseUrl]").attr("content")
 	return baseUrl + "/api/inventory";
 }
+function getBrandUrl(){
+
+	var baseUrl = $("meta[name=baseUrl]").attr("content")
+	return baseUrl + "/api/brand";
+}
 
 //BUTTON ACTIONS
 function addProduct(event){
 	//Set the values to update
-	var $form = $("#product-form");
-	var json = toJson($form);
-	var jsonObject = JSON.parse(json);
-	console.log(jsonObject);
-	var inventoryData = {"id":jsonObject.brandCategory,"quantity":0}
-	var inventoryDataJson = JSON.stringify(inventoryData);
-	console.log(inventoryData);
 	var url = getProductUrl();
-	var inventoryUrl = getInventoryUrl();
+	var barcode = $('#inputBarcode').val();
+	var name = $('#inputName').val();
+	var mrp = $('#inputMrp').val();
+	var brandCategory = $('#brand-category-select').children("option:selected").val();
+	var newProduct = {"barcode":barcode,"name":name,"mrp":mrp,"brandCategory":brandCategory};
+	var newProductJson = JSON.stringify(newProduct);
+	console.log(newProductJson);
 	$.ajax({
 	   url: url,
 	   type: 'POST',
-	   data: json,
+	   data: newProductJson,
 	   headers: {
        	'Content-Type': 'application/json'
        },
 	   success: function(response) {
+	   console.log(response);
 	   		getProductList();
 	   },
 	   error: handleAjaxError
 	});
-
-//	$.ajax({
-//    	   url: inventoryUrl,
-//    	   type: 'POST',
-//    	   data: inventoryDataJson,
-//    	   headers: {
-//           	'Content-Type': 'application/json'
-//           },
-//    	   success: function(response) {
-//    	   		getProductList();
-//    	   },
-//    	   error: handleAjaxError
-//    	});
-
 	return false;
 }
 
@@ -159,6 +150,29 @@ function downloadErrors(){
 }
 
 //UI DISPLAY METHODS
+function displayBrandCategorySelect(brandCategoryList){
+    var brandCategorySelect = $('#brand-category-select');
+    console.log("brand",brandCategoryList)
+    for(brand of brandCategoryList){
+    console.log(brand);
+        brandCategorySelect.append("<option value="+brand.id+">"+brand.brand+" "+brand.category+"</option>")
+    }
+}
+
+function setupBrandCategorySelect(){
+    var url = getBrandUrl();
+    $.ajax({
+       url: url,
+       type: 'GET',
+       success: function(brandData) {
+       console.log(brandData);
+        brandList = [...brandData];
+        displayBrandCategorySelect(brandData);
+       },
+       error: handleAjaxError
+    });
+
+}
 
 function displayProductList(data){
 	var $tbody = $('#product-table').find('tbody');
@@ -243,4 +257,4 @@ function init(){
 
 $(document).ready(init);
 $(document).ready(getProductList);
-
+$(document).ready(setupBrandCategorySelect);
