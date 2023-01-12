@@ -1,3 +1,4 @@
+let productList = [];
 function getInventoryUrl(){
 
 	var baseUrl = $("meta[name=baseUrl]").attr("content")
@@ -11,17 +12,16 @@ function getProductUrl(){
 //BUTTON ACTIONS
 function updateInventory(event){
 	//Get the ID
-	var id = $("#inventory-edit-form input[name=id]").val();
+	var id = $('#product-select').children("option:selected").val();
 	var url = getInventoryUrl() + "/" + id;
-
-	//Set the values to update
-	var $form = $("#inventory-edit-form");
-	var json = toJson($form);
+	var quantity = $('#inputQuantity').val();
+    var newInventory = {"id":id,"quantity":quantity};
+    var newInventoryJson = JSON.stringify(newInventory);
 
 	$.ajax({
 	   url: url,
 	   type: 'PUT',
-	   data: json,
+	   data: newInventoryJson,
 	   headers: {
        	'Content-Type': 'application/json'
        },
@@ -34,14 +34,16 @@ function updateInventory(event){
 	return false;
 }
 function addInventory(event){
-	var $form = $("#inventory-edit-form");
-    var json = toJson($form);
+    var quantity = $('#inputQuantity').val();
+    var id = $('#product-select').children("option:selected").val();
+    var newInventory = {"id":id,"quantity":quantity};
+    var newInventoryJson = JSON.stringify(newInventory);
     var url = getInventoryUrl();
 
     $.ajax({
        url: url,
        type: 'POST',
-       data: json,
+       data: newInventoryJson,
        headers: {
         'Content-Type': 'application/json'
        },
@@ -65,6 +67,19 @@ function getInventoryList(){
 	   },
 	   error: handleAjaxError
 	});
+}
+function setupProductSelect(){
+    var url = getProductUrl();
+    $.ajax({
+       url: url,
+       type: 'GET',
+       success: function(productData) {
+        productList = [...productData];
+        displayProductSelect(productData);
+       },
+       error: handleAjaxError
+    });
+
 }
 function getProductList(inventoryData){
 	var productUrl = getProductUrl();
@@ -147,6 +162,12 @@ function downloadErrors(){
 }
 
 //UI DISPLAY METHODS
+function displayProductSelect(productList){
+    var productSelect = $('#product-select');
+    for(product of productList){
+        productSelect.append("<option value="+product.id+">"+product.name+"</option>");
+    }
+}
 
 function displayInventoryList(productData,inventoryData){
 	var $tbody = $('#inventory-table').find('tbody');
@@ -157,12 +178,9 @@ function displayInventoryList(productData,inventoryData){
 	$tbody.empty();
 	for(var i in inventoryData){
 		var e = inventoryData[i];
-		var buttonHtml = '<button onclick="deleteInventory(' + e.id + ')">delete</button>'
 		var row = '<tr>'
-		+ '<td>' + e.id + '</td>'
 		+ '<td>' + result[e.id] + '</td>'
 		+ '<td>'  + e.quantity + '</td>'
-		+ '<td>' + buttonHtml + '</td>'
 		+ '</tr>';
         $tbody.append(row);
 	}
@@ -216,4 +234,5 @@ function init(){
 
 $(document).ready(init);
 $(document).ready(getInventoryList);
+$(document).ready(setupProductSelect);
 
