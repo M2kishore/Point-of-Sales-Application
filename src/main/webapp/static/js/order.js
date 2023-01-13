@@ -1,5 +1,7 @@
 
-let currentOrder = {};
+let currentOrder = [];
+let currentTransaction = {};
+let currentOrderId = -1;
 function getOrderUrl(){
 
 	var baseUrl = $("meta[name=baseUrl]").attr("content")
@@ -7,22 +9,26 @@ function getOrderUrl(){
 }
 //BUTTON ACTIONS
 function addOrder(){
-console.log(currentOrder);
-var json = JSON.stringify(currentOrder);
-var url = getOrderUrl()+"/order";
-$.ajax({
-       url: url,
-       type: 'POST',
-       data: json,
-       headers: {
-        'Content-Type': 'application/json'
-       },
-       success: function(response) {
-           console.log(response);
-           getOrderList();
-       },
-       error: handleAjaxError
-    });
+currentOrder.push(currentTransaction);
+currentTransaction.orderID = currentOrderId;
+currentTransaction = {};
+displayOrderList(currentOrder);
+//console.log(currentOrder);
+//var json = JSON.stringify(currentOrder);
+//var url = getOrderUrl()+"/order";
+//$.ajax({
+//       url: url,
+//       type: 'POST',
+//       data: json,
+//       headers: {
+//        'Content-Type': 'application/json'
+//       },
+//       success: function(response) {
+//           console.log(response);
+//           getOrderList();
+//       },
+//       error: handleAjaxError
+//    });
 
 }
 
@@ -52,19 +58,25 @@ function updateOrder(event){
 	return false;
 }
 
+function submitOrder(){
+    console.log(currentOrder);
+}
+
 
 function getOrderList(){
-var url = getOrderUrl() + "/" + "all";
 
-	$.ajax({
-	   url: url,
-	   type: 'GET',
-	   success: function(data) {
-	   		displayOrderList(data);
-	   },
-	   error: handleAjaxError
-	});
 }
+//var url = getOrderUrl() + "/" + "all";
+//
+//	$.ajax({
+//	   url: url,
+//	   type: 'GET',
+//	   success: function(data) {
+//	   		displayOrderList(data);
+//	   },
+//	   error: handleAjaxError
+//	});
+//}
 
 function deleteOrder(id){
 	var url = getOrderUrl() + "/" + id;
@@ -90,9 +102,12 @@ function updatePrice(){
        console.log(data);
        let price = data.sellingPrice*quantity;
        $('#inputPrice').val(price);
-       currentOrder.sellingPrice = price;
-       currentOrder.quantity = quantity;
-       currentOrder.productId = data.productId;
+       currentTransaction.sellingPrice = price;
+       currentTransaction.quantity = quantity;
+       currentTransaction.productId = data.productId;
+       currentTransaction.barcode = data.barcode;
+       currentTransaction.name = data.name;
+
        },
        error: handleAjaxError
     });
@@ -154,22 +169,39 @@ function downloadErrors(){
 }
 
 //UI DISPLAY METHODS
+function deleteTransaction(barcode){
+    currentOrder = currentOrder.filter(transaction=>transaction.barcode != barcode);
+    displayOrderList(currentOrder);
+}
+function displayOrderList(currentOrder){
+console.log(currentOrder)
+var $tbody = $('#order-table').find('tbody');
+$tbody.empty();
+for(var product of currentOrder){
+    var buttonHtml = ' <button onclick="deleteTransaction(' + product.barcode + ')">delete</button>'
+    var row = '<tr>'
+    + '<td>' + product.name + '</td>'
+    + '<td>'  + product.quantity + '</td>'
+    + '<td>' + product.sellingPrice + '</td>'
+    + '<td>' + buttonHtml + '</td>'
+    + '</tr>';
+    $tbody.append(row);
+}
 
-function displayOrderList(data){
-	var $tbody = $('#order-table').find('tbody');
-	$tbody.empty();
-	for(var i in data){
-		var e = data[i];
-		var buttonHtml = ' <button onclick="displayEditOrder(' + e.id + ')">edit</button>'
-		var row = '<tr>'
-		+ '<td>' + e.orderId + '</td>'
-		+ '<td>' + e.productId + '</td>'
-		+ '<td>'  + e.quantity + '</td>'
-		+ '<td>' + e.sellingPrice + '</td>'
-		+ '<td>' + buttonHtml + '</td>'
-		+ '</tr>';
-        $tbody.append(row);
-	}
+//	var $tbody = $('#order-table').find('tbody');
+//	$tbody.empty();
+//	for(var i in data){
+//		var e = data[i];
+//		var buttonHtml = ' <button onclick="displayEditOrder(' + e.id + ')">edit</button>'
+//		var row = '<tr>'
+//		+ '<td>' + e.orderId + '</td>'
+//		+ '<td>' + e.productId + '</td>'
+//		+ '<td>'  + e.quantity + '</td>'
+//		+ '<td>' + e.sellingPrice + '</td>'
+//		+ '<td>' + buttonHtml + '</td>'
+//		+ '</tr>';
+//        $tbody.append(row);
+//	}
 }
 
 function displayEditOrder(id){
@@ -228,6 +260,7 @@ function displayOrder(data){
 function init(){
 	$('#add-order').click(addOrder);
 	$('#update-order').click(updateOrder);
+	$('#submit-order').click(submitOrder);
 	$('#refresh-data').click(getOrderList);
 	$('#upload-data').click(displayUploadData);
 	$('#process-data').click(processData);
@@ -250,7 +283,7 @@ function getOrderId(){
          'Content-Type': 'application/json'
        },
        success: function(data) {
-            currentOrder.orderId = data;
+            currentOrderId = data;
             $('#orderNumber').html("#"+data);
        },
        error: handleAjaxError
