@@ -10,7 +10,7 @@ function getOrderUrl(){
 //BUTTON ACTIONS
 function addOrder(){
 currentOrder.push(currentTransaction);
-currentTransaction.orderID = currentOrderId;
+currentTransaction.orderId = currentOrderId;
 currentTransaction = {};
 displayOrderList(currentOrder);
 //console.log(currentOrder);
@@ -59,7 +59,24 @@ function updateOrder(event){
 }
 
 function submitOrder(){
-    console.log(currentOrder);
+    currentOrder.map(transaction=>{
+        var orderItemObject = {"productId":transaction.productId,"orderId":transaction.orderId,"quantity":transaction.quantity,"sellingPrice":transaction.sellingPrice};
+        console.table(orderItemObject);
+        var orderItemObjectJson = JSON.stringify(orderItemObject);
+        var url = getOrderUrl()+"/order";
+        $.ajax({
+           url: url,
+           type: 'POST',
+           data: orderItemObjectJson,
+           headers: {
+            'Content-Type': 'application/json'
+           },
+           success: function(response) {
+               console.log(response);
+           },
+           error: handleAjaxError
+        });
+    });
 }
 
 
