@@ -7,10 +7,22 @@ function getOrderUrl(){
 	var baseUrl = $("meta[name=baseUrl]").attr("content")
 	return baseUrl + "/api/order";
 }
+function checkDuplicate(currentTransaction){
+    for(let transaction of currentOrder){
+        if(transaction.barcode === currentTransaction.barcode){
+            alert("product already present");
+            return true;
+        }
+    }
+return false;
+}
 //BUTTON ACTIONS
 function addOrder(){
+if(checkDuplicate(currentTransaction) || Object.keys(currentTransaction).length === 0){
+alert("product already present");
+    return;
+}
 currentOrder.push(currentTransaction);
-currentTransaction.orderId = currentOrderId;
 currentTransaction = {};
 displayOrderList(currentOrder);
 //console.log(currentOrder);
@@ -124,6 +136,7 @@ function updatePrice(){
        currentTransaction.productId = data.productId;
        currentTransaction.barcode = data.barcode;
        currentTransaction.name = data.name;
+       currentTransaction.orderId = currentOrderId;
 
        },
        error: handleAjaxError

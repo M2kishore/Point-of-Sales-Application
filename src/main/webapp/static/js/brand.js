@@ -109,6 +109,7 @@ function uploadRows(){
 	processCount++;
 
 	var json = JSON.stringify(row);
+	console.log(row)
 	var url = getBrandUrl();
 
 	//Make ajax call
