@@ -10,7 +10,8 @@ function getOrderUrl(){
 function checkDuplicate(currentTransaction){
     for(let transaction of currentOrder){
         if(transaction.barcode === currentTransaction.barcode){
-            alert("product already present");
+            transaction.quantity += currentTransaction.quantity;
+            transaction.sellingPrice += currentTransaction.sellingPrice;
             return true;
         }
     }
@@ -19,7 +20,7 @@ return false;
 //BUTTON ACTIONS
 function addOrder(){
 if(checkDuplicate(currentTransaction) || Object.keys(currentTransaction).length === 0){
-alert("product already present");
+    displayOrderList(currentOrder);
     return;
 }
 currentOrder.push(currentTransaction);
@@ -84,7 +85,7 @@ function submitOrder(){
             'Content-Type': 'application/json'
            },
            success: function(response) {
-               console.log(response);
+               location.reload();
            },
            error: handleAjaxError
         });
@@ -106,20 +107,14 @@ function getOrderList(){
 //	   error: handleAjaxError
 //	});
 //}
-
-function deleteOrder(id){
-	var url = getOrderUrl() + "/" + id;
-
-	$.ajax({
-	   url: url,
-	   type: 'DELETE',
-	   success: function(data) {
-	   		getOrderList();
-	   },
-	   error: handleAjaxError
-	});
+function resetOrder(){
+    $('#inputBarcode').val('');
+    $('#inputPrice').val(0);
+    $('#inputMrp').val(0);
+    $('#inputName').val("");
+    $('#inputSellingPrice').val(0);
+    currentTransaction = {};
 }
-
 function updatePrice(){
     let quantity = $("#inputQuantity").val();
     let barcode = $("#inputBarcode").val();
@@ -128,16 +123,23 @@ function updatePrice(){
        url: url,
        type: 'GET',
        success: function(data) {
-       console.log(data);
-       let price = data.sellingPrice*quantity;
-       $('#inputPrice').val(price);
-       currentTransaction.sellingPrice = price;
-       currentTransaction.quantity = quantity;
-       currentTransaction.productId = data.productId;
-       currentTransaction.barcode = data.barcode;
-       currentTransaction.name = data.name;
-       currentTransaction.orderId = currentOrderId;
-
+           let price = $('#inputPrice').val();
+           let sellingPrice = price*quantity;
+           if(data.mrp < price){
+                alert("Price cannot be greater than mrp");
+                resetOrder();
+                return;
+           }
+           $('#inputMrp').val(data.mrp);
+           $('#inputName').val(data.name);
+           $('#inputSellingPrice').val(sellingPrice);
+           currentTransaction.sellingPrice = sellingPrice;
+           currentTransaction.quantity = +quantity;
+           currentTransaction.productId = data.productId;
+           currentTransaction.barcode = data.barcode;
+           currentTransaction.name = data.name;
+           currentTransaction.orderId = currentOrderId;
+           currentTransaction.mrp = data.mrp;
        },
        error: handleAjaxError
     });
@@ -204,85 +206,19 @@ function deleteTransaction(barcode){
     displayOrderList(currentOrder);
 }
 function displayOrderList(currentOrder){
-console.log(currentOrder)
-var $tbody = $('#order-table').find('tbody');
-$tbody.empty();
-for(var product of currentOrder){
-    var buttonHtml = ' <button onclick="deleteTransaction(' + product.barcode + ')">delete</button>'
-    var row = '<tr>'
-    + '<td>' + product.name + '</td>'
-    + '<td>'  + product.quantity + '</td>'
-    + '<td>' + product.sellingPrice + '</td>'
-    + '<td>' + buttonHtml + '</td>'
-    + '</tr>';
-    $tbody.append(row);
-}
-
-//	var $tbody = $('#order-table').find('tbody');
-//	$tbody.empty();
-//	for(var i in data){
-//		var e = data[i];
-//		var buttonHtml = ' <button onclick="displayEditOrder(' + e.id + ')">edit</button>'
-//		var row = '<tr>'
-//		+ '<td>' + e.orderId + '</td>'
-//		+ '<td>' + e.productId + '</td>'
-//		+ '<td>'  + e.quantity + '</td>'
-//		+ '<td>' + e.sellingPrice + '</td>'
-//		+ '<td>' + buttonHtml + '</td>'
-//		+ '</tr>';
-//        $tbody.append(row);
-//	}
-}
-
-function displayEditOrder(id){
-	var url = getOrderUrl() + "/" + id;
-	$.ajax({
-	   url: url,
-	   type: 'GET',
-	   success: function(data) {
-	   		displayOrder(data);
-	   },
-	   error: handleAjaxError
-	});
-}
-
-function resetUploadDialog(){
-	//Reset file name
-	var $file = $('#orderFile');
-	$file.val('');
-	$('#orderFileName').html("Choose File");
-	//Reset various counts
-	processCount = 0;
-	fileData = [];
-	errorData = [];
-	//Update counts
-	updateUploadDialog();
-}
-
-function updateUploadDialog(){
-	$('#rowCount').html("" + fileData.length);
-	$('#processCount').html("" + processCount);
-	$('#errorCount').html("" + errorData.length);
-}
-
-function updateFileName(){
-	var $file = $('#orderFile');
-	var fileName = $file.val();
-	$('#orderFileName').html(fileName);
-}
-
-function displayUploadData(){
- 	resetUploadDialog();
-	$('#upload-order-modal').modal('toggle');
-}
-
-function displayOrder(data){
-	$("#order-edit-form input[name=barcode]").val(data.barcode);
-	$("#order-edit-form input[name=quantity]").val(data.quantity);
-	$("#order-edit-form input[name=name]").val(data.name);
-	$("#order-edit-form input[name=price]").val(data.sellingPrice);
-	$("#order-edit-form input[name=id]").val(data.id);
-	$('#edit-order-modal').modal('toggle');
+    console.log(currentOrder)
+    var $tbody = $('#order-table').find('tbody');
+    $tbody.empty();
+    for(var product of currentOrder){
+        var buttonHtml = ' <button onclick="deleteTransaction(' + product.barcode + ')">delete</button>'
+        var row = '<tr>'
+        + '<td>' + product.name + '</td>'
+        + '<td>'  + product.quantity + '</td>'
+        + '<td>' + product.sellingPrice + '</td>'
+        + '<td>' + buttonHtml + '</td>'
+        + '</tr>';
+        $tbody.append(row);
+    }
 }
 
 
@@ -292,11 +228,9 @@ function init(){
 	$('#update-order').click(updateOrder);
 	$('#submit-order').click(submitOrder);
 	$('#refresh-data').click(getOrderList);
-	$('#upload-data').click(displayUploadData);
 	$('#process-data').click(processData);
-	$('#download-errors').click(downloadErrors);
-    $('#orderFile').on('change', updateFileName)
     $("#inputQuantity").on('input',updatePrice);
+    $("#inputPrice").on('input',updatePrice);
     $("#inputBarcode").on('change',updatePrice);
 }
 
@@ -322,5 +256,4 @@ function getOrderId(){
 
 $(document).ready(init);
 $(document).ready(getOrderId);
-$(document).ready(getOrderList);
 

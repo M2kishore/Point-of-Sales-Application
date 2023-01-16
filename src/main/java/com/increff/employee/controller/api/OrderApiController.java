@@ -79,7 +79,7 @@ public class OrderApiController {
         OrderItemData orderItemData = new OrderItemData();
         orderItemData.setName(productPojo.getName());
         orderItemData.setBarcode(productPojo.getBarcode());
-        orderItemData.setSellingPrice(productPojo.getMrp());
+        orderItemData.setMrp(productPojo.getMrp());
         orderItemData.setProductId(productPojo.getId());
         return orderItemData;
     }
