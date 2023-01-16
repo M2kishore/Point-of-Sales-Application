@@ -7,25 +7,87 @@ function getOrderUrl(){
 	var baseUrl = $("meta[name=baseUrl]").attr("content")
 	return baseUrl + "/api/order";
 }
-function checkDuplicate(currentTransaction){
-    for(let transaction of currentOrder){
-        if(transaction.barcode === currentTransaction.barcode){
-            transaction.quantity += currentTransaction.quantity;
-            transaction.sellingPrice += currentTransaction.sellingPrice;
-            return true;
-        }
-    }
-return false;
+function getInventoryUrl(){
+
+	var baseUrl = $("meta[name=baseUrl]").attr("content")
+	return baseUrl + "/api/inventory";
 }
 //BUTTON ACTIONS
+//function isInventoryAvailable(productId,inventoryCount){
+//    console.log("isInventoryAvailable")
+//    console.log(productId,inventoryCount);
+//    var url = getInventoryUrl() + "/" + productId;
+//    var status = true;
+//    	$.ajax({
+//    	   url: url,
+//    	   type: 'GET',
+//    	   async:false,
+//    	   success: function(data) {
+//    	        currentOrder.map(transaction=>{
+//    	            if(transaction.productId === data.id){
+//    	                console.log(inventoryCount,data.quantity,inventoryCount > data.quantity);
+//    	                if(inventoryCount > data.quantity){
+//    	                    status=false;
+//    	                }
+//    	            }
+//    	        });
+//    	   },
+//    	   error: handleAjaxError
+//    	});
+//    	console.log(status,"status")
+//    return status;
+//}
 function addOrder(){
-if(checkDuplicate(currentTransaction) || Object.keys(currentTransaction).length === 0){
-    displayOrderList(currentOrder);
-    return;
-}
-currentOrder.push(currentTransaction);
-currentTransaction = {};
-displayOrderList(currentOrder);
+var url = getInventoryUrl() + "/" + currentTransaction.productId;
+console.log(url);
+    	$.ajax({
+    	   url: url,
+    	   type: 'GET',
+    	   async:false,
+    	   success: function(data) {
+    	        let currentQuantity = currentTransaction.quantity? currentTransaction.quantity:0;
+    	        let price = $('#inputPrice').val();
+    	        if(currentOrder.length == 0){
+    	            console.log(currentOrder.length == 0)
+    	            if(currentQuantity < data.quantity){
+    	                currentOrder.push(currentTransaction);
+    	                currentTransaction = {};
+    	                resetOrder();
+    	                displayOrderList(currentOrder);
+    	                return;
+    	            }
+    	        }
+    	        for(var transaction of currentOrder){
+    	            if(transaction.productId === data.id){
+    	                if(transaction.quantity+currentQuantity > data.quantity){
+    	                    alert("given quantity is larger than the inventory");
+    	                    return
+    	                }else{
+    	                    if(currentQuantity > 0){
+    	                    //duplicate entry
+                            transaction.quantity += currentQuantity;
+                            transaction.sellingPrice += currentQuantity*price;
+                            currentTransaction = {};
+                            displayOrderList(currentOrder);
+                            resetOrder();
+                            return
+    	                    }
+    	                }
+    	            }
+    	        };
+                //new entry of transaction
+                currentOrder.push(currentTransaction);
+                currentTransaction = {};
+    	        displayOrderList(currentOrder);
+    	        resetOrder();
+    	   },
+    	   error: handleAjaxError
+    	});
+//currentOrder.push(currentTransaction);
+//currentTransaction = {};
+//displayOrderList(currentOrder);
+//resetOrder();
+
 //console.log(currentOrder);
 //var json = JSON.stringify(currentOrder);
 //var url = getOrderUrl()+"/order";
@@ -74,7 +136,6 @@ function updateOrder(event){
 function submitOrder(){
     currentOrder.map(transaction=>{
         var orderItemObject = {"productId":transaction.productId,"orderId":transaction.orderId,"quantity":transaction.quantity,"sellingPrice":transaction.sellingPrice};
-        console.table(orderItemObject);
         var orderItemObjectJson = JSON.stringify(orderItemObject);
         var url = getOrderUrl()+"/order";
         $.ajax({
@@ -230,7 +291,7 @@ function init(){
 	$('#refresh-data').click(getOrderList);
 	$('#process-data').click(processData);
     $("#inputQuantity").on('input',updatePrice);
-    $("#inputPrice").on('input',updatePrice);
+    $("#inputPrice").on('change',updatePrice);
     $("#inputBarcode").on('change',updatePrice);
 }
 
