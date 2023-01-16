@@ -135,26 +135,53 @@ function updateOrder(event){
 
 	return false;
 }
-
+function updateInventory(id,quantity,transaction){
+    var url = getInventoryUrl() + "/" + id;
+    var newInventory = {"id":id,"quantity":quantity};
+    var newInventoryJson = JSON.stringify(newInventory);
+    $.ajax({
+       url: url,
+       type: 'PUT',
+       data: newInventoryJson,
+       headers: {
+            'Content-Type': 'application/json'
+          },
+       success: function(response) {
+            var orderItemObject = {"productId":transaction.productId,"orderId":transaction.orderId,"quantity":transaction.quantity,"sellingPrice":transaction.sellingPrice};
+            var orderItemObjectJson = JSON.stringify(orderItemObject);
+            var url = getOrderUrl()+"/order";
+            $.ajax({
+               url: url,
+               type: 'POST',
+               data: orderItemObjectJson,
+               headers: {
+                'Content-Type': 'application/json'
+               },
+               success: function(response) {
+                    location.reload();
+               },
+               error: handleAjaxError
+            });
+       },
+       error: handleAjaxError
+    });
+}
 function submitOrder(){
     currentOrder.map(transaction=>{
-        var orderItemObject = {"productId":transaction.productId,"orderId":transaction.orderId,"quantity":transaction.quantity,"sellingPrice":transaction.sellingPrice};
-        var orderItemObjectJson = JSON.stringify(orderItemObject);
-        var url = getOrderUrl()+"/order";
+        var url = getInventoryUrl() + "/" +transaction.productId;
+        console.log(url);
         $.ajax({
            url: url,
-           type: 'POST',
-           data: orderItemObjectJson,
-           headers: {
-            'Content-Type': 'application/json'
-           },
-           success: function(response) {
-               location.reload();
+           type: 'GET',
+           success: function(data) {
+                let newQuantity = data.quantity-transaction.quantity;
+                updateInventory(data.id,newQuantity,transaction);
            },
            error: handleAjaxError
         });
     });
 }
+
 
 
 function getOrderList(){
