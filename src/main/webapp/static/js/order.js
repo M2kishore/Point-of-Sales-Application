@@ -48,7 +48,6 @@ console.log(url);
     	        let currentQuantity = currentTransaction.quantity? currentTransaction.quantity:0;
     	        let price = $('#inputPrice').val();
     	        if(currentOrder.length == 0){
-    	            console.log(currentOrder.length == 0)
     	            if(currentQuantity < data.quantity){
     	                currentOrder.push(currentTransaction);
     	                currentTransaction = {};
@@ -76,7 +75,11 @@ console.log(url);
     	            }
     	        };
                 //new entry of transaction
-                currentOrder.push(currentTransaction);
+                if(currentQuantity < data.quantity){
+                    currentOrder.push(currentTransaction);
+                }else{
+                    alert("given quantity is larger than the inventory");
+                }
                 currentTransaction = {};
     	        displayOrderList(currentOrder);
     	        resetOrder();
