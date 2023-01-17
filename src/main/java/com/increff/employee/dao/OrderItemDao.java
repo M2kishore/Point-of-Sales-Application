@@ -1,5 +1,6 @@
 package com.increff.employee.dao;
 
+import com.increff.employee.model.form.ReportOrderForm;
 import com.increff.employee.pojo.OrderItemPojo;
 import com.increff.employee.pojo.OrderItemPojo;
 import com.increff.employee.pojo.OrderItemPojo;
@@ -14,6 +15,8 @@ public class OrderItemDao extends AbstractDao {
     private static String select_all = "select orderItemPojo from OrderItemPojo orderItemPojo";
     private static String select_id = "select orderItemPojo from OrderItemPojo orderItemPojo where orderId=:orderId";
 
+    private static String select_orders = "SELECT orderItemPojo FROM OrderItemPojo AS orderItemPojo WHERE orderItemPojo.orderId BETWEEN :startOrderId AND :endOrderId";
+
     @Transactional
     public void insert(OrderItemPojo orderItemPojo){
         entityManager().persist(orderItemPojo);
@@ -27,6 +30,12 @@ public class OrderItemDao extends AbstractDao {
 
     public List<OrderItemPojo> selectAll() {
         TypedQuery<OrderItemPojo> query = getQuery(select_all, OrderItemPojo.class);
+        return query.getResultList();
+    }
+    public List<OrderItemPojo> filterOrder(ReportOrderForm reportOrderForm){
+        TypedQuery<OrderItemPojo> query = getQuery(select_orders,OrderItemPojo.class);
+        query.setParameter("startOrderId",reportOrderForm.getStartId());
+        query.setParameter("endOrderId",reportOrderForm.getEndId());
         return query.getResultList();
     }
     public void update(OrderItemPojo orderItemPojo){

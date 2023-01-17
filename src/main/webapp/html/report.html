@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="snippets.html :: name_head">
+</head>
+<body>
+<nav th:replace="snippets.html :: name_app_navbar"></nav>
+<div class="container">
+    <form>
+        <div class="form-row">
+            <div class="col">
+                Start Date: <input id="startDate" width="276" required/>
+            </div>
+            <div class="col">
+                End Date: <input id="endDate" width="276" required/>
+            </div>
+            <div class="col">
+                <button type="button" class="btn btn-primary" id="getReport">Get Report</button>
+            </div>
+        </div>
+    </form>
+
+    invoiced_orders_count:<p id="order-count"></p>
+    invoiced_items_count:<p id="item-count"></p>
+    total_revenue:<p id="total-revenue"></p>
+
+
+</div>
+<footer th:replace="snippets.html :: name_footer"></footer>
+
+<script th:src="@{/static/js/report.js}"/></script>
+
+</body>
+</html>

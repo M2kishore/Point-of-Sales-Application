@@ -13,30 +13,6 @@ function getInventoryUrl(){
 	return baseUrl + "/api/inventory";
 }
 //BUTTON ACTIONS
-//function isInventoryAvailable(productId,inventoryCount){
-//    console.log("isInventoryAvailable")
-//    console.log(productId,inventoryCount);
-//    var url = getInventoryUrl() + "/" + productId;
-//    var status = true;
-//    	$.ajax({
-//    	   url: url,
-//    	   type: 'GET',
-//    	   async:false,
-//    	   success: function(data) {
-//    	        currentOrder.map(transaction=>{
-//    	            if(transaction.productId === data.id){
-//    	                console.log(inventoryCount,data.quantity,inventoryCount > data.quantity);
-//    	                if(inventoryCount > data.quantity){
-//    	                    status=false;
-//    	                }
-//    	            }
-//    	        });
-//    	   },
-//    	   error: handleAjaxError
-//    	});
-//    	console.log(status,"status")
-//    return status;
-//}
 function addOrder(){
 var url = getInventoryUrl() + "/" + currentTransaction.productId;
 console.log(url);
@@ -86,28 +62,6 @@ console.log(url);
     	   },
     	   error: handleAjaxError
     	});
-//currentOrder.push(currentTransaction);
-//currentTransaction = {};
-//displayOrderList(currentOrder);
-//resetOrder();
-
-//console.log(currentOrder);
-//var json = JSON.stringify(currentOrder);
-//var url = getOrderUrl()+"/order";
-//$.ajax({
-//       url: url,
-//       type: 'POST',
-//       data: json,
-//       headers: {
-//        'Content-Type': 'application/json'
-//       },
-//       success: function(response) {
-//           console.log(response);
-//           getOrderList();
-//       },
-//       error: handleAjaxError
-//    });
-
 }
 
 function updateOrder(event){
@@ -181,23 +135,6 @@ function submitOrder(){
         });
     });
 }
-
-
-
-function getOrderList(){
-
-}
-//var url = getOrderUrl() + "/" + "all";
-//
-//	$.ajax({
-//	   url: url,
-//	   type: 'GET',
-//	   success: function(data) {
-//	   		displayOrderList(data);
-//	   },
-//	   error: handleAjaxError
-//	});
-//}
 function resetOrder(){
     $('#inputBarcode').val('');
     $('#inputPrice').val(0);
@@ -247,49 +184,6 @@ function processData(){
 	readFileData(file, readFileDataCallback);
 }
 
-function readFileDataCallback(results){
-	fileData = results.data;
-	uploadRows();
-}
-
-function uploadRows(){
-	//Update progress
-	updateUploadDialog();
-	//If everything processed then return
-	if(processCount==fileData.length){
-		return;
-	}
-
-	//Process next row
-	var row = fileData[processCount];
-	processCount++;
-
-	var json = JSON.stringify(row);
-	var url = getOrderUrl();
-
-	//Make ajax call
-	$.ajax({
-	   url: url,
-	   type: 'POST',
-	   data: json,
-	   headers: {
-       	'Content-Type': 'application/json'
-       },
-	   success: function(response) {
-	   		uploadRows();
-	   },
-	   error: function(response){
-	   		row.error=response.responseText
-	   		errorData.push(row);
-	   		uploadRows();
-	   }
-	});
-
-}
-
-function downloadErrors(){
-	writeFileData(errorData);
-}
 
 //UI DISPLAY METHODS
 function deleteTransaction(barcode){
@@ -318,7 +212,6 @@ function init(){
 	$('#add-order').click(addOrder);
 	$('#update-order').click(updateOrder);
 	$('#submit-order').click(submitOrder);
-	$('#refresh-data').click(getOrderList);
 	$('#process-data').click(processData);
     $("#inputQuantity").on('input',updatePrice);
     $("#inputPrice").on('change',updatePrice);

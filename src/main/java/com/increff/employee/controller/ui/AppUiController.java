@@ -37,4 +37,8 @@ public class AppUiController extends AbstractUiController {
 	public ModelAndView order() {
 		return modelAndView("order.html");
 	}
+	@RequestMapping(value = "/ui/report")
+	public ModelAndView report() {
+		return modelAndView("report.html");
+	}
 }

@@ -2,6 +2,8 @@ package com.increff.employee.service;
 
 import com.increff.employee.dao.OrderDao;
 import com.increff.employee.dao.OrderItemDao;
+import com.increff.employee.model.form.ReportDateForm;
+import com.increff.employee.model.form.ReportOrderForm;
 import com.increff.employee.pojo.OrderItemPojo;
 import com.increff.employee.pojo.OrderPojo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +42,14 @@ public class OrderService {
     @Transactional
     public List<OrderItemPojo> getAll(){
         return orderItemDao.selectAll();
+    }
+    @Transactional
+    public List<OrderPojo> filterId(ReportDateForm reportDateForm){
+        return orderDao.filterId(reportDateForm);
+    }
+    @Transactional
+    public List<OrderItemPojo> filterOrders(ReportOrderForm reportOrderForm){
+        return orderItemDao.filterOrder(reportOrderForm);
     }
     @Transactional
     public void delete(int id){
