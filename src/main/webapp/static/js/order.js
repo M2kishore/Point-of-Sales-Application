@@ -101,7 +101,7 @@ function updateInventory(id,quantity,transaction){
             'Content-Type': 'application/json'
           },
        success: function(response) {
-            var orderItemObject = {"productId":transaction.productId,"orderId":transaction.orderId,"quantity":transaction.quantity,"sellingPrice":transaction.sellingPrice};
+            var orderItemObject = {"productId":transaction.productId,"orderId":currentOrderId,"quantity":transaction.quantity,"sellingPrice":transaction.sellingPrice};
             var orderItemObjectJson = JSON.stringify(orderItemObject);
             var url = getOrderUrl()+"/order";
             $.ajax({
@@ -120,19 +120,39 @@ function updateInventory(id,quantity,transaction){
        error: handleAjaxError
     });
 }
-function submitOrder(){
+function getProductInformation(){
     currentOrder.map(transaction=>{
-        var url = getInventoryUrl() + "/" +transaction.productId;
-        console.log(url);
-        $.ajax({
-           url: url,
-           type: 'GET',
-           success: function(data) {
-                let newQuantity = data.quantity-transaction.quantity;
-                updateInventory(data.id,newQuantity,transaction);
-           },
-           error: handleAjaxError
+            var url = getInventoryUrl() + "/" +transaction.productId;
+            console.log(url);
+            $.ajax({
+               url: url,
+               type: 'GET',
+               success: function(data) {
+                    let newQuantity = data.quantity-transaction.quantity;
+                    updateInventory(data.id,newQuantity,transaction);
+               },
+               error: handleAjaxError
+            });
         });
+}
+function submitOrder(){
+    var url = getOrderUrl();
+    const now = Date.now();
+    var data = {"date": now}
+    var dataJson = JSON.stringify(data);
+    //getting order id for order
+    $.ajax({
+       url: url,
+       type: 'POST',
+       data: dataJson,
+       headers: {
+         'Content-Type': 'application/json'
+       },
+       success: function(data) {
+            currentOrderId = data;
+            getProductInformation();
+       },
+       error: handleAjaxError
     });
 }
 function resetOrder(){
@@ -166,7 +186,6 @@ function updatePrice(){
            currentTransaction.productId = data.productId;
            currentTransaction.barcode = data.barcode;
            currentTransaction.name = data.name;
-           currentTransaction.orderId = currentOrderId;
            currentTransaction.mrp = data.mrp;
        },
        error: handleAjaxError
@@ -217,27 +236,5 @@ function init(){
     $("#inputPrice").on('change',updatePrice);
     $("#inputBarcode").on('change',updatePrice);
 }
-
-function getOrderId(){
-    var url = getOrderUrl();
-    const now = Date.now();
-    var data = {"date": now}
-    var dataJson = JSON.stringify(data);
-    $.ajax({
-       url: url,
-       type: 'POST',
-       data: dataJson,
-       headers: {
-         'Content-Type': 'application/json'
-       },
-       success: function(data) {
-            currentOrderId = data;
-            $('#orderNumber').html("#"+data);
-       },
-       error: handleAjaxError
-    });
-}
-
 $(document).ready(init);
-$(document).ready(getOrderId);
 
