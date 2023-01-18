@@ -62,6 +62,8 @@ function getQuantityAndSellingPrice(orderArray){
 //INITIALIZATION CODE
 
 function init(){
+    var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+    today.setDate(today.getDate()+1);
     $('#startDate').datepicker({
         uiLibrary: 'bootstrap4',
         iconsLibrary: 'fontawesome',
@@ -76,7 +78,8 @@ function init(){
         format: 'mm/dd/yyyy',
         minDate: function () {
             return $('#startDate').val();
-        }
+        },
+        maxDate: today
     });
 $('#getReport').click(getReport);
 }

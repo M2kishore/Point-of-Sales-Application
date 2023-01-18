@@ -1,6 +1,8 @@
 package com.increff.employee.controller.api;
 
 import com.increff.employee.model.data.OrderData;
+import com.increff.employee.model.form.BillForm;
+import com.increff.employee.model.form.BillFormList;
 import com.increff.employee.model.form.OrderForm;
 import com.increff.employee.model.form.OrderItemForm;
 import com.increff.employee.pojo.OrderItemPojo;
@@ -9,19 +11,41 @@ import com.increff.employee.pojo.ProductPojo;
 import com.increff.employee.service.ApiException;
 import com.increff.employee.service.OrderService;
 import com.increff.employee.service.ProductService;
+import com.increff.employee.spring.SecurityConfig;
 import com.increff.employee.util.DateUtil;
 import com.increff.employee.model.data.OrderItemData;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.fop.apps.Fop;
+import org.apache.fop.apps.FopFactory;
+import org.apache.fop.apps.MimeConstants;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.transform.Result;
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.sax.SAXResult;
+import javax.xml.transform.stream.StreamSource;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
 @Api
 @RestController
 public class OrderApiController {
+    private static Logger logger = Logger.getLogger(OrderApiController.class);
     @Autowired
     private OrderService orderService;
     @Autowired
@@ -42,6 +66,54 @@ public class OrderApiController {
             list2.add(convertPojoToData(orderItemPojo));
         }
         return list2;
+    }
+    @ApiOperation(value = "gets PDF of invoice")
+    @RequestMapping(path = "api/order/pdf",method = RequestMethod.POST)
+    protected void doGet(@RequestBody BillFormList billFormList, HttpServletRequest req, HttpServletResponse response) throws ServletException, IOException {
+        String billFormListXml = jaxbObjectToXML(billFormList);
+        logger.info(billFormListXml);
+        //creating the instance of file
+        File path = new File(System.getProperty("user.dir")+"/src/main/resources/bill.xml");
+
+        //passing file instance in filewriter
+        FileWriter wr = new FileWriter(path);
+
+        //calling writer.write() method with the string
+        wr.write(billFormListXml);
+
+        //flushing the writer
+        wr.flush();
+
+        //closing the writer
+        wr.close();
+        try{
+            FopFactory fopFactory = FopFactory.newInstance(new File(".").toURI());
+
+            //Setup a buffer to obtain the content length
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+            Fop fop = fopFactory.newFop(MimeConstants.MIME_PDF, out);
+            TransformerFactory factory = TransformerFactory.newInstance();
+            Transformer transformer = factory.newTransformer(new StreamSource("src/main/resources/template.xsl"));
+            //Make sure the XSL transformation's result is piped through to FOP
+            Result res = new SAXResult(fop.getDefaultHandler());
+
+            //Setup input
+            Source src = new StreamSource(new File(System.getProperty("user.dir")+"/src/main/resources/bill.xml"));
+
+            //Start the transformation and rendering process
+            transformer.transform(src, res);
+
+            //Prepare response
+            response.setContentType("application/pdf");
+            response.setContentLength(out.size());
+
+            //Send content to Browser
+            response.getOutputStream().write(out.toByteArray());
+            response.getOutputStream().flush();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }
     @ApiOperation(value = "add date and time for orders")
     @RequestMapping(path="/api/order",method = RequestMethod.POST)
@@ -93,4 +165,32 @@ public class OrderApiController {
         return orderData;
     }
 
+    private static String jaxbObjectToXML(BillFormList billFormList)
+    {
+        try
+        {
+            //Create JAXB Context
+            JAXBContext jaxbContext = JAXBContext.newInstance(BillFormList.class);
+
+            //Create Marshaller
+            Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+
+            //Required formatting??
+            jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+
+            //Print XML String to Console
+            StringWriter sw = new StringWriter();
+
+            //Write XML to StringWriter
+            jaxbMarshaller.marshal(billFormList, sw);
+
+            //Verify XML Content
+            String xmlContent = sw.toString();
+            return xmlContent;
+
+        } catch (JAXBException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
 }

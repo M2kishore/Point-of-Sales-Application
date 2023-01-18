@@ -2,6 +2,7 @@
 let currentOrder = [];
 let currentTransaction = {};
 let currentOrderId = -1;
+let total = 0;
 function getOrderUrl(){
 
 	var baseUrl = $("meta[name=baseUrl]").attr("content")
@@ -26,6 +27,8 @@ console.log(url);
     	        if(currentOrder.length == 0){
     	            if(currentQuantity < data.quantity){
     	                currentOrder.push(currentTransaction);
+    	                total+=price*currentQuantity;
+    	                console.log(currentOrder);
     	                currentTransaction = {};
     	                resetOrder();
     	                displayOrderList(currentOrder);
@@ -42,6 +45,7 @@ console.log(url);
     	                    //duplicate entry
                             transaction.quantity += currentQuantity;
                             transaction.sellingPrice += currentQuantity*price;
+                            total += currentQuantity*price;
                             currentTransaction = {};
                             displayOrderList(currentOrder);
                             resetOrder();
@@ -53,10 +57,13 @@ console.log(url);
                 //new entry of transaction
                 if(currentQuantity < data.quantity){
                     currentOrder.push(currentTransaction);
+                    total += currentQuantity*price;
                 }else{
                     alert("given quantity is larger than the inventory");
+                    return;
                 }
                 currentTransaction = {};
+                $('#total').text(total);
     	        displayOrderList(currentOrder);
     	        resetOrder();
     	   },
@@ -158,6 +165,7 @@ function submitOrder(){
 function resetOrder(){
     $('#inputBarcode').val('');
     $('#inputPrice').val(0);
+    $('#inputQuantity').val(1);
     $('#inputMrp').val(0);
     $('#inputName').val("");
     $('#inputSellingPrice').val(0);
@@ -175,7 +183,6 @@ function updatePrice(){
            let sellingPrice = price*quantity;
            if(data.mrp < price){
                 alert("Price cannot be greater than mrp");
-                resetOrder();
                 return;
            }
            $('#inputMrp').val(data.mrp);
@@ -206,7 +213,13 @@ function processData(){
 
 //UI DISPLAY METHODS
 function deleteTransaction(barcode){
-    currentOrder = currentOrder.filter(transaction=>transaction.barcode != barcode);
+    currentOrder = currentOrder.filter(transaction=>{
+        if(transaction.barcode === barcode){
+            total-=transaction.sellingPrice;
+            return false;
+        }
+        return true;
+    });
     displayOrderList(currentOrder);
 }
 function displayOrderList(currentOrder){
@@ -224,12 +237,37 @@ function displayOrderList(currentOrder){
         $tbody.append(row);
     }
 }
-
+function getInvoice(){
+var url = getOrderUrl()+"/pdf";
+var orderObject = {"billForm":currentOrder,"total":total};
+var orderJson = JSON.stringify(orderObject);
+console.log(orderJson)
+    $.ajax({
+       url: url,
+       type: 'POST',
+         data: orderJson,
+         headers: {
+        'Content-Type': 'application/json'
+       },
+         xhrFields: {
+        responseType: 'blob'
+     },
+       success: function(blob) {
+            console.log(blob.size);
+            var link=document.createElement('a');
+            link.href=window.URL.createObjectURL(blob);
+            link.download="Invoice_" + new Date() + ".pdf";
+            link.click();
+       },
+       error: handleAjaxError
+    });
+}
 
 //INITIALIZATION CODE
 function init(){
 	$('#add-order').click(addOrder);
 	$('#update-order').click(updateOrder);
+	$('#get-invoice').click(getInvoice);
 	$('#submit-order').click(submitOrder);
 	$('#process-data').click(processData);
     $("#inputQuantity").on('input',updatePrice);
