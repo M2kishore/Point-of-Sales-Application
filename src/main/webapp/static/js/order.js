@@ -223,11 +223,10 @@ function deleteTransaction(barcode){
     displayOrderList(currentOrder);
 }
 function displayOrderList(currentOrder){
-    console.log(currentOrder)
     var $tbody = $('#order-table').find('tbody');
     $tbody.empty();
     for(var product of currentOrder){
-        var buttonHtml = ' <button onclick="deleteTransaction(' + product.barcode + ')">delete</button>'
+        var buttonHtml = `<button onclick="deleteTransaction('${product.barcode}')">delete</button>`
         var row = '<tr>'
         + '<td>' + product.name + '</td>'
         + '<td>'  + product.quantity + '</td>'
