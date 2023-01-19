@@ -13,15 +13,86 @@
             <div class="col">
                 End Date: <input id="endDate" width="276" required/>
             </div>
-            <div class="col">
+            <div class="row">
                 <button type="button" class="btn btn-primary" id="getReport">Get Report</button>
             </div>
         </div>
     </form>
+    <div class="col-12">
+        <div class="row">
+            <div class="col-4">
+                No of Orders:<span id="order-count"></span>
+            </div>
+            <div class="col-4">
+                No of Items:<span id="item-count"></span>
+            </div>
+            <div class="col-4">
+                Total Revenue:<span id="total-revenue"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-3">
+            <button type="button" class="btn btn-primary" id="getCategoryReport">Get Category Report</button>
+        </div>
+        <div class="col-3">
+            <button type="button" class="btn btn-primary" id="getBrandReport">Get Brand Report</button>
+        </div>
+        <div class="col-3">
+            <button type="button" class="btn btn-primary" id="getInventoryReport">Get Inventory Report</button>
+        </div>
+    </div>
+    <div class="row">
 
-    invoiced_orders_count:<p id="order-count"></p>
-    invoiced_items_count:<p id="item-count"></p>
-    total_revenue:<p id="total-revenue"></p>
+        <!-- Table  Category-->
+        <div class="col-12">
+            <table class="table table-striped" id="category-table">
+                <thead>
+                <tr>
+                    <th scope="col">Category</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Revenue</th>
+                </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+    <div class="row">
+
+    <!-- Table Brand-->
+    <div class="col-12">
+        <table class="table table-striped" id="brand-table">
+            <thead>
+            <tr>
+                <th scope="col">Brand</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Revenue</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+
+    </div>
+    <!-- Table Inventory-->
+    <div class="col-12">
+        <table class="table table-striped" id="inventory-table">
+            <thead>
+            <tr>
+                <th scope="col">Brand</th>
+                <th scope="col">Category</th>
+                <th scope="col">Quantity</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+
+    </div>
+</div>
 
 
 </div>

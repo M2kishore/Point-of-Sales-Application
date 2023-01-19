@@ -1,19 +1,40 @@
+var orders = [];
+var products = {};
+var brandCategory = {};
+var inventory = {};
 var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
 function getReportUrl(){
 
 	var baseUrl = $("meta[name=baseUrl]").attr("content")
 	return baseUrl + "/api/report";
 }
+function getProductUrl(){
 
+	var baseUrl = $("meta[name=baseUrl]").attr("content")
+	return baseUrl + "/api/product";
+}
+function getBrandUrl(){
+
+	var baseUrl = $("meta[name=baseUrl]").attr("content")
+	return baseUrl + "/api/brand";
+}
+function getInventoryUrl(){
+
+	var baseUrl = $("meta[name=baseUrl]").attr("content")
+	return baseUrl + "/api/inventory";
+}
 function getReport(){
     let startDate = $('#startDate').val();
     let endDate = $('#endDate').val();
+    if(startDate === '' || endDate === ''){
+        alert("enter Start Date and End Date");
+        return;
+    }
     var startDateTimestamp = Date.parse(startDate);
     var endDateTimestamp = Date.parse(endDate);
     var startDateMilliSeconds = new Date(startDateTimestamp).getTime();
     var endDateMilliSeconds = new Date(endDateTimestamp).getTime();
     var DateObject = {"endDate":endDateMilliSeconds,"startDate":startDateMilliSeconds};
-    console.log(DateObject);
     var DateJson = JSON.stringify(DateObject);
     var url = getReportUrl();
 
@@ -24,10 +45,9 @@ function getReport(){
        headers: {
         'Content-Type': 'application/json'
        },
-       success: function(response) {
-            console.log(response);
+       success:async function(response) {
             $("#order-count").text(response.length);
-            getQuantityAndSellingPrice(response);
+            await getQuantityAndSellingPrice(response);
        },
        error: handleAjaxError
     });
@@ -46,10 +66,11 @@ function getQuantityAndSellingPrice(orderArray){
         'Content-Type': 'application/json'
        },
        success: function(orderItems) {
-        console.log(orderItems);
+       orders = [...orderItems];
             var quantity = 0;
             var revenue = 0;
             orderItems.map(item=>{
+                getProductData(item.productId);
                 quantity += item.quantity;
                 revenue += item.sellingPrice;
             });
@@ -59,18 +80,128 @@ function getQuantityAndSellingPrice(orderArray){
        error: handleAjaxError
     });
 }
+function getProductData(productId){
+if(products.hasOwnProperty(productId)){
+    return;
+}
+   var url = getProductUrl() + "/" + productId;
+   	$.ajax({
+   	   url: url,
+   	   type: 'GET',
+   	   success: function(productData) {
+   	        products[productData.id] = productData;
+   	        getBrandCategory(productData.brandCategory);
+   	   },
+   	   error: handleAjaxError
+   	});
+}
+function getBrandCategory(id){
+    if(brandCategory.hasOwnProperty(id)){
+        return;
+    }
+    var url = getBrandUrl() + "/" + id;
+    $.ajax({
+       url: url,
+       type: 'GET',
+       success: function(brandCategoryData) {
+            brandCategory[id] = brandCategoryData;
+            getInventory(id);
+       },
+       error: handleAjaxError
+    });
+}
+function getInventory(id){
+    if(inventory.hasOwnProperty(id)){
+      return;
+    }
+    var url = getInventoryUrl() + "/" + id;
+    $.ajax({
+       url: url,
+       type: 'GET',
+       success: function(inventoryData) {
+            inventory[id] = inventoryData;
+       },
+       error: handleAjaxError
+    });
+}
+function getInventoryReport(){
+    let inventoryReport = {};
+    orders.map(order=>{
+        var id = brandCategory[products[order.productId]["brandCategory"]]["id"];
+        var brand = brandCategory[products[order.productId]["brandCategory"]]["brand"];
+        var category = brandCategory[products[order.productId]["brandCategory"]]["category"];
+        if(!inventoryReport.hasOwnProperty(id)){
+            inventoryReport[id] = {"brand":brand,"category":category,"quantity":0};
+        }
+        inventoryReport[id]["quantity"] += order.quantity;
+    });
+    var $tbody = $('#inventory-table').find('tbody');
+    $tbody.empty();
+    for(var id in inventoryReport){
+        var reportObject = inventoryReport[id];
+        var row = '<tr>'
+        + '<td>' + reportObject.brand + '</td>'
+        + '<td>' + reportObject.category + '</td>'
+        + '<td>'  + reportObject.quantity + '</td>'
+        + '</tr>';
+        $tbody.append(row);
+    }
+}
+function getBrandReport(){
+    let brandReport = {};
+    orders.map(order=>{
+        var brand = brandCategory[products[order.productId]["brandCategory"]]["brand"];
+        if(!brandReport.hasOwnProperty(brand)){
+            brandReport[brand] = {"quantity":0,"revenue":0};
+        }
+        brandReport[brand]["quantity"] += order.quantity;
+        brandReport[brand]["revenue"] += order.sellingPrice;
+    });
+    var $tbody = $('#brand-table').find('tbody');
+    $tbody.empty();
+    for(var brand in brandReport){
+        var reportObject = brandReport[brand];
+        var row = '<tr>'
+        + '<td>' + brand + '</td>'
+        + '<td>' + reportObject.quantity + '</td>'
+        + '<td>'  + reportObject.revenue + '</td>'
+        + '</tr>';
+        $tbody.append(row);
+    }
+}
+function getCategoryReport(){
+    let categoryReport = {};
+    orders.map(order=>{
+        var category = brandCategory[products[order.productId]["brandCategory"]]["category"];
+        if(!categoryReport.hasOwnProperty(category)){
+            categoryReport[category] = {"quantity":0,"revenue":0};
+        }
+        categoryReport[category]["quantity"] += order.quantity;
+        categoryReport[category]["revenue"] += order.sellingPrice;
+    });
+    var $tbody = $('#category-table').find('tbody');
+    $tbody.empty();
+    for(var category in categoryReport){
+        var reportObject = categoryReport[category];
+        var row = '<tr>'
+        + '<td>' + category + '</td>'
+        + '<td>' + reportObject.quantity + '</td>'
+        + '<td>'  + reportObject.revenue + '</td>'
+        + '</tr>';
+        $tbody.append(row);
+    }
+}
 //INITIALIZATION CODE
 
 function init(){
     var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
-    today.setDate(today.getDate()+1);
+    var nextDate = new Date();
+    nextDate.setDate(today.getDate()+1);
     $('#startDate').datepicker({
         uiLibrary: 'bootstrap4',
         iconsLibrary: 'fontawesome',
         format: 'mm/dd/yyyy',
-        maxDate: function () {
-            return $('#endDate').val();
-        }
+        maxDate: today
     });
     $('#endDate').datepicker({
         uiLibrary: 'bootstrap4',
@@ -79,9 +210,11 @@ function init(){
         minDate: function () {
             return $('#startDate').val();
         },
-        maxDate: today
+        maxDate: nextDate
     });
 $('#getReport').click(getReport);
+$('#getBrandReport').click(getBrandReport);
+$('#getCategoryReport').click(getCategoryReport);
+$('#getInventoryReport').click(getInventoryReport);
 }
 $(document).ready(init);
-
