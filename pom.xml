@@ -33,7 +33,7 @@
 		<!-- Jetty configuration -->
 		<jetty.version>9.4.21.v20190926</jetty.version>
 		<jetty.http.port>9001</jetty.http.port>
-		<jetty.context>/employee</jetty.context>
+		<jetty.context>/pos</jetty.context>
 		<failOnMissingWebXml>false</failOnMissingWebXml>
 
 

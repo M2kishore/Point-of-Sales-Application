@@ -1,4 +1,5 @@
 let productList = [];
+let filteredProductList = [];
 function getInventoryUrl(){
 
 	var baseUrl = $("meta[name=baseUrl]").attr("content")
@@ -162,8 +163,20 @@ function downloadErrors(){
 }
 
 //UI DISPLAY METHODS
+function filterSelect(){
+    var searchString = $('#inputSearch').val();
+    filteredProductList = productList.filter(product=>{
+        if(product.name.includes(searchString) || product.barcode.includes(searchString)){
+            return true;
+        }
+        return false;
+    });
+    displayProductSelect(filteredProductList);
+    $('#product-select').show().focus().click();
+}
 function displayProductSelect(productList){
     var productSelect = $('#product-select');
+    productSelect.empty();
     for(product of productList){
         productSelect.append("<option value="+product.id+">"+product.name+"</option>");
     }
@@ -229,7 +242,8 @@ function init(){
 	$('#upload-data').click(displayUploadData);
 	$('#process-data').click(processData);
 	$('#download-errors').click(downloadErrors);
-    $('#inventoryFile').on('change', updateFileName)
+    $('#inventoryFile').on('change', updateFileName);
+    $('#inputSearch').on('change',filterSelect);
 }
 
 $(document).ready(init);
