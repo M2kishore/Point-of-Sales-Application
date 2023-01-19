@@ -1,5 +1,6 @@
 
 let currentOrder = [];
+let billedOrder = [];
 let currentTransaction = {};
 let currentOrderId = -1;
 let total = 0;
@@ -15,8 +16,11 @@ function getInventoryUrl(){
 }
 //BUTTON ACTIONS
 function addOrder(){
+if(currentTransaction.productId === undefined){
+    alert("invalid barcode");
+    return;
+}
 var url = getInventoryUrl() + "/" + currentTransaction.productId;
-console.log(url);
     	$.ajax({
     	   url: url,
     	   type: 'GET',
@@ -37,7 +41,7 @@ console.log(url);
     	        }
     	        for(var transaction of currentOrder){
     	            if(transaction.productId === data.id){
-    	                if(transaction.quantity+currentQuantity > data.quantity){
+    	                if(transaction.quantity+currentQuantity <= data.quantity){
     	                    alert("given quantity is larger than the inventory");
     	                    return
     	                }else{
@@ -47,6 +51,7 @@ console.log(url);
                             transaction.sellingPrice += currentQuantity*price;
                             total += currentQuantity*price;
                             currentTransaction = {};
+                            $('#total').text(total);
                             displayOrderList(currentOrder);
                             resetOrder();
                             return
@@ -55,7 +60,7 @@ console.log(url);
     	            }
     	        };
                 //new entry of transaction
-                if(currentQuantity < data.quantity){
+                if(currentQuantity <= data.quantity){
                     currentOrder.push(currentTransaction);
                     total += currentQuantity*price;
                 }else{
@@ -119,7 +124,7 @@ function updateInventory(id,quantity,transaction){
                 'Content-Type': 'application/json'
                },
                success: function(response) {
-                    location.reload();
+                    billedOrder.push(transaction);
                },
                error: handleAjaxError
             });
@@ -129,18 +134,26 @@ function updateInventory(id,quantity,transaction){
 }
 function getProductInformation(){
     currentOrder.map(transaction=>{
-            var url = getInventoryUrl() + "/" +transaction.productId;
-            console.log(url);
-            $.ajax({
-               url: url,
-               type: 'GET',
-               success: function(data) {
-                    let newQuantity = data.quantity-transaction.quantity;
+        var url = getInventoryUrl() + "/" +transaction.productId;
+        $.ajax({
+           url: url,
+           type: 'GET',
+           success: function(data) {
+                let newQuantity = data.quantity-transaction.quantity;
+                if(newQuantity >= 0){
                     updateInventory(data.id,newQuantity,transaction);
-               },
-               error: handleAjaxError
-            });
+                }else{
+                    alert("insufficient inventory for "+transaction.name);
+                }
+           },
+           error: handleAjaxError
         });
+    });
+    //disable add and enable invoice
+    alert("success, refresh for new order or click invoice to download invoice");
+    $('#add-order').prop('disabled', true);
+    $('#get-invoice').prop('disabled', false);
+    $('#submit-order').prop('disabled', true);
 }
 function submitOrder(){
     var url = getOrderUrl();
@@ -216,6 +229,7 @@ function deleteTransaction(barcode){
     currentOrder = currentOrder.filter(transaction=>{
         if(transaction.barcode === barcode){
             total-=transaction.sellingPrice;
+            $('#total').text(total);
             return false;
         }
         return true;
@@ -238,7 +252,8 @@ function displayOrderList(currentOrder){
 }
 function getInvoice(){
 var url = getOrderUrl()+"/pdf";
-var orderObject = {"billForm":currentOrder,"total":total};
+var total = billedOrder.reduce((total,transaction)=>total+transaction.sellingPrice,0);
+var orderObject = {"billForm":billedOrder,"total":total,"orderId":currentOrderId};
 var orderJson = JSON.stringify(orderObject);
 console.log(orderJson)
     $.ajax({

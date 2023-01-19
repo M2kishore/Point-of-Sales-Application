@@ -7,6 +7,15 @@ public class BillFormList {
 
     private List<BillForm> billForm;
     private double total;
+    private int orderId;
+
+    public int getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(int orderId) {
+        this.orderId = orderId;
+    }
 
     public List<BillForm> getBillForm() {
         return billForm;

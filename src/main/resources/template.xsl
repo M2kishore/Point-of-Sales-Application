@@ -14,7 +14,9 @@
             <fo:page-sequence master-reference="simpleA4">
                 <fo:flow flow-name="xsl-region-body">
                     <fo:block font-size="16pt" font-weight="bold" space-after="5mm">Invoice
-<!--                        <xsl:value-of select="companyname"/>-->
+                    </fo:block>
+                    <fo:block font-size="16pt" font-weight="bold">Order#
+                        <xsl:value-of select="orderId"/>
                     </fo:block>
                     <fo:block font-size="10pt">
                         <fo:table table-layout="fixed" width="100%" border-collapse="separate">

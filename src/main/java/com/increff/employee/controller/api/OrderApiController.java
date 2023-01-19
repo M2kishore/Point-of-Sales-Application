@@ -69,7 +69,7 @@ public class OrderApiController {
     }
     @ApiOperation(value = "gets PDF of invoice")
     @RequestMapping(path = "api/order/pdf",method = RequestMethod.POST)
-    protected void doGet(@RequestBody BillFormList billFormList, HttpServletRequest req, HttpServletResponse response) throws ServletException, IOException {
+    protected void makePdf(@RequestBody BillFormList billFormList, HttpServletRequest req, HttpServletResponse response) throws ServletException, IOException {
         String billFormListXml = jaxbObjectToXML(billFormList);
         logger.info(billFormListXml);
         //creating the instance of file
