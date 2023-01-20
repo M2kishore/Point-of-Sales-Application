@@ -13,39 +13,39 @@
             <div class="col">
                 End Date: <input id="endDate" width="276" required/>
             </div>
-            <div class="row">
-                <button type="button" class="btn btn-primary" id="getReport">Get Report</button>
-            </div>
         </div>
     </form>
-    <div class="col-12">
+    <hr>
+    <div class="col-12 mt-2 mb-2">
         <div class="row">
             <div class="col-4">
-                No of Orders:<span id="order-count"></span>
+                <h4>No of Orders:&nbsp;<span id="order-count"></span></h4>
             </div>
             <div class="col-4">
-                No of Items:<span id="item-count"></span>
+                <h4>No of Items:&nbsp;<span id="item-count"></span></h4>
             </div>
             <div class="col-4">
-                Total Revenue:<span id="total-revenue"></span>
+                <h4>Total Revenue:&nbsp;<span id="total-revenue"></span></h4>
             </div>
         </div>
     </div>
-    <div class="row">
+    <hr>
+    <div class="row mt-2 mb-4">
         <div class="col-3">
-            <button type="button" class="btn btn-primary" id="getCategoryReport">Get Category Report</button>
+            <button type="button" class="btn btn-primary" id="getCategoryReport">Category Report</button>
         </div>
         <div class="col-3">
-            <button type="button" class="btn btn-primary" id="getBrandReport">Get Brand Report</button>
+            <button type="button" class="btn btn-primary" id="getBrandReport">Brand Report</button>
         </div>
         <div class="col-3">
-            <button type="button" class="btn btn-primary" id="getInventoryReport">Get Inventory Report</button>
+            <button type="button" class="btn btn-primary" id="getInventoryReport">Inventory Report</button>
         </div>
     </div>
     <div class="row">
 
         <!-- Table  Category-->
-        <div class="col-12">
+        <div class="col-12" id="category-table-div">
+            <h3>Category Table</h3>
             <table class="table table-striped" id="category-table">
                 <thead>
                 <tr>
@@ -57,42 +57,42 @@
                 <tbody>
                 </tbody>
             </table>
-
         </div>
     </div>
     <div class="row">
-
     <!-- Table Brand-->
-    <div class="col-12">
-        <table class="table table-striped" id="brand-table">
-            <thead>
-            <tr>
-                <th scope="col">Brand</th>
-                <th scope="col">Quantity</th>
-                <th scope="col">Revenue</th>
-            </tr>
-            </thead>
-            <tbody>
-            </tbody>
-        </table>
-
+        <div class="col-12" id="brand-table-div">
+            <h3>Brand Table</h3>
+            <table class="table table-striped" id="brand-table">
+                <thead>
+                <tr>
+                    <th scope="col">Brand</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Revenue</th>
+                </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
     </div>
+    <div class="row">
     <!-- Table Inventory-->
-    <div class="col-12">
-        <table class="table table-striped" id="inventory-table">
-            <thead>
-            <tr>
-                <th scope="col">Brand</th>
-                <th scope="col">Category</th>
-                <th scope="col">Quantity</th>
-            </tr>
-            </thead>
-            <tbody>
-            </tbody>
-        </table>
-
+        <div class="col-12" id="inventory-table-div"n>
+            <h3>Inventory Table</h3>
+            <table class="table table-striped" id="inventory-table">
+                <thead>
+                <tr>
+                    <th scope="col">Brand</th>
+                    <th scope="col">Category</th>
+                    <th scope="col">Quantity</th>
+                </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
     </div>
-</div>
 
 
 </div>

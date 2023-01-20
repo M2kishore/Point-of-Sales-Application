@@ -26,10 +26,6 @@ function getInventoryUrl(){
 function getReport(){
     let startDate = $('#startDate').val();
     let endDate = $('#endDate').val();
-    if(startDate === '' || endDate === ''){
-        alert("enter Start Date and End Date");
-        return;
-    }
     var startDateTimestamp = Date.parse(startDate);
     var endDateTimestamp = Date.parse(endDate);
     var startDateMilliSeconds = new Date(startDateTimestamp).getTime();
@@ -125,6 +121,9 @@ function getInventory(id){
     });
 }
 function getInventoryReport(){
+    $('#category-table-div').hide();
+    $('#brand-table-div').hide();
+    $('#inventory-table-div').show();
     let inventoryReport = {};
     orders.map(order=>{
         var id = brandCategory[products[order.productId]["brandCategory"]]["id"];
@@ -148,6 +147,9 @@ function getInventoryReport(){
     }
 }
 function getBrandReport(){
+    $('#category-table-div').hide();
+    $('#brand-table-div').show();
+    $('#inventory-table-div').hide();
     let brandReport = {};
     orders.map(order=>{
         var brand = brandCategory[products[order.productId]["brandCategory"]]["brand"];
@@ -170,6 +172,9 @@ function getBrandReport(){
     }
 }
 function getCategoryReport(){
+    $('#category-table-div').show();
+    $('#brand-table-div').hide();
+    $('#inventory-table-div').hide();
     let categoryReport = {};
     orders.map(order=>{
         var category = brandCategory[products[order.productId]["brandCategory"]]["category"];
@@ -216,5 +221,10 @@ $('#getReport').click(getReport);
 $('#getBrandReport').click(getBrandReport);
 $('#getCategoryReport').click(getCategoryReport);
 $('#getInventoryReport').click(getInventoryReport);
+$('#endDate').on('change',getReport);
+$('#startDate').on('change',getReport)
+$('#category-table-div').hide();
+$('#brand-table-div').hide();
+$('#inventory-table-div').hide();
 }
 $(document).ready(init);
