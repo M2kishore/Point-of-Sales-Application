@@ -97,6 +97,11 @@ function readFileDataCallback(results){
 }
 
 function uploadRows(){
+    //no of rows check
+    if (fileData.length>5000){
+        alert("File Rows should be within 5000 rows");
+        return;
+    }
 	//Update progress
 	updateUploadDialog();
 	//If everything processed then return

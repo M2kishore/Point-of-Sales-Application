@@ -200,6 +200,11 @@ function displayInventoryList(productData,inventoryData){
 }
 
 function resetUploadDialog(){
+    //no of rows check
+    if (fileData.length>5000){
+        alert("File Rows should be within 5000 rows");
+        return;
+    }
 	//Reset file name
 	var $file = $('#inventoryFile');
 	$file.val('');
