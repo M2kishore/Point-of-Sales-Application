@@ -52,6 +52,9 @@ function getQuantityAndSellingPrice(orderArray){
     var url = getReportUrl()+"/order";
     var startId = orderArray.shift();
     var endId = orderArray.pop();
+    if(orderArray.length === 0){
+        endId = startId;
+    }
     var idObject = {"endId":endId,"startId":startId};
     var idJson = JSON.stringify(idObject);
     $.ajax({

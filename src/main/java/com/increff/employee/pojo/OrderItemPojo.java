@@ -1,13 +1,12 @@
 package com.increff.employee.pojo;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+
 @Entity
 public class OrderItemPojo {
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy= GenerationType.SEQUENCE,generator = "orderItemIdSequence")
+    @SequenceGenerator(name = "orderItemIdSequence",initialValue = 100000,allocationSize = 1,sequenceName = "orderItemId")
     private int id;
     private int orderId;
     private int productId;
