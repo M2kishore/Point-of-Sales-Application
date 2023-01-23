@@ -2,6 +2,8 @@ var orders = [];
 var products = {};
 var brandCategory = {};
 var inventory = {};
+var brandString="";
+var categoryString="";
 var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
 function getReportUrl(){
 
@@ -26,6 +28,8 @@ function getInventoryUrl(){
 function getReport(){
     let startDate = $('#startDate').val();
     let endDate = $('#endDate').val();
+    brandString = $('#inputBrand').val();
+    categoryString = $('#inputCategory').val();
     var startDateTimestamp = Date.parse(startDate);
     var endDateTimestamp = Date.parse(endDate);
     var startDateMilliSeconds = new Date(startDateTimestamp).getTime();
@@ -141,6 +145,9 @@ function getInventoryReport(){
     $tbody.empty();
     for(var id in inventoryReport){
         var reportObject = inventoryReport[id];
+        if(!reportObject.brand.includes(brandString) || reportObject.category.includes(categoryString)){
+            continue;
+        }
         var row = '<tr>'
         + '<td>' + reportObject.brand + '</td>'
         + '<td>' + reportObject.category + '</td>'
@@ -165,6 +172,9 @@ function getBrandReport(){
     var $tbody = $('#brand-table').find('tbody');
     $tbody.empty();
     for(var brand in brandReport){
+        if(!brand.includes(brandString)){
+            continue;
+        }
         var reportObject = brandReport[brand];
         var row = '<tr>'
         + '<td>' + brand + '</td>'
@@ -191,6 +201,9 @@ function getCategoryReport(){
     $tbody.empty();
     for(var category in categoryReport){
         var reportObject = categoryReport[category];
+        if(!category.includes(categoryString)){
+            continue;
+        }
         var row = '<tr>'
         + '<td>' + category + '</td>'
         + '<td>' + reportObject.quantity + '</td>'
@@ -226,6 +239,8 @@ $('#getCategoryReport').click(getCategoryReport);
 $('#getInventoryReport').click(getInventoryReport);
 $('#endDate').on('change',getReport);
 $('#startDate').on('change',getReport)
+$('#inputBrand').on('change',getReport)
+$('#inputCategory').on('change',getReport)
 $('#category-table-div').hide();
 $('#brand-table-div').hide();
 $('#inventory-table-div').hide();
