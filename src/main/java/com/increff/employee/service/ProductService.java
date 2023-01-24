@@ -15,21 +15,17 @@ public class ProductService {
     @Transactional(rollbackOn = ApiException.class)
     public int add(ProductPojo newProductPojo) throws ApiException {
         normalize(newProductPojo);
-        if(StringUtil.isEmpty(newProductPojo.getBarcode()) ||
+        if (StringUtil.isEmpty(newProductPojo.getBarcode()) ||
                 StringUtil.isEmpty(String.valueOf(newProductPojo.getBrandCategory())) ||
-                StringUtil.isEmpty(newProductPojo.getName())||
+                StringUtil.isEmpty(newProductPojo.getName()) ||
                 StringUtil.isEmpty(String.valueOf(newProductPojo.getMrp()))) {
             throw new ApiException("empty string detected cannot be empty");
         }
         try {
             return productDao.insert(newProductPojo);
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new ApiException("Duplicate barcode");
         }
-    }
-    @Transactional
-    public void delete(int id) {
-        productDao.delete(id);
     }
     @Transactional(rollbackOn = ApiException.class)
     public ProductPojo get(int id) throws ApiException {

@@ -24,7 +24,7 @@ public class ScheduleUtil implements Job {
     Date startDate = new Date();
     Date endDate = new Date();
     public void execute(JobExecutionContext context) throws JobExecutionException {
-        logger.info("Scheduler Started");
+        System.out.println("Scheduler Started");
         startDate.setDate(startDate.getDate() - 10);
         Calendar calendarStart = Calendar.getInstance();
         Calendar calendarEnd = Calendar.getInstance();

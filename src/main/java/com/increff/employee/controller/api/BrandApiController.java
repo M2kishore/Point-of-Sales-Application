@@ -25,11 +25,6 @@ public class BrandApiController {
         BrandPojo newBrandPojo = convertFormToPojo(form);
         brandService.add(newBrandPojo);
     }
-    @ApiOperation(value="Deletes a brand")
-    @RequestMapping(path="/api/brand/{id}",method = RequestMethod.DELETE)
-    public void delete(@PathVariable int id){
-        brandService.delete(id);
-    }
     @ApiOperation(value = "Gets a brand by ID")
     @RequestMapping(path ="/api/brand/{id}",method = RequestMethod.GET)
     public BrandData get(@PathVariable int id) throws ApiException {

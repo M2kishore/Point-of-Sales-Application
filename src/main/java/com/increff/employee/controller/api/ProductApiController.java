@@ -32,11 +32,6 @@ public class ProductApiController {
         inventoryPojo.setQuantity(0);
         inventoryService.add(inventoryPojo);
     }
-    @ApiOperation(value="Deletes a product")
-    @RequestMapping(path="/api/product/{id}",method = RequestMethod.DELETE)
-    public void delete(@PathVariable int id){
-        productService.delete(id);
-    }
     @ApiOperation(value = "Gets a product by ID")
     @RequestMapping(path ="/api/product/{id}",method = RequestMethod.GET)
     public ProductData get(@PathVariable int id) throws ApiException {

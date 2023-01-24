@@ -10,7 +10,6 @@ import java.util.List;
 
 @Repository
 public class BrandDao extends AbstractDao {
-    private static String delete_id = "delete from BrandPojo brandPojo where id=:id";
     private static String select_id = "select brandPojo from BrandPojo brandPojo where id=:id";
     private static String select_brand = "select brandPojo from BrandPojo brandPojo where brand=:brand";
     private static String select_all = "select brandPojo from BrandPojo brandPojo";
@@ -18,12 +17,6 @@ public class BrandDao extends AbstractDao {
     @Transactional
     public void insert(BrandPojo brandPojo) {
         entityManager().persist(brandPojo);
-    }
-
-    public int delete(int id) {
-        Query query = entityManager().createQuery(delete_id);
-        query.setParameter("id", id);
-        return query.executeUpdate();
     }
 
     public BrandPojo select(int id) {

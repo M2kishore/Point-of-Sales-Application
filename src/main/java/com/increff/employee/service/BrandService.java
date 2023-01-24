@@ -21,10 +21,6 @@ public class BrandService {
         }
         brandDao.insert(brandPojo);
     }
-    @Transactional
-    public void delete(int id) {
-        brandDao.delete(id);
-    }
     @Transactional(rollbackOn = ApiException.class)
     public BrandPojo get(int id) throws ApiException {
         return getCheck(id);
@@ -49,7 +45,7 @@ public class BrandService {
         oldBrandPojo.setCategory(p.getCategory());
         brandDao.update(oldBrandPojo);
     }
-    protected static void normalize(BrandPojo brandPojo) {
+    public static void normalize(BrandPojo brandPojo) {
         brandPojo.setBrand(StringUtil.toLowerCase(brandPojo.getBrand()));
         brandPojo.setCategory(StringUtil.toLowerCase(brandPojo.getCategory()));
     }
