@@ -31,11 +31,6 @@ public class InventoryApiController {
         }
         throw new ApiException("Inventory already present try updating it");
     }
-    @ApiOperation(value="Deletes a inventory")
-    @RequestMapping(path="/api/inventory/{sno}",method = RequestMethod.DELETE)
-    public void delete(@PathVariable int sno){
-        inventoryService.delete(sno);
-    }
     @ApiOperation(value = "Gets a inventory by id")
     @RequestMapping(path ="/api/inventory/{id}",method = RequestMethod.GET)
     public InventoryData get(@PathVariable int id) throws ApiException {

@@ -15,10 +15,6 @@ public class InventoryService {
     public void add(InventoryPojo inventoryPojo) throws ApiException {
         inventoryDao.insert(inventoryPojo);
     }
-    @Transactional
-    public void delete(int id) {
-        inventoryDao.delete(id);
-    }
     @Transactional(rollbackOn = ApiException.class)
     public InventoryPojo get(int id) throws ApiException {
         return getCheck(id);

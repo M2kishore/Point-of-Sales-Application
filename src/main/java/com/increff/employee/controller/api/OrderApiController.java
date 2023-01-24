@@ -128,11 +128,6 @@ public class OrderApiController {
         OrderItemPojo newOrderItemPojo = convertFormToPojo(form);
         orderService.add(newOrderItemPojo);
     }
-    @ApiOperation(value="Deletes a Cancelled Order")
-    @RequestMapping(path="/api/order/{id}",method = RequestMethod.DELETE)
-    public void delete(@PathVariable int id){
-        orderService.delete(id);
-    }
 
     private OrderItemPojo convertFormToPojo(OrderItemForm orderItemForm){
         OrderItemPojo newOrderItemPojo = new OrderItemPojo();

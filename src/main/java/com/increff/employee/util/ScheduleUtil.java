@@ -10,19 +10,23 @@ import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+@Service
 public class ScheduleUtil implements Job {
 
     private static Logger logger = Logger.getLogger(ScheduleUtil.class);
     @Autowired
-    ReportApiController reportApiController;
+    OrderDao orderDao;
     Date startDate = new Date();
     Date endDate = new Date();
+    @Transactional
     public void execute(JobExecutionContext context) throws JobExecutionException {
         System.out.println("Scheduler Started");
         startDate.setDate(startDate.getDate() - 10);
@@ -38,9 +42,15 @@ public class ScheduleUtil implements Job {
         reportDateForm.setStartDate(startDateMilliseconds);
         reportDateForm.setEndDate(endDateMilliseconds);
         System.out.println(reportDateForm.getStartDate()+" "+reportDateForm.getEndDate());
-        List<Integer> orderPojoList = reportApiController.getAll(reportDateForm);
-        System.out.println(orderPojoList.size());
-        System.out.println("Schedule Complete");
+        try{
+            List<OrderPojo> orderPojoList = orderDao.filterId(reportDateForm);
+            System.out.println(orderPojoList.size());
+        }catch (Exception e){
+            System.out.println("Exception");
+            System.out.println(e.getMessage());
+        }finally {
+            System.out.println("Schedule Complete");
+        }
     }
     private Calendar makeTimeZero(Calendar calendar){
         calendar.set(Calendar.HOUR_OF_DAY, 0);

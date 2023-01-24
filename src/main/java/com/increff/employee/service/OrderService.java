@@ -35,7 +35,7 @@ public class OrderService {
     public List<OrderItemPojo> getCheck(int id) throws ApiException {
         List<OrderItemPojo> orderItemPojo = orderItemDao.select(id);
         if (orderItemPojo == null) {
-            throw new ApiException("Brand with given ID does not exit, id: " + id);
+            throw new ApiException("Order with given ID does not exit, id: " + id);
         }
         return orderItemPojo;
     }
@@ -50,9 +50,5 @@ public class OrderService {
     @Transactional
     public List<OrderItemPojo> filterOrders(ReportOrderForm reportOrderForm){
         return orderItemDao.filterOrder(reportOrderForm);
-    }
-    @Transactional
-    public void delete(int id){
-        orderDao.delete(id);
     }
 }

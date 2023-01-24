@@ -12,19 +12,12 @@ import java.util.List;
 
 @Repository
 public class InventoryDao extends AbstractDao{
-    private static String delete_id = "delete from InventoryPojo inventoryPojo where id=:id";
     private static String select_id = "select inventoryPojo from InventoryPojo inventoryPojo where id=:id";
     private static String select_all = "select inventoryPojo from InventoryPojo inventoryPojo";
 
     @Transactional
     public void insert(InventoryPojo inventoryPojo) {
         entityManager().persist(inventoryPojo);
-    }
-
-    public int delete(int id) {
-        Query query = entityManager().createQuery(delete_id);
-        query.setParameter("id", id);
-        return query.executeUpdate();
     }
 
     public InventoryPojo select(int id) {

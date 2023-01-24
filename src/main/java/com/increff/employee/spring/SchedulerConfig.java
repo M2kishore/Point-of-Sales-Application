@@ -12,7 +12,7 @@ public class SchedulerConfig {
             JobDetail job = JobBuilder.newJob(ScheduleUtil.class)
                     .withIdentity("job", "group1").build();
             Trigger trigger1 = TriggerBuilder.newTrigger()
-                    .withIdentity("cronTrigger1", "group1").withSchedule(CronScheduleBuilder.cronSchedule("0/5 * * * * ?"))
+                    .withIdentity("cronTrigger1", "group1").withSchedule(CronScheduleBuilder.cronSchedule("0/30 * * * * ?"))
                     .build();
             Scheduler scheduler1 = new StdSchedulerFactory().getScheduler();
             scheduler1.start();
