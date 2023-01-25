@@ -23,6 +23,18 @@ public class BrandServiceTest extends AbstractUnitTest {
     }
 
     @Test
+    public void testEmptyStringAdd() throws ApiException{
+        try{
+        BrandPojo brandPojo = new BrandPojo();
+        brandPojo.setBrand("");
+        brandPojo.setCategory("");
+        brandService.add(brandPojo);
+        }catch (ApiException e){
+            assertEquals(e.getMessage(),"name or category cannot be empty");
+        }
+    }
+
+    @Test
     public void testGetSingle() throws ApiException {
         BrandPojo brandPojo = new BrandPojo();
         brandPojo.setBrand("nike");
