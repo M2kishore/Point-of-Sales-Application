@@ -41,7 +41,7 @@ public class UserService {
 		dao.delete(id);
 	}
 
-	protected static void normalize(UserPojo p) {
+	public static void normalize(UserPojo p) {
 		p.setEmail(p.getEmail().toLowerCase().trim());
 		p.setRole(p.getRole().toLowerCase().trim());
 	}
