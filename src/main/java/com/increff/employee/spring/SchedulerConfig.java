@@ -39,7 +39,10 @@ public class SchedulerConfig {
         reportDateForm.setStartDate(startDateMilliseconds);
         reportDateForm.setEndDate(endDateMilliseconds);
         List<OrderPojo> orderPojoList = orderService.filterId(reportDateForm);
-
+        if(orderPojoList.size() == 0){
+            System.out.println("No orders for today");
+            return;
+        }
         OrderPojo startObject = orderPojoList.get(0);
         OrderPojo endObject = orderPojoList.get(orderPojoList.size()-1);
         ReportOrderForm reportOrderForm = new ReportOrderForm();

@@ -128,7 +128,7 @@ function getInventory(id){
     });
 }
 function getInventoryReport(){
-    $('#category-table-div').hide();
+    $('#sales-table-div').hide();
     $('#brand-table-div').hide();
     $('#inventory-table-div').show();
     let inventoryReport = {};
@@ -145,7 +145,7 @@ function getInventoryReport(){
     $tbody.empty();
     for(var id in inventoryReport){
         var reportObject = inventoryReport[id];
-        if(!reportObject.brand.includes(brandString) || reportObject.category.includes(categoryString)){
+        if(!reportObject.brand.includes(brandString) || !reportObject.category.includes(categoryString)){
             continue;
         }
         var row = '<tr>'
@@ -157,7 +157,7 @@ function getInventoryReport(){
     }
 }
 function getBrandReport(){
-    $('#category-table-div').hide();
+    $('#sales-table-div').hide();
     $('#brand-table-div').show();
     $('#inventory-table-div').hide();
     let brandReport = {};
@@ -184,30 +184,33 @@ function getBrandReport(){
         $tbody.append(row);
     }
 }
-function getCategoryReport(){
-    $('#category-table-div').show();
+function getSalesReport(){
+    $('#sales-table-div').show();
     $('#brand-table-div').hide();
     $('#inventory-table-div').hide();
-    let categoryReport = {};
+    let salesReport = {};
     orders.map(order=>{
+        var id = brandCategory[products[order.productId]["brandCategory"]]["id"];
         var category = brandCategory[products[order.productId]["brandCategory"]]["category"];
-        if(!categoryReport.hasOwnProperty(category)){
-            categoryReport[category] = {"quantity":0,"revenue":0};
+        var brand = brandCategory[products[order.productId]["brandCategory"]]["brand"];
+        if(!salesReport.hasOwnProperty(id)){
+            salesReport[id] = {"brand":brand,"category":category,"quantity":0,"revenue":0};
         }
-        categoryReport[category]["quantity"] += order.quantity;
-        categoryReport[category]["revenue"] += order.sellingPrice;
+        salesReport[id]["quantity"] += order.quantity;
+        salesReport[id]["revenue"] += order.sellingPrice;
     });
-    var $tbody = $('#category-table').find('tbody');
+    var $tbody = $('#sales-table').find('tbody');
     $tbody.empty();
-    for(var category in categoryReport){
-        var reportObject = categoryReport[category];
-        if(!category.includes(categoryString)){
+    for(var sales in salesReport){
+        var salesObject = salesReport[sales];
+        if(!salesObject.brand.includes(brandString) || !salesObject.category.includes(categoryString)){
             continue;
         }
         var row = '<tr>'
-        + '<td>' + category + '</td>'
-        + '<td>' + reportObject.quantity + '</td>'
-        + '<td>'  + reportObject.revenue + '</td>'
+        + '<td>' + salesObject.brand + '</td>'
+        +'<td>'+ salesObject.category + '</td>'
+        + '<td>' + salesObject.quantity + '</td>'
+        + '<td>'  + salesObject.revenue + '</td>'
         + '</tr>';
         $tbody.append(row);
     }
@@ -235,13 +238,13 @@ function init(){
     });
 $('#getReport').click(getReport);
 $('#getBrandReport').click(getBrandReport);
-$('#getCategoryReport').click(getCategoryReport);
+$('#getSalesReport').click(getSalesReport);
 $('#getInventoryReport').click(getInventoryReport);
 $('#endDate').on('change',getReport);
 $('#startDate').on('change',getReport)
 $('#inputBrand').on('change',getReport)
 $('#inputCategory').on('change',getReport)
-$('#category-table-div').hide();
+$('#sales-table-div').hide();
 $('#brand-table-div').hide();
 $('#inventory-table-div').hide();
 }
