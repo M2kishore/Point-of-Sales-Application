@@ -14,7 +14,6 @@ import java.util.List;
 public class OrderItemDao extends AbstractDao {
     private static String select_all = "select orderItemPojo from OrderItemPojo orderItemPojo";
     private static String select_id = "select orderItemPojo from OrderItemPojo orderItemPojo where orderId=:orderId";
-
     private static String select_orders = "SELECT orderItemPojo FROM OrderItemPojo AS orderItemPojo WHERE orderItemPojo.orderId BETWEEN :startOrderId AND :endOrderId";
 
     @Transactional
@@ -40,5 +39,4 @@ public class OrderItemDao extends AbstractDao {
     }
     public void update(OrderItemPojo orderItemPojo){
     }
-
 }

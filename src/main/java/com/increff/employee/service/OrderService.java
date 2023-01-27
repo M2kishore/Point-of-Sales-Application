@@ -43,6 +43,11 @@ public class OrderService {
     public List<OrderItemPojo> getAll(){
         return orderItemDao.selectAll();
     }
+
+    @Transactional
+    public List<OrderPojo> getAllIds(){
+        return orderDao.getAllIds();
+    }
     @Transactional
     public List<OrderPojo> filterId(ReportDateForm reportDateForm){
         return orderDao.filterId(reportDateForm);
@@ -50,5 +55,9 @@ public class OrderService {
     @Transactional
     public List<OrderItemPojo> filterOrders(ReportOrderForm reportOrderForm){
         return orderItemDao.filterOrder(reportOrderForm);
+    }
+
+    public List<OrderItemPojo> select(int id) {
+        return orderItemDao.select(id);
     }
 }

@@ -1,6 +1,8 @@
 package com.increff.employee.controller.api;
 
+import com.increff.employee.model.data.InvoiceData;
 import com.increff.employee.model.data.OrderData;
+import com.increff.employee.model.data.OrderInvoiceData;
 import com.increff.employee.model.form.BillForm;
 import com.increff.employee.model.form.BillFormList;
 import com.increff.employee.model.form.OrderForm;
@@ -11,7 +13,6 @@ import com.increff.employee.pojo.ProductPojo;
 import com.increff.employee.service.ApiException;
 import com.increff.employee.service.OrderService;
 import com.increff.employee.service.ProductService;
-import com.increff.employee.spring.SecurityConfig;
 import com.increff.employee.util.DateUtil;
 import com.increff.employee.model.data.OrderItemData;
 import io.swagger.annotations.Api;
@@ -36,11 +37,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.sax.SAXResult;
 import javax.xml.transform.stream.StreamSource;
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Api
 @RestController
@@ -57,6 +54,26 @@ public class OrderApiController {
         ProductPojo productPojo = productService.getBarcode(barcode);
         return convertPojoToData(productPojo);
     }
+    @ApiOperation(value="Gets a products by orderId")
+    @RequestMapping(path="/api/order/{id}",method = RequestMethod.GET)
+    public List<BillForm> get(@PathVariable int id) throws ApiException {
+        List<OrderItemPojo> orderItemPojoList = orderService.select(id);
+        List<BillForm> billFormList = new ArrayList<BillForm>();
+        for(OrderItemPojo orderItemPojo : orderItemPojoList){
+            ProductPojo productPojo = productService.get(orderItemPojo.getProductId());
+            BillForm billForm = new BillForm();
+            billForm.setBarcode(productPojo.getBarcode());
+            billForm.setMrp(productPojo.getMrp());
+            billForm.setName(productPojo.getName());
+            billForm.setQuantity(orderItemPojo.getQuantity());
+            billForm.setSellingPrice(orderItemPojo.getSellingPrice());
+            billForm.setProductId(orderItemPojo.getProductId());
+
+            billFormList.add(billForm);
+        }
+        return billFormList;
+    }
+
     @ApiOperation(value = "Gets list of all Orders")
     @RequestMapping(path = "/api/order/all", method = RequestMethod.GET)
     public List<OrderData> getAll() {
@@ -67,6 +84,24 @@ public class OrderApiController {
         }
         return list2;
     }
+    @ApiOperation(value = "Gets list of all Orders")
+    @RequestMapping(path = "/api/order/all/id", method = RequestMethod.GET)
+    public List<OrderInvoiceData> getAllIds() {
+        List<OrderPojo> list = orderService.getAllIds();
+        List<OrderInvoiceData> list2 = new ArrayList<OrderInvoiceData>();
+        for (OrderPojo orderPojo : list) {
+            list2.add(convertPojoToData(orderPojo));
+        }
+        return list2;
+    }
+
+    private OrderInvoiceData convertPojoToData(OrderPojo orderPojo) {
+        OrderInvoiceData orderInvoiceData = new OrderInvoiceData();
+        orderInvoiceData.setId(orderPojo.getId());
+        orderInvoiceData.setDate(DateUtil.DateToMillisecond(orderPojo.getDate()));
+        return orderInvoiceData;
+    }
+
     @ApiOperation(value = "gets PDF of invoice")
     @RequestMapping(path = "api/order/pdf",method = RequestMethod.POST)
     protected void makePdf(@RequestBody BillFormList billFormList, HttpServletRequest req, HttpServletResponse response) throws ServletException, IOException {
@@ -128,6 +163,8 @@ public class OrderApiController {
         OrderItemPojo newOrderItemPojo = convertFormToPojo(form);
         orderService.add(newOrderItemPojo);
     }
+
+
 
     private OrderItemPojo convertFormToPojo(OrderItemForm orderItemForm){
         OrderItemPojo newOrderItemPojo = new OrderItemPojo();

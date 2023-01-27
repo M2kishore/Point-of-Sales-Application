@@ -15,16 +15,18 @@
                 <fo:flow flow-name="xsl-region-body">
                     <fo:block font-size="16pt" font-weight="bold" space-after="5mm">Invoice
                     </fo:block>
-                    <fo:block font-size="16pt" font-weight="bold">Order#
+                    <fo:block font-size="10pt" font-weight="bold" space-after="5mm">Date
+                        <xsl:value-of select="date"/>
+                    </fo:block>
+                    <fo:block font-size="14pt" font-weight="bold">Order#
                         <xsl:value-of select="orderId"/>
                     </fo:block>
-                    <fo:block font-size="10pt">
+                    <fo:block font-size="12pt">
                         <fo:table table-layout="fixed" width="100%" border-collapse="separate">
+                            <fo:table-column column-width="5cm"/>
+                            <fo:table-column column-width="5cm"/>
                             <fo:table-column column-width="4cm"/>
-                            <fo:table-column column-width="4cm"/>
-                            <fo:table-column column-width="4cm"/>
-                            <fo:table-column column-width="3cm"/>
-                            <fo:table-column column-width="3cm"/>
+                            <fo:table-column column-width="5cm"/>
                             <fo:table-header>
                                 <fo:table-cell
                                         xsl:use-attribute-sets="tableBorder">

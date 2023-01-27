@@ -8,6 +8,15 @@ public class BillFormList {
     private List<BillForm> billForm;
     private double total;
     private int orderId;
+    private String date;
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
 
     public int getOrderId() {
         return orderId;

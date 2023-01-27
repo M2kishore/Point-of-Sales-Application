@@ -6,4 +6,8 @@ public class DateUtil {
         Date date = new Date(longDate);
         return date;
     }
+
+    public static long DateToMillisecond(Date date){
+        return date.getTime();
+    }
 }
