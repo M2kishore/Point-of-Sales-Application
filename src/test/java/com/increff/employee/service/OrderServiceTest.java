@@ -1,4 +1,4 @@
-package com.increff.employee.service.service;
+package com.increff.employee.service;
 
 import com.increff.employee.model.form.ReportDateForm;
 import com.increff.employee.model.form.ReportOrderForm;
@@ -9,9 +9,11 @@ import com.increff.employee.service.ApiException;
 import com.increff.employee.service.InventoryService;
 import com.increff.employee.service.OrderService;
 import io.swagger.annotations.Api;
+import org.apache.xpath.operations.Or;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.persistence.criteria.Order;
 import java.util.Date;
 import java.util.List;
 
@@ -60,9 +62,7 @@ public class OrderServiceTest extends AbstractUnitTest {
         orderService.add(orderItemPojo2);
         //get order list
         List<OrderItemPojo> orderItemPojoList = orderService.getAll();
-        for(OrderItemPojo order: orderItemPojoList){
-            System.out.println(order.getOrderId()+" "+order.getProductId());
-        }
+
         assertEquals(2,orderItemPojoList.size());
         assertFalse(orderItemPojoList.isEmpty());
     }
@@ -81,17 +81,69 @@ public class OrderServiceTest extends AbstractUnitTest {
         orderItemPojo2.setQuantity(5);
         orderService.add(orderItemPojo2);
         //get order
+        List<OrderItemPojo> orderItemPojoList = orderService.get(1);
+        assertFalse(orderItemPojoList.isEmpty());
+        assertEquals(2,orderItemPojoList.size());
         try{
-            List<OrderItemPojo> orderItemPojoList = orderService.get(1);
-            assertFalse(orderItemPojoList.isEmpty());
-            assertEquals(2,orderItemPojoList.size());
-            orderItemPojoList = orderService.get(-1);
-            assertTrue(orderItemPojoList.size()==0);
+            orderItemPojoList = orderService.get(2);
         }catch (Exception e){
-            System.out.println(e.getMessage());
+            assertEquals("Order with given ID does not exit, id: 2",e.getMessage());
         }
+
     }
-    
+
+    @Test
+    public void testGetSingleNotPresent() throws ApiException{
+        try {
+            orderService.get(1);
+        }catch (ApiException e){
+            assertEquals("Order with given ID does not exit, id: 1",e.getMessage());
+        }
+
+    }
+
+    @Test
+    public void testGetAllIds() throws ApiException{
+        OrderPojo orderPojo = new OrderPojo();
+        orderPojo.setDate(new Date());
+        orderService.add(orderPojo);
+
+        List<OrderPojo> orderPojoList =  orderService.getAllIds();
+        assertEquals(1,orderPojoList.size());
+    }
+
+    @Test
+    public void testGetOrdersUsingOrderId() throws ApiException{
+        OrderItemPojo orderItemPojo1 = new OrderItemPojo();
+        orderItemPojo1.setOrderId(1);
+        orderItemPojo1.setProductId(1);
+        orderItemPojo1.setSellingPrice(100);
+        orderItemPojo1.setQuantity(5);
+        orderService.add(orderItemPojo1);
+        OrderItemPojo orderItemPojo2 = new OrderItemPojo();
+        orderItemPojo2.setOrderId(1);
+        orderItemPojo2.setProductId(2);
+        orderItemPojo2.setSellingPrice(200);
+        orderItemPojo2.setQuantity(5);
+        orderService.add(orderItemPojo2);
+        OrderItemPojo orderItemPojo3 = new OrderItemPojo();
+        orderItemPojo3.setOrderId(2);
+        orderItemPojo3.setProductId(1);
+        orderItemPojo3.setSellingPrice(1000);
+        orderItemPojo3.setQuantity(5);
+        orderService.add(orderItemPojo3);
+        OrderItemPojo orderItemPojo4 = new OrderItemPojo();
+        orderItemPojo4.setOrderId(3);
+        orderItemPojo4.setProductId(3);
+        orderItemPojo4.setSellingPrice(500);
+        orderItemPojo4.setQuantity(5);
+        orderService.add(orderItemPojo4);
+
+        List<OrderItemPojo> orderItemPojoList = orderService.get(1);
+        assertEquals(2,orderItemPojoList.size());
+    }
+//    @Test
+//    public void testInvalidOrderId
     @Test
     public void testFilterOrders() throws ApiException{
         //add orders

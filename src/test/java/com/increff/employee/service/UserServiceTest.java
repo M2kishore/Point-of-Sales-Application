@@ -1,4 +1,4 @@
-package com.increff.employee.service.service;
+package com.increff.employee.service;
 
 import com.increff.employee.pojo.UserPojo;
 import com.increff.employee.service.AbstractUnitTest;

@@ -1,4 +1,4 @@
-package com.increff.employee.service.service;
+package com.increff.employee.service;
 
 import com.increff.employee.pojo.InventoryPojo;
 import com.increff.employee.service.AbstractUnitTest;
@@ -37,6 +37,15 @@ public class InventoryServiceTest extends AbstractUnitTest {
         assertEquals(addedInventoryPojo.getQuantity(),inventoryPojo.getQuantity());
     }
 
+    @Test
+    public void testGetSingleNotPresent() throws ApiException{
+        try {
+            inventoryService.get(1);
+        }catch (ApiException e){
+            assertEquals("Inventory with given ID does not exit, id: 1",e.getMessage());
+        }
+
+    }
     @Test
     public void testGetAll() throws ApiException{
         //add pojo

@@ -2,8 +2,6 @@ package com.increff.employee.dao;
 
 import com.increff.employee.model.form.ReportOrderForm;
 import com.increff.employee.pojo.OrderItemPojo;
-import com.increff.employee.pojo.OrderItemPojo;
-import com.increff.employee.pojo.OrderItemPojo;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,7 +34,5 @@ public class OrderItemDao extends AbstractDao {
         query.setParameter("startOrderId",reportOrderForm.getStartId());
         query.setParameter("endOrderId",reportOrderForm.getEndId());
         return query.getResultList();
-    }
-    public void update(OrderItemPojo orderItemPojo){
     }
 }

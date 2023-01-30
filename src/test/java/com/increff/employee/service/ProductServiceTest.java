@@ -1,4 +1,4 @@
-package com.increff.employee.service.service;
+package com.increff.employee.service;
 
 import com.increff.employee.pojo.BrandPojo;
 import com.increff.employee.pojo.ProductPojo;
@@ -26,7 +26,53 @@ public class ProductServiceTest extends AbstractUnitTest {
         productPojo.setMrp(100.25);
         productService.add(productPojo);
     }
+    @Test
+    public void testEmptyAdd() throws ApiException{
+        ProductPojo productPojo = new ProductPojo();
+        try{
+            productService.add(productPojo);
+        }catch (ApiException e){
+            assertEquals("empty string detected cannot be empty",e.getMessage());
+        }
+    }
+    @Test
+    public void testDuplicateAdd() throws ApiException{
+        ProductPojo productPojo1 = new ProductPojo();
+        productPojo1.setName("sparkle");
+        productPojo1.setBarcode("qwe123");
+        productPojo1.setBrandCategory(1);
+        productPojo1.setMrp(100.25);
+        productService.add(productPojo1);
 
+        ProductPojo productPojo2 = new ProductPojo();
+        productPojo2.setName("sparkle");
+        productPojo2.setBarcode("qwe123");
+        productPojo2.setBrandCategory(1);
+        productPojo2.setMrp(100.25);
+        try{
+            productService.add(productPojo2);
+        }catch (ApiException e){
+            assertEquals("Duplicate barcode",e.getMessage());
+        }
+    }
+
+    @Test
+    public void testBarcodeNotPresent() throws ApiException{
+        try{
+            productService.getBarcode("notPresent");
+        }catch (ApiException e){
+            assertEquals("Product with given Barcode does not exit, barcode: notPresent",e.getMessage());
+        }
+    }
+
+    @Test
+    public void testIdNotPresent() throws ApiException{
+        try{
+            productService.get(1);
+        }catch (ApiException e){
+            assertEquals("Product with given ID does not exit, id: 1",e.getMessage());
+        }
+    }
     @Test
     public void testGetSingle() throws ApiException{
         //add product

@@ -2,8 +2,6 @@ package com.increff.employee.dao;
 
 import com.increff.employee.pojo.ProductPojo;
 import org.springframework.stereotype.Repository;
-
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 import java.util.List;

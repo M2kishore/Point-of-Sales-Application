@@ -1,9 +1,10 @@
-package com.increff.employee.service.service;
+package com.increff.employee.service;
 
 import com.increff.employee.pojo.BrandPojo;
 import com.increff.employee.service.AbstractUnitTest;
 import com.increff.employee.service.ApiException;
 import com.increff.employee.service.BrandService;
+import io.swagger.annotations.Api;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -46,6 +47,15 @@ public class BrandServiceTest extends AbstractUnitTest {
         System.out.println(brand+" "+category);
         assertEquals("nike",brand);
         assertEquals("shoe",category);
+    }
+    @Test
+    public void testGetSingleNotPresent() throws ApiException{
+        try {
+            brandService.get(1);
+        }catch (ApiException e){
+            assertEquals("Brand with given ID does not exit, id: 1",e.getMessage());
+        }
+
     }
 
     @Test

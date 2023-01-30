@@ -57,7 +57,7 @@ public class OrderApiController {
     @ApiOperation(value="Gets a products by orderId")
     @RequestMapping(path="/api/order/{id}",method = RequestMethod.GET)
     public List<BillForm> get(@PathVariable int id) throws ApiException {
-        List<OrderItemPojo> orderItemPojoList = orderService.select(id);
+        List<OrderItemPojo> orderItemPojoList = orderService.get(id);
         List<BillForm> billFormList = new ArrayList<BillForm>();
         for(OrderItemPojo orderItemPojo : orderItemPojoList){
             ProductPojo productPojo = productService.get(orderItemPojo.getProductId());
