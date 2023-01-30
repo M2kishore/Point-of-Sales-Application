@@ -44,7 +44,6 @@ public class BrandServiceTest extends AbstractUnitTest {
         brandPojo = brandService.get(3);
         String brand = brandPojo.getBrand();
         String category = brandPojo.getCategory();
-        System.out.println(brand+" "+category);
         assertEquals("nike",brand);
         assertEquals("shoe",category);
     }

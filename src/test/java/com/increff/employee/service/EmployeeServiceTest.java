@@ -83,7 +83,6 @@ public class EmployeeServiceTest extends AbstractUnitTest {
         employeePojo.setAge(51);
 
         employeeService.add(employeePojo);
-        System.out.println(employeeService.getAll().get(0).getId());
         employeeService.delete(employeeService.getAll().get(0).getId());
 
         assertEquals(0,employeeService.getAll().size());

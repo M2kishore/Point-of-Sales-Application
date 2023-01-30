@@ -90,7 +90,6 @@ public class UserServiceTest extends AbstractUnitTest {
         userPojo1.setRole("standard");
 
         userService.add(userPojo1);
-        System.out.println(userService.getAll().get(0).getId());
 
         //delete pojo
         userService.delete(2);
