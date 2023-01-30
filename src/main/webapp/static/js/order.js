@@ -18,7 +18,6 @@ function getInvoice(id){
             var total = billedOrder.reduce((total,transaction)=>total+transaction.sellingPrice,0);
             var orderObject = {"billForm":billedOrder,"total":total,"orderId":orderId,"date":orderDate};
             var orderJson = JSON.stringify(orderObject);
-            console.log(orderJson)
                 $.ajax({
                    url: url,
                    type: 'POST',
@@ -30,7 +29,6 @@ function getInvoice(id){
                     responseType: 'blob'
                  },
                    success: function(blob) {
-                        console.log(blob.size);
                         var link=document.createElement('a');
                         link.href=window.URL.createObjectURL(blob);
                         link.download="Invoice_" + new Date() + ".pdf";
@@ -48,13 +46,22 @@ function getInvoice(id){
 function displayOrderList(){
 	var $tbody = $('#order-table').find('tbody');
 	$tbody.empty();
+	var searchString = $("#inputSearch").val();
+	var startDateString = $('#startDate').val();
+	var endDateString = $('#endDate').val();
+	var startDate = new Date(Date.parse(startDateString)).getTime();
+	var endDate = new Date(Date.parse(endDateString)).getTime();
 	for(var id in orderIds){
-	    console.log(id)
+	    var idString = orderIds[id].id.toString();
+	    var orderDate = orderIds[id].date
+	    if(!idString.includes(searchString) || endDate < orderDate || startDate > orderDate){
+	        continue;
+	    }
 		var buttonHtml = ' <button onclick="getInvoice(' + id + ')">invoice</button>'
-		var orderDate = new Date(orderIds[id].date).toString();
+		var orderDateString = new Date(orderDate).toString();
 		var row = '<tr>'
-		+ '<td>' + orderIds[id].id + '</td>'
-		+ '<td>' + orderDate + '</td>'
+		+ '<td>' + idString + '</td>'
+		+ '<td>' + orderDateString + '</td>'
 		+ '<td>' + buttonHtml + '</td>'
 		+ '</tr>';
         $tbody.append(row);
@@ -64,14 +71,33 @@ function displayOrderList(){
 
 //INITIALIZATION CODE
 function init(){
-    console.log("pool")
+    $("#inputSearch").on('input',displayOrderList);
+    var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+        var nextDate = new Date();
+        nextDate.setDate(today.getDate()+1);
+        $('#startDate').datepicker({
+            uiLibrary: 'bootstrap4',
+            iconsLibrary: 'fontawesome',
+            format: 'mm/dd/yyyy',
+            maxDate: today
+        });
+        $('#endDate').datepicker({
+            uiLibrary: 'bootstrap4',
+            iconsLibrary: 'fontawesome',
+            format: 'mm/dd/yyyy',
+            minDate: function () {
+                return $('#startDate').val();
+            },
+            maxDate: nextDate
+        });
+    $('#startDate').on("change",displayOrderList);
+    $('#endDate').on('change',displayOrderList);
     var url = getOrderUrl() + "/all/id";
             $.ajax({
                url: url,
                type: 'GET',
                success: function(data) {
                     orderIds = data;
-                    console.log(orderIds)
                     displayOrderList();
                },
                error: handleAjaxError
