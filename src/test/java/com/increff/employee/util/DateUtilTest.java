@@ -1,4 +1,4 @@
-package com.increff.employee.service.util;
+package com.increff.employee.util;
 
 import com.increff.employee.service.AbstractUnitTest;
 import com.increff.employee.util.DateUtil;
@@ -17,5 +17,11 @@ public class DateUtilTest extends AbstractUnitTest {
         Date actualDate = new Date(millisecond);
         Date functionDate = dateUtil.MillisecondToDate(millisecond);
         assertEquals(functionDate,actualDate);
+    }
+    @Test
+    public void testDateToMillisecond(){
+        Date today = new Date();
+        long converted = dateUtil.DateToMillisecond(today);
+        assertEquals(today.getTime(),converted);
     }
 }

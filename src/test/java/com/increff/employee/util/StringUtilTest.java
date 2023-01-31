@@ -1,4 +1,4 @@
-package com.increff.employee.service.util;
+package com.increff.employee.util;
 
 import com.increff.employee.service.AbstractUnitTest;
 import com.increff.employee.service.ApiException;

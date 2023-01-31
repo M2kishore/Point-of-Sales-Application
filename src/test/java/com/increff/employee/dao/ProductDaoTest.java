@@ -2,7 +2,6 @@ package com.increff.employee.dao;
 
 import com.increff.employee.pojo.ProductPojo;
 import com.increff.employee.service.AbstractUnitTest;
-import com.increff.employee.service.ApiException;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -11,7 +10,7 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
-public class TestProductDao extends AbstractUnitTest {
+public class ProductDaoTest extends AbstractUnitTest {
     @Autowired
     ProductDao productDao;
     @Test
