@@ -41,7 +41,8 @@ public class BrandServiceTest extends AbstractUnitTest {
         brandPojo.setBrand("nike");
         brandPojo.setCategory("shoe");
         brandService.add(brandPojo);
-        brandPojo = brandService.get(3);
+        int id = brandService.getAll().get(0).getId();
+        brandPojo = brandService.get(id);
         String brand = brandPojo.getBrand();
         String category = brandPojo.getCategory();
         assertEquals("nike",brand);
@@ -79,11 +80,12 @@ public class BrandServiceTest extends AbstractUnitTest {
         brandPojo.setCategory("shoe");
         brandService.add(brandPojo);
         //update
+        brandPojo = brandService.getAll().get(0);
         brandPojo.setBrand("nuke");
         brandPojo.setCategory("shoes");
-        brandService.update(4,brandPojo);
+        brandService.update(brandPojo.getId(),brandPojo);
         //check updated pojo
-        BrandPojo updatedBrandPojo = brandService.get(4);
+        BrandPojo updatedBrandPojo = brandService.get(brandPojo.getId());
         assertEquals(updatedBrandPojo.getBrand(),"nuke");
         assertEquals(updatedBrandPojo.getCategory(),"shoes");
     }

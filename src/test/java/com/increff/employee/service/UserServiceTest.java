@@ -92,7 +92,8 @@ public class UserServiceTest extends AbstractUnitTest {
         userService.add(userPojo1);
 
         //delete pojo
-        userService.delete(2);
+        int id = userService.getAll().get(0).getId();
+        userService.delete(id);
         //retrieve pojo
         List<UserPojo> userPojoList = userService.getAll();
         assertEquals(0,userPojoList.size());

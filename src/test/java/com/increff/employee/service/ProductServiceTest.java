@@ -83,7 +83,8 @@ public class ProductServiceTest extends AbstractUnitTest {
         productPojo.setMrp(100.25);
         productService.add(productPojo);
         //checking added product
-        ProductPojo addedProductPojo = productService.get(4);
+        int id = productService.getAll().get(0).getId();
+        ProductPojo addedProductPojo = productService.get(id);
         assertEquals(addedProductPojo.getBarcode(),productPojo.getBarcode());
         assertEquals(addedProductPojo.getMrp(),productPojo.getMrp(),0.01);
         assertEquals(addedProductPojo.getName(),productPojo.getName());
@@ -116,11 +117,12 @@ public class ProductServiceTest extends AbstractUnitTest {
         productPojo.setMrp(100.25);
         productService.add(productPojo);
         //update pojo
+        productPojo = productService.getAll().get(0);
         productPojo.setName("sparkles");
         productPojo.setMrp(150);
-        productService.update(5,productPojo);
+        productService.update(productPojo.getId(),productPojo);
         //check updated pojo
-        ProductPojo updatedProductPojo = productService.get(5);
+        ProductPojo updatedProductPojo = productService.get(productPojo.getId());
         assertEquals(updatedProductPojo.getName(),productPojo.getName());
         assertEquals(updatedProductPojo.getBarcode(),productPojo.getBarcode());
         assertEquals(updatedProductPojo.getMrp(),productPojo.getMrp(),0.01);
