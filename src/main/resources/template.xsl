@@ -15,7 +15,7 @@
                 <fo:flow flow-name="xsl-region-body">
                     <fo:block font-size="16pt" font-weight="bold" space-after="5mm">Invoice
                     </fo:block>
-                    <fo:block font-size="10pt" font-weight="bold" space-after="5mm">Date
+                    <fo:block font-size="10pt" font-weight="bold" space-after="5mm">Date:
                         <xsl:value-of select="date"/>
                     </fo:block>
                     <fo:block font-size="14pt" font-weight="bold">Order#

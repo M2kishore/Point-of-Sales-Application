@@ -253,7 +253,7 @@ function displayOrderList(currentOrder){
 function getInvoice(){
     var url = getOrderUrl()+"/pdf";
     var total = billedOrder.reduce((total,transaction)=>total+transaction.sellingPrice,0);
-    var orderDate = new Date().toString();
+    var orderDate = new Date().toString().substring(0,24);
     var orderObject = {"billForm":billedOrder,"total":total,"orderId":currentOrderId,"date":orderDate};
     var orderJson = JSON.stringify(orderObject);
     console.log(orderJson)

@@ -5,21 +5,22 @@
 <body>
 <nav th:replace="snippets.html :: name_app_navbar"></nav>
 <div class="container">
+    <h3>Report</h3>
     <form>
         <div class="form-row">
-            <div class="col">
-                Start Date: <input id="startDate" width="276" required/>
+            <div class="col form-inline">
+                Start Date:&nbsp;<input id="startDate" width="276" required/>
             </div>
-            <div class="col">
-                End Date: <input id="endDate" width="276" required/>
+            <div class="col form-inline">
+                End Date:&nbsp;<input id="endDate" width="276" required/>
             </div>
         </div><br>
         <div class="form-row">
-            <div class="col">
-                <input type="text" class="form-control" name="barcode" id="inputBrand" placeholder="Enter Brand">
+            <div class="col form-inline">
+                Brand:&nbsp;<input type="text" class="form-control" name="barcode" id="inputBrand" placeholder="Enter Brand">
             </div>
-            <div class="col">
-                <input type="text" class="form-control" name="category" id="inputCategory" placeholder="Enter Category">
+            <div class="col form-inline">
+                Category:&nbsp;<input type="text" class="form-control" name="category" id="inputCategory" placeholder="Enter Category">
             </div>
         </div>
     </form>

@@ -8,7 +8,7 @@ function getOrderUrl(){
 
 function getInvoice(id){
     var orderId = orderIds[id].id;
-    var orderDate = new Date(orderIds[id].date).toString();
+    var orderDate = new Date(orderIds[id].date).toString().substring(0,24);
     var url = getOrderUrl()+"/"+orderId;
     $.ajax({
        url: url,
@@ -58,7 +58,7 @@ function displayOrderList(){
 	        continue;
 	    }
 		var buttonHtml = ' <button onclick="getInvoice(' + id + ')">invoice</button>'
-		var orderDateString = new Date(orderDate).toString();
+		var orderDateString = new Date(orderDate).toString().substring(0,25);
 		var row = '<tr>'
 		+ '<td>' + idString + '</td>'
 		+ '<td>' + orderDateString + '</td>'
