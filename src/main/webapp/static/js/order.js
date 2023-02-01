@@ -5,7 +5,34 @@ function getOrderUrl(){
 	var baseUrl = $("meta[name=baseUrl]").attr("content")
 	return baseUrl + "/api/order";
 }
-
+function showOrder(id){
+    var orderId = orderIds[id].id;
+    var orderDate = new Date(orderIds[id].date).toString().substring(0,25);
+        var url = getOrderUrl()+"/"+orderId;
+        $.ajax({
+           url: url,
+           type: 'GET',
+           success: function(currentOrder) {
+                //display in the modal
+                $('#order-show-modal').modal('toggle');
+                $('#orderId').text(orderId);
+                var total = 0;
+                var $tbody = $('#order-show-table').find('tbody');
+                    $tbody.empty();
+                    for(var product of currentOrder){
+                        total+= product.sellingPrice;
+                        var row = '<tr>'
+                        + '<td>' + product.name + '</td>'
+                        + '<td>'  + product.quantity + '</td>'
+                        + '<td>' + product.sellingPrice + '</td>'
+                        + '</tr>';
+                        $tbody.append(row);
+                    }
+                $('#total').text(total);
+           },
+           error: handleAjaxError
+        });
+}
 function getInvoice(id){
     var orderId = orderIds[id].id;
     var orderDate = new Date(orderIds[id].date).toString().substring(0,24);
@@ -58,6 +85,7 @@ function displayOrderList(){
 	        continue;
 	    }
 		var buttonHtml = ' <button onclick="getInvoice(' + id + ')">invoice</button>'
+		buttonHtml += ' <button onclick="showOrder(' + id + ')">details</button>'
 		var orderDateString = new Date(orderDate).toString().substring(0,25);
 		var row = '<tr>'
 		+ '<td>' + idString + '</td>'
