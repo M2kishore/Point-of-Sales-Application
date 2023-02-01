@@ -4,7 +4,9 @@ import com.increff.employee.model.form.ReportDateForm;
 import com.increff.employee.model.form.ReportOrderForm;
 import com.increff.employee.pojo.OrderItemPojo;
 import com.increff.employee.pojo.OrderPojo;
+import com.increff.employee.pojo.SchedulerPojo;
 import com.increff.employee.service.OrderService;
+import com.increff.employee.service.SchedulerService;
 import org.hibernate.criterion.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -21,6 +23,8 @@ import java.util.List;
 public class SchedulerConfig {
     @Autowired
     OrderService orderService;
+    @Autowired
+    SchedulerService schedulerService;
     Date startDate = new Date();
     Date endDate = new Date();
     @Scheduled(cron = "0/10 * * * * ?")
@@ -53,12 +57,15 @@ public class SchedulerConfig {
 
         double revenue = 0;
         int quantity = 0;
-
+        int count = orderPojoList.size();
         for(OrderItemPojo order: orderItemPojoList){
             quantity += order.getQuantity();
             revenue += order.getSellingPrice();
         }
-        System.out.println("count: "+orderPojoList.size()+" quantity: "+quantity+" revenue: "+revenue);
+        System.out.println("count: "+count+" quantity: "+quantity+" revenue: "+revenue);
+
+        SchedulerPojo schedulerPojo = new SchedulerPojo(startDate,count,quantity,revenue);
+        //schedulerService.add(schedulerPojo);
         System.out.println("Schedule Complete");
     }
     private Calendar makeTimeZero(Calendar calendar) {
