@@ -32,6 +32,7 @@ var url = getInventoryUrl() + "/" + currentTransaction.productId;
     	            if(currentQuantity < data.quantity){
     	                currentOrder.push(currentTransaction);
     	                total+=price*currentQuantity;
+    	                $('#total').text(total);
     	                console.log(currentOrder);
     	                currentTransaction = {};
     	                resetOrder();
@@ -151,11 +152,15 @@ function getProductInformation(){
     });
     //disable add and enable invoice
     alert("success, refresh for new order or click invoice to download invoice");
+    $('#get-invoice').show();
     $('#add-order').prop('disabled', true);
-    $('#get-invoice').prop('disabled', false);
     $('#submit-order').prop('disabled', true);
 }
 function submitOrder(){
+    if(currentOrder.length == 0){
+        alert("please add items");
+        return
+    }
     var url = getOrderUrl();
     const now = Date.now();
     var data = {"date": now}
@@ -283,6 +288,7 @@ function init(){
 	$('#add-order').click(addOrder);
 	$('#update-order').click(updateOrder);
 	$('#get-invoice').click(getInvoice);
+	$('#get-invoice').hide();
 	$('#submit-order').click(submitOrder);
 	$('#process-data').click(processData);
     $("#inputQuantity").on('input',updatePrice);

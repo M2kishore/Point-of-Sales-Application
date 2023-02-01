@@ -51,9 +51,6 @@
                 </div>
                 <div class="form-group form-inline row my-1">
                     <button type="button" class="btn btn-primary" id="add-order">Add</button>&nbsp;
-
-                    <button type="button" class="btn btn-primary" id="get-invoice" disabled>Invoice</button>&nbsp;
-
                     <button type="button" class="btn btn-primary" id="submit-order">Submit</button>
                 </div>
             </form>
@@ -82,7 +79,12 @@
         </div>
     </div>
     <div class="row">
-        Total:<p id="total">0</p>
+        <div class="col-10">
+            <h3 class="form-inline">Total:<span id="total">0</span></h3>
+        </div>
+        <div class="col align-self-end">
+            <button type="button" class="btn btn-primary" id="get-invoice">Invoice</button>
+        </div>
     </div>
 </div>
 
