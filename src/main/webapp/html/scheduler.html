@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="snippets.html :: name_head"></head>
+<body>
+<nav th:replace="snippets.html :: name_app_navbar"></nav>
+<div class="container">
+    <h3>Scheduler</h3>
+    <!-- Top row with form-->
+    <div class="row">
+        <div class="col-12">
+            <form id="scheduler-form">
+                <div class="row">
+                    <div class="col form-inline">
+                        Start Date:&nbsp;<input id="startDate" width="276" required/>
+                    </div>
+                    <div class="col form-inline">
+                        End Date:&nbsp;<input id="endDate" width="276" required/>
+                    </div>
+                </div>
+                <br>
+            </form>
+        </div>
+    </div>
+    <br>
+
+    <!-- Blank Row -->
+    <div class="row">
+    </div>
+    <div class="row">
+
+        <!-- Table -->
+        <div class="col-12">
+            <table class="table table-striped" id="scheduler-table">
+                <thead>
+                <tr>
+                    <th scope="col">Date</th>
+                    <th scope="col">Count</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Revenue</th>
+                </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>
+
+
+
+<footer th:replace="snippets.html :: name_footer"></footer>
+
+<script th:src="@{/static/js/scheduler.js}"/></script>
+
+</body>
+</html>

@@ -45,4 +45,8 @@ public class AppUiController extends AbstractUiController {
 	public ModelAndView report() {
 		return modelAndView("report.html");
 	}
+	@RequestMapping(value = "/ui/scheduler")
+	public ModelAndView scheduler() {
+		return modelAndView("scheduler.html");
+	}
 }

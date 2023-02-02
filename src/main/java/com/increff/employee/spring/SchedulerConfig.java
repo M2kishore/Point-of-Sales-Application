@@ -27,7 +27,8 @@ public class SchedulerConfig {
     SchedulerService schedulerService;
     Date startDate = new Date();
     Date endDate = new Date();
-    @Scheduled(cron = "0/10 * * * * ?")
+//    @Scheduled(cron = "0/10 * * * * ?")
+    @Scheduled(cron = "0 0 0 * * ?")
     public void Schedule(){
         System.out.println("Scheduler Started");
         endDate.setDate(startDate.getDate() + 1);
@@ -65,7 +66,7 @@ public class SchedulerConfig {
         System.out.println("count: "+count+" quantity: "+quantity+" revenue: "+revenue);
 
         SchedulerPojo schedulerPojo = new SchedulerPojo(startDate,count,quantity,revenue);
-        //schedulerService.add(schedulerPojo);
+        schedulerService.add(schedulerPojo);
         System.out.println("Schedule Complete");
     }
     private Calendar makeTimeZero(Calendar calendar) {
