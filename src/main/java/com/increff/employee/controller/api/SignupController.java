@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Api
@@ -25,8 +26,9 @@ public class SignupController {
     @Autowired
     private InfoData info;
 
-    @Value("#{${arrayOfEmails}}")
-    private List<String> arrayOfSupervisorEmails;
+//    @Value("${arrayOfEmails}")
+    @Value("#{'${arrayOfEmails}'.split(',')}")
+    private List<String> arrayOfSupervisorEmails = new ArrayList<String>();
     @ApiOperation(value = "Adds a user")
     @RequestMapping(path = "/session/signup", method = RequestMethod.POST,consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public ModelAndView addUser(SignupForm signupForm) throws ApiException {
