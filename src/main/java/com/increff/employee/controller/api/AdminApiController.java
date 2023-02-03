@@ -50,20 +50,20 @@ public class AdminApiController {
 		return list2;
 	}
 
-	private static UserData convert(UserPojo p) {
-		UserData d = new UserData();
-		d.setEmail(p.getEmail());
-		d.setRole(p.getRole());
-		d.setId(p.getId());
-		return d;
+	private static UserData convert(UserPojo userPojo) {
+		UserData userData = new UserData();
+		userData.setEmail(userPojo.getEmail());
+		userData.setRole(userPojo.getRole());
+		userData.setId(userPojo.getId());
+		return userData;
 	}
 
-	private static UserPojo convert(UserForm f) {
-		UserPojo p = new UserPojo();
-		p.setEmail(f.getEmail());
-		p.setRole(f.getRole());
-		p.setPassword(f.getPassword());
-		return p;
+	private static UserPojo convert(UserForm userForm) {
+		UserPojo userPojo = new UserPojo();
+		userPojo.setEmail(userForm.getEmail());
+		userPojo.setRole(userForm.getRole());
+		userPojo.setPassword(userForm.getPassword());
+		return userPojo;
 	}
 
 }

@@ -13,13 +13,23 @@ public class InfoData implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private String message;
+	private String signupMessage;
 	private String email;
 
 	public InfoData() {
-		message = "No message";
+		signupMessage = "";
+		message = "";
 		email = "No email";
 	}
-	
+
+	public String getSignupMessage() {
+		return signupMessage;
+	}
+
+	public void setSignupMessage(String signupMessage) {
+		this.signupMessage = signupMessage;
+	}
+
 	public String getMessage() {
 		return message;
 	}
