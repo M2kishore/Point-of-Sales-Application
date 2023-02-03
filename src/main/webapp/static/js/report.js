@@ -221,6 +221,9 @@ function init(){
     var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
     var nextDate = new Date();
     nextDate.setDate(today.getDate()+1);
+    var initialStartDate = new Date();
+    var initialEndDate = new Date();
+    initialStartDate.setDate(today.getDate() - 90);
     $('#startDate').datepicker({
         uiLibrary: 'bootstrap4',
         iconsLibrary: 'fontawesome',
@@ -241,7 +244,9 @@ $('#getBrandReport').click(getBrandReport);
 $('#getSalesReport').click(getSalesReport);
 $('#getInventoryReport').click(getInventoryReport);
 $('#endDate').on('change',getReport);
+$('#endDate').val((initialEndDate.getMonth()+1)+"/"+initialEndDate.getDate()+"/"+initialEndDate.getFullYear());
 $('#startDate').on('change',getReport)
+$('#startDate').val(initialStartDate.getMonth()+1+"/"+initialStartDate.getDate()+"/"+initialStartDate.getFullYear());
 $('#inputBrand').on('change',getReport)
 $('#inputCategory').on('change',getReport)
 $('#sales-table-div').hide();

@@ -101,25 +101,30 @@ function displayOrderList(){
 function init(){
     $("#inputSearch").on('input',displayOrderList);
     var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
-        var nextDate = new Date();
-        nextDate.setDate(today.getDate()+1);
-        $('#startDate').datepicker({
-            uiLibrary: 'bootstrap4',
-            iconsLibrary: 'fontawesome',
-            format: 'mm/dd/yyyy',
-            maxDate: today
-        });
-        $('#endDate').datepicker({
-            uiLibrary: 'bootstrap4',
-            iconsLibrary: 'fontawesome',
-            format: 'mm/dd/yyyy',
-            minDate: function () {
-                return $('#startDate').val();
-            },
-            maxDate: nextDate
-        });
+    var nextDate = new Date();
+    nextDate.setDate(today.getDate()+1);
+    var initialStartDate = new Date();
+    var initialEndDate = new Date();
+    initialStartDate.setDate(today.getDate() - 90);
+    $('#startDate').datepicker({
+        uiLibrary: 'bootstrap4',
+        iconsLibrary: 'fontawesome',
+        format: 'mm/dd/yyyy',
+        maxDate: today
+    });
+    $('#endDate').datepicker({
+        uiLibrary: 'bootstrap4',
+        iconsLibrary: 'fontawesome',
+        format: 'mm/dd/yyyy',
+        minDate: function () {
+            return $('#startDate').val();
+        },
+        maxDate: nextDate
+    });
     $('#startDate').on("change",displayOrderList);
+    $('#startDate').val(initialStartDate.getMonth()+1+"/"+initialStartDate.getDate()+"/"+initialStartDate.getFullYear());
     $('#endDate').on('change',displayOrderList);
+    $('#endDate').val((initialEndDate.getMonth()+1)+"/"+initialEndDate.getDate()+"/"+initialEndDate.getFullYear());
     var url = getOrderUrl() + "/all/id";
             $.ajax({
                url: url,
