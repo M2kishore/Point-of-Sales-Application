@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -55,5 +56,9 @@ public class OrderService {
     @Transactional
     public List<OrderItemPojo> filterOrders(ReportOrderForm reportOrderForm){
         return orderItemDao.filterOrder(reportOrderForm);
+    }
+
+    public Date getDate(int orderId) {
+        return orderDao.getDate(orderId);
     }
 }

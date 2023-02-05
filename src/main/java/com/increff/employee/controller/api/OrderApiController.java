@@ -1,6 +1,5 @@
 package com.increff.employee.controller.api;
 
-import com.increff.employee.model.data.InvoiceData;
 import com.increff.employee.model.data.OrderData;
 import com.increff.employee.model.data.OrderInvoiceData;
 import com.increff.employee.model.form.BillForm;
@@ -54,7 +53,7 @@ public class OrderApiController {
         ProductPojo productPojo = productService.getBarcode(barcode);
         return convertPojoToData(productPojo);
     }
-    @ApiOperation(value="Gets a products by orderId")
+    @ApiOperation(value="Gets products by orderId")
     @RequestMapping(path="/api/order/{id}",method = RequestMethod.GET)
     public List<BillForm> get(@PathVariable int id) throws ApiException {
         List<OrderItemPojo> orderItemPojoList = orderService.get(id);
@@ -103,53 +102,43 @@ public class OrderApiController {
     }
 
     @ApiOperation(value = "gets PDF of invoice")
-    @RequestMapping(path = "api/order/pdf",method = RequestMethod.POST)
-    protected void makePdf(@RequestBody BillFormList billFormList, HttpServletRequest req, HttpServletResponse response) throws ServletException, IOException {
-        String billFormListXml = jaxbObjectToXML(billFormList);
-        logger.info(billFormListXml);
-        //creating the instance of file
-        File path = new File(System.getProperty("user.dir")+"/src/main/resources/bill.xml");
-
-        //passing file instance in filewriter
-        FileWriter wr = new FileWriter(path);
-
-        //calling writer.write() method with the string
-        wr.write(billFormListXml);
-
-        //flushing the writer
-        wr.flush();
-
-        //closing the writer
-        wr.close();
+    @RequestMapping(path = "api/order/pdf/{id}",method = RequestMethod.GET)
+    protected void makePdf(@PathVariable int id, HttpServletRequest req, HttpServletResponse response) throws ServletException, IOException, ApiException {
+        //get orders based on order id
+        List<OrderItemPojo> orderItemPojoList = orderService.get(id);
         try{
-            FopFactory fopFactory = FopFactory.newInstance(new File(".").toURI());
-
-            //Setup a buffer to obtain the content length
-            ByteArrayOutputStream out = new ByteArrayOutputStream();
-
-            Fop fop = fopFactory.newFop(MimeConstants.MIME_PDF, out);
-            TransformerFactory factory = TransformerFactory.newInstance();
-            Transformer transformer = factory.newTransformer(new StreamSource("src/main/resources/template.xsl"));
-            //Make sure the XSL transformation's result is piped through to FOP
-            Result res = new SAXResult(fop.getDefaultHandler());
-
-            //Setup input
-            Source src = new StreamSource(new File(System.getProperty("user.dir")+"/src/main/resources/bill.xml"));
-
-            //Start the transformation and rendering process
-            transformer.transform(src, res);
-
-            //Prepare response
-            response.setContentType("application/pdf");
-            response.setContentLength(out.size());
-
-            //Send content to Browser
-            response.getOutputStream().write(out.toByteArray());
-            response.getOutputStream().flush();
-        }catch(Exception e){
+            BillFormList bill = getBillFormList(id,orderItemPojoList);
+            createPdf(bill,response);
+        }catch (Exception e){
             e.printStackTrace();
         }
     }
+
+    private BillFormList getBillFormList(int orderId,List<OrderItemPojo> orderItemPojoList) throws ApiException {
+        List<BillForm> billFormList = new ArrayList<BillForm>();
+        String orderDate = orderService.getDate(orderId).toString();
+        double total = 0;
+        for(OrderItemPojo orderItemPojo: orderItemPojoList){
+            //get product details
+            ProductPojo productPojo = productService.get(orderItemPojo.getProductId());
+            BillForm billForm = new BillForm();
+            billForm.setBarcode(productPojo.getBarcode());
+            billForm.setMrp(productPojo.getMrp());
+            billForm.setName(productPojo.getName());
+            billForm.setProductId(orderItemPojo.getProductId());
+            billForm.setQuantity(orderItemPojo.getQuantity());
+            billForm.setSellingPrice(orderItemPojo.getSellingPrice());
+            total+=orderItemPojo.getSellingPrice();
+            billFormList.add(billForm);
+        }
+        BillFormList bill = new BillFormList();
+        bill.setBillForm(billFormList);
+        bill.setOrderId(orderId);
+        bill.setTotal(total);
+        bill.setDate(orderDate);
+        return bill;
+    }
+
     @ApiOperation(value = "add date and time for orders")
     @RequestMapping(path="/api/order",method = RequestMethod.POST)
     public int add(@RequestBody OrderForm form)throws ApiException{
@@ -174,6 +163,7 @@ public class OrderApiController {
         newOrderItemPojo.setSellingPrice(orderItemForm.getSellingPrice());
         return newOrderItemPojo;
     }
+
     private OrderPojo convertFormToPojo(OrderForm orderForm){
         OrderPojo newOrderPojo = new OrderPojo();
         newOrderPojo.setDate(DateUtil.MillisecondToDate(orderForm.getDate()));
@@ -187,7 +177,6 @@ public class OrderApiController {
         orderItemData.setProductId(productPojo.getId());
         return orderItemData;
     }
-
     private OrderData convertPojoToData(OrderItemPojo orderItemPojo) {
         OrderData orderData = new OrderData();
         orderData.setId(orderItemPojo.getId());
@@ -195,6 +184,53 @@ public class OrderApiController {
         orderData.setProductId(orderItemPojo.getProductId());
         orderData.setSellingPrice(orderItemPojo.getSellingPrice());
         return orderData;
+    }
+
+    private void createPdf(BillFormList billFormList, HttpServletResponse response) throws IOException {
+        String billFormListXml = jaxbObjectToXML(billFormList);
+        logger.info(billFormListXml);
+        //creating the instance of file
+        File path = new File(System.getProperty("user.dir")+"/src/main/resources/bill.xml");
+
+        //passing file instance in filewriter
+        FileWriter wr = new FileWriter(path);
+
+        //calling writer.write() method with the string
+        wr.write(billFormListXml);
+
+        //flushing the writer
+        wr.flush();
+
+        //closing the writer
+        wr.close();
+        try{
+            FopFactory fopFactory = FopFactory.newInstance(new File(".").toURI());
+
+            //Set up a buffer to obtain the content length
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+            Fop fop = fopFactory.newFop(MimeConstants.MIME_PDF, out);
+            TransformerFactory factory = TransformerFactory.newInstance();
+            Transformer transformer = factory.newTransformer(new StreamSource("src/main/resources/template.xsl"));
+            //Make sure the XSL transformation's result is piped through to FOP
+            Result res = new SAXResult(fop.getDefaultHandler());
+
+            //Setup input
+            Source src = new StreamSource(new File(System.getProperty("user.dir")+"/src/main/resources/bill.xml"));
+
+            //Start the transformation and rendering process
+            transformer.transform(src, res);
+
+            //Prepare response
+            response.setContentType("application/pdf");
+            response.setContentLength(out.size());
+
+            //Send content to Browser
+            response.getOutputStream().write(out.toByteArray());
+            response.getOutputStream().flush();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }
 
     private static String jaxbObjectToXML(BillFormList billFormList)

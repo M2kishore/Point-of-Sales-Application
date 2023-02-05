@@ -256,31 +256,22 @@ function displayOrderList(currentOrder){
     }
 }
 function getInvoice(){
-    var url = getOrderUrl()+"/pdf";
-    var total = billedOrder.reduce((total,transaction)=>total+transaction.sellingPrice,0);
-    var orderDate = new Date().toString().substring(0,24);
-    var orderObject = {"billForm":billedOrder,"total":total,"orderId":currentOrderId,"date":orderDate};
-    var orderJson = JSON.stringify(orderObject);
-    console.log(orderJson)
-        $.ajax({
-           url: url,
-           type: 'POST',
-             data: orderJson,
-             headers: {
-            'Content-Type': 'application/json'
-           },
-             xhrFields: {
+    var url = getOrderUrl()+"/pdf/"+currentOrderId;
+    $.ajax({
+       url: url,
+       type: 'GET',
+        xhrFields: {
             responseType: 'blob'
-         },
-           success: function(blob) {
-                console.log(blob.size);
-                var link=document.createElement('a');
-                link.href=window.URL.createObjectURL(blob);
-                link.download="Invoice_" + new Date() + ".pdf";
-                link.click();
-           },
-           error: handleAjaxError
-        });
+        },
+       success: function(blob) {
+            console.log(blob.size);
+            var link=document.createElement('a');
+            link.href=window.URL.createObjectURL(blob);
+            link.download="Invoice_" + new Date() + ".pdf";
+            link.click();
+       },
+       error: handleAjaxError
+    });
 }
 
 //INITIALIZATION CODE
