@@ -51,4 +51,16 @@ public class OrderDaoTest extends AbstractUnitTest {
         List<OrderPojo> orderPojoList =  orderDao.getAllIds();
         assertEquals(1,orderPojoList.size());
     }
+    @Test
+    public void testGetDate(){
+        //add OrderPojo
+        Date today = new Date();
+        OrderPojo orderPojo = new OrderPojo();
+        orderPojo.setDate(today);
+        orderDao.insert(orderPojo);
+        //get OrderPojo ID
+        int id = orderDao.getAllIds().get(0).getId();
+        Date orderDate = orderDao.getDate(id);
+        assertEquals(orderDate,today);
+    }
 }

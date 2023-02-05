@@ -203,4 +203,16 @@ public class OrderServiceTest extends AbstractUnitTest {
         List<OrderPojo> orderPojoList = orderService.filterId(reportDateForm);
         assertEquals(1,orderPojoList.size());
     }
+    @Test
+    public void testGetDate(){
+        //add OrderPojo
+        Date today = new Date();
+        OrderPojo orderPojo = new OrderPojo();
+        orderPojo.setDate(today);
+        orderService.add(orderPojo);
+        //get OrderPojo ID
+        int id = orderService.getAllIds().get(0).getId();
+        Date orderDate = orderService.getDate(id);
+        assertEquals(orderDate,today);
+    }
 }
