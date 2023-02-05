@@ -6,10 +6,12 @@ import com.increff.employee.model.form.BillForm;
 import com.increff.employee.model.form.BillFormList;
 import com.increff.employee.model.form.OrderForm;
 import com.increff.employee.model.form.OrderItemForm;
+import com.increff.employee.pojo.InventoryPojo;
 import com.increff.employee.pojo.OrderItemPojo;
 import com.increff.employee.pojo.OrderPojo;
 import com.increff.employee.pojo.ProductPojo;
 import com.increff.employee.service.ApiException;
+import com.increff.employee.service.InventoryService;
 import com.increff.employee.service.OrderService;
 import com.increff.employee.service.ProductService;
 import com.increff.employee.util.DateUtil;
@@ -46,6 +48,8 @@ public class OrderApiController {
     private OrderService orderService;
     @Autowired
     private ProductService productService;
+    @Autowired
+    private InventoryService inventoryService;
 
     @ApiOperation(value="Gets a product by Barcode")
     @RequestMapping(path="/api/order",method = RequestMethod.GET)
@@ -148,9 +152,19 @@ public class OrderApiController {
 
     @ApiOperation(value = "Place an order")
     @RequestMapping(path = "/api/order/order",method = RequestMethod.POST)
-    public void add(@RequestBody OrderItemForm form)throws ApiException{
-        OrderItemPojo newOrderItemPojo = convertFormToPojo(form);
-        orderService.add(newOrderItemPojo);
+    public void add(@RequestBody List<OrderItemForm> orderItemForms)throws ApiException{
+        for(OrderItemForm orderItemForm: orderItemForms) {
+            InventoryPojo inventoryPojo = inventoryService.get(orderItemForm.getProductId());
+            if(inventoryPojo.getQuantity()<orderItemForm.getQuantity()){
+                ProductPojo productPojo = productService.get(orderItemForm.getProductId());
+                //new ApiException("insufficient storage for "+productPojo.getName()+" Available: "+inventoryPojo.getQuantity()+" Requested: "+orderItemForm.getQuantity());
+                continue;
+            }
+            inventoryPojo.setQuantity(inventoryPojo.getQuantity()-orderItemForm.getQuantity());
+            inventoryService.update(inventoryPojo.getId(),inventoryPojo);
+            OrderItemPojo newOrderItemPojo = convertFormToPojo(orderItemForm);
+            orderService.add(newOrderItemPojo);
+        }
     }
 
 

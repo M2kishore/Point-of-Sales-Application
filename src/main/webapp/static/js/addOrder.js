@@ -77,85 +77,85 @@ var url = getInventoryUrl() + "/" + currentTransaction.productId;
     	});
 }
 
-function updateOrder(event){
-	$('#edit-order-modal').modal('toggle');
-	//Get the ID
-	var id = $("#order-edit-form input[name=id]").val();
-	var url = getOrderUrl() + "/" + id;
-
-	//Set the values to update
-	var $form = $("#order-edit-form");
-	var json = toJson($form);
-
-	$.ajax({
-	   url: url,
-	   type: 'PUT',
-	   data: json,
-	   headers: {
-       	'Content-Type': 'application/json'
-       },
-	   success: function(response) {
-	   		getOrderList();
-	   },
-	   error: handleAjaxError
-	});
-
-	return false;
-}
-function updateInventory(id,quantity,transaction){
-    var url = getInventoryUrl() + "/" + id;
-    var newInventory = {"id":id,"quantity":quantity};
-    var newInventoryJson = JSON.stringify(newInventory);
-    $.ajax({
-       url: url,
-       type: 'PUT',
-       data: newInventoryJson,
-       headers: {
-            'Content-Type': 'application/json'
-          },
-       success: function(response) {
-            var orderItemObject = {"productId":transaction.productId,"orderId":currentOrderId,"quantity":transaction.quantity,"sellingPrice":transaction.sellingPrice};
-            var orderItemObjectJson = JSON.stringify(orderItemObject);
-            var url = getOrderUrl()+"/order";
-            $.ajax({
-               url: url,
-               type: 'POST',
-               data: orderItemObjectJson,
-               headers: {
-                'Content-Type': 'application/json'
-               },
-               success: function(response) {
-                    billedOrder.push(transaction);
-               },
-               error: handleAjaxError
-            });
-       },
-       error: handleAjaxError
-    });
-}
-function getProductInformation(){
-    currentOrder.map(transaction=>{
-        var url = getInventoryUrl() + "/" +transaction.productId;
-        $.ajax({
-           url: url,
-           type: 'GET',
-           success: function(data) {
-                let newQuantity = data.quantity-transaction.quantity;
-                if(newQuantity >= 0){
-                    updateInventory(data.id,newQuantity,transaction);
-                }else{
-                    alert("insufficient inventory for "+transaction.name);
-                }
-           },
-           error: handleAjaxError
-        });
-    });
-    //disable add and enable invoice
-    alert("success, refresh for new order or click invoice to download invoice");
-    $('#get-invoice').show();
-    $('#add-order').prop('disabled', true);
-    $('#submit-order').prop('disabled', true);
-}
+//function updateOrder(event){
+//	$('#edit-order-modal').modal('toggle');
+//	//Get the ID
+//	var id = $("#order-edit-form input[name=id]").val();
+//	var url = getOrderUrl() + "/" + id;
+//
+//	//Set the values to update
+//	var $form = $("#order-edit-form");
+//	var json = toJson($form);
+//
+//	$.ajax({
+//	   url: url,
+//	   type: 'PUT',
+//	   data: json,
+//	   headers: {
+//       	'Content-Type': 'application/json'
+//       },
+//	   success: function(response) {
+//	   		getOrderList();
+//	   },
+//	   error: handleAjaxError
+//	});
+//
+//	return false;
+//}
+//function updateInventory(id,quantity,transaction){
+//    var url = getInventoryUrl() + "/" + id;
+//    var newInventory = {"id":id,"quantity":quantity};
+//    var newInventoryJson = JSON.stringify(newInventory);
+//    $.ajax({
+//       url: url,
+//       type: 'PUT',
+//       data: newInventoryJson,
+//       headers: {
+//            'Content-Type': 'application/json'
+//          },
+//       success: function(response) {
+//            var orderItemObject = {"productId":transaction.productId,"orderId":currentOrderId,"quantity":transaction.quantity,"sellingPrice":transaction.sellingPrice};
+//            var orderItemObjectJson = JSON.stringify(orderItemObject);
+//            var url = getOrderUrl()+"/order";
+//            $.ajax({
+//               url: url,
+//               type: 'POST',
+//               data: orderItemObjectJson,
+//               headers: {
+//                'Content-Type': 'application/json'
+//               },
+//               success: function(response) {
+//                    billedOrder.push(transaction);
+//               },
+//               error: handleAjaxError
+//            });
+//       },
+//       error: handleAjaxError
+//    });
+//}
+//function getProductInformation(){
+//    currentOrder.map(transaction=>{
+//        var url = getInventoryUrl() + "/" +transaction.productId;
+//        $.ajax({
+//           url: url,
+//           type: 'GET',
+//           success: function(data) {
+//                let newQuantity = data.quantity-transaction.quantity;
+//                if(newQuantity >= 0){
+//                    updateInventory(data.id,newQuantity,transaction);
+//                }else{
+//                    alert("insufficient inventory for "+transaction.name);
+//                }
+//           },
+//           error: handleAjaxError
+//        });
+//    });
+//    //disable add and enable invoice
+//    alert("success, refresh for new order or click invoice to download invoice");
+//    $('#get-invoice').show();
+//    $('#add-order').prop('disabled', true);
+//    $('#submit-order').prop('disabled', true);
+//}
 function submitOrder(){
     if(currentOrder.length == 0){
         alert("please add items");
@@ -175,7 +175,30 @@ function submitOrder(){
        },
        success: function(data) {
             currentOrderId = data;
-            getProductInformation();
+            makeOrder();
+       },
+       error: handleAjaxError
+    });
+}
+function makeOrder(){
+    var url = getOrderUrl()+"/order";
+    var orderItemList = currentOrder.map(transaction=>{
+        var orderItemObject = {"productId":transaction.productId,"orderId":currentOrderId,"quantity":transaction.quantity,"sellingPrice":transaction.sellingPrice};
+        return orderItemObject;
+    })
+    var orderItemJson = JSON.stringify(orderItemList);
+    $.ajax({
+       url: url,
+       type: 'POST',
+       data: orderItemJson,
+       headers: {
+        'Content-Type': 'application/json'
+       },
+       success: function(response) {
+            alert("Order placed, you can download the invoice");
+            $('#get-invoice').show();
+            $('#add-order').prop('disabled', true);
+            $('#submit-order').prop('disabled', true);
        },
        error: handleAjaxError
     });
@@ -221,12 +244,6 @@ function updatePrice(){
 var fileData = [];
 var errorData = [];
 var processCount = 0;
-
-
-function processData(){
-	var file = $('#orderFile')[0].files[0];
-	readFileData(file, readFileDataCallback);
-}
 
 
 //UI DISPLAY METHODS
@@ -277,11 +294,9 @@ function getInvoice(){
 //INITIALIZATION CODE
 function init(){
 	$('#add-order').click(addOrder);
-	$('#update-order').click(updateOrder);
 	$('#get-invoice').click(getInvoice);
 	$('#get-invoice').hide();
 	$('#submit-order').click(submitOrder);
-	$('#process-data').click(processData);
     $("#inputQuantity").on('input',updatePrice);
     $("#inputPrice").on('change',updatePrice);
     $("#inputBarcode").on('change',updatePrice);
