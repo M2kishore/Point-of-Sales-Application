@@ -24,17 +24,17 @@
   </button>
   <div class="collapse navbar-collapse" id="navbarNav">
     <ul class="navbar-nav">
-      <li class="nav-item">
+      <li class="nav-item" th:classappend="${#httpServletRequest.getRequestURI() == '/pos/site/features' ? 'active':''}">
         <a class="nav-link" th:href="@{/site/features}">Features</a>
       </li>
-      <li class="nav-item">
+      <li class="nav-item" th:classappend="${#httpServletRequest.getRequestURI() == '/pos/site/pricing' ? 'active':''}">
         <a class="nav-link" th:href="@{/site/pricing}">Pricing</a>
       </li>
     </ul>
     
     <ul class="navbar-nav ml-auto">
-       <li class="nav-item">
-        <a class="btn btn-primary" th:href="@{/site/login}">Login</a>
+       <li class="nav-item" th:classappend="${#httpServletRequest.getRequestURI() == '/pos/site/login' ? 'active':''}">
+        <a class="nav-link" th:href="@{/site/login}">Login</a>
       </li>
     </ul>
  
@@ -51,25 +51,25 @@
   </button>
   <div class="collapse navbar-collapse" id="navbarNav">
     <ul class="navbar-nav">
-      <li class="nav-item">
+      <li class="nav-item" th:classappend="${#httpServletRequest.getRequestURI() == '/pos/ui/home' ? 'active':''}">
         <a class="nav-link" th:href="@{/ui/home}">Home</a>
       </li>
-        <li class="nav-item">
+        <li class="nav-item" th:classappend="${#httpServletRequest.getRequestURI() == '/pos/ui/brand' ? 'active':''}">
             <a class="nav-link" th:href="@{/ui/brand}">Brand</a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" th:classappend="${#httpServletRequest.getRequestURI() == '/pos/ui/product' ? 'active':''}">
             <a class="nav-link" th:href="@{/ui/product}">Product</a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" th:classappend="${#httpServletRequest.getRequestURI() == '/pos/ui/inventory' ? 'active':''}">
             <a class="nav-link" th:href="@{/ui/inventory}">Inventory</a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" th:classappend="${#httpServletRequest.getRequestURI() == '/pos/ui/order' ? 'active':''}">
             <a class="nav-link" th:href="@{/ui/order}">Order</a>
         </li>
-      <li class="nav-item">
+      <li class="nav-item"th:classappend="${#httpServletRequest.getRequestURI() == '/pos/ui/report' ? 'active':''}">
         <a class="nav-link" th:href="@{/ui/report}">Report</a>
       </li>
-      <li class="nav-item">
+      <li class="nav-item" th:classappend="${#httpServletRequest.getRequestURI() == '/pos/ui/scheduler' ? 'active':''}">
         <a class="nav-link" th:href="@{/ui/scheduler}">Scheduler</a>
       </li>
     </ul>
@@ -90,7 +90,6 @@
 
 <footer class="footer  mt-1" th:fragment="name_footer">
 	Copyright Increff 2019
-	&nbsp;
 	<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
   <script src="http://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.2/js/toastr.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>

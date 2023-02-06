@@ -10,44 +10,37 @@
 
 
 <div class="container">
-</div> <!-- Col -->
 
-<div class="col-6">
+    <div class="col-6">
 
-    <div class="card">
-        <div class="card-header">
-            Signup
-        </div>
-        <div class="card-body">
-            <form class="form" id="signup-form" method="POST" th:action="@{/session/signup}">
-                <div class="form-group">
-                    <label for="signup_email" class="col-sm-10 col-form-label">Email</label>
-                    <div class="col-sm-10">
-                        <input type="email" class="form-control" name="email" id="signup_email" placeholder="enter email">
+        <div class="card">
+            <div class="card-header">
+                Signup
+            </div>
+            <div class="card-body">
+                <form class="form" id="signup-form" method="POST" th:action="@{/session/signup}">
+                    <div class="form-group">
+                        <label for="signup_email" class="col-sm-10 col-form-label">Email</label>
+                        <div class="col-sm-10">
+                            <input type="email" class="form-control" name="email" id="signup_email" placeholder="enter email">
+                        </div>
                     </div>
-                </div>
-                <div class="form-group">
-                    <label for="signup_password" class="col-sm-10 col-form-label">Password</label>
-                    <div class="col-sm-10">
-                        <input type="password" class="form-control" name="password" id="signup_password" placeholder="password">
+                    <div class="form-group">
+                        <label for="signup_password" class="col-sm-10 col-form-label">Password</label>
+                        <div class="col-sm-10">
+                            <input type="password" class="form-control" name="password" id="signup_password" placeholder="password">
+                        </div>
                     </div>
-                </div>
-                <button type="submit" class="btn btn-primary" id="signup-login">Signup</button>
-            </form>
+                    <button type="submit" class="btn btn-primary" id="signup-login">Signup</button>
+                </form>
+            </div>
+            <div class="card-footer text-danger">
+                [[${info.getSignupMessage()}]]
+            </div>
+
         </div>
-        <div class="card-footer text-danger">
-            [[${info.getSignupMessage()}]]
-        </div>
-
-    </div>
-
-
-
-</div> <!-- Col -->
+    </div> <!-- Col -->
 </div> <!-- Row -->
-
-</div>
-<!-- Container-->
         <footer th:replace="snippets.html :: name_footer"></footer>
 
 </body>
