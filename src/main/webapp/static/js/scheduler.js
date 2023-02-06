@@ -14,8 +14,6 @@ function displaySchedulerList(){
 	var endDate = new Date(Date.parse(endDateString)).getTime();
 	for(var id in schedules){
 	    var scheduleDate = schedules[id].date
-	    console.log(scheduleDate,endDate,startDate)
-	    console.log(endDate > scheduleDate,startDate < scheduleDate)
 	    if(endDate >= scheduleDate && startDate <= scheduleDate){
 	        var schedulerDateString = formattedDate(new Date(scheduleDate));
             var row = '<tr>'
@@ -59,7 +57,6 @@ function init(){
        url: url,
        type: 'GET',
        success: function(schedulerData) {
-            console.log(schedulerData);
             schedules = schedulerData;
             displaySchedulerList();
        },

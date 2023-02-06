@@ -16,149 +16,79 @@ function getInventoryUrl(){
 }
 //BUTTON ACTIONS
 function addOrder(){
-if(currentTransaction.productId === undefined){
-    alert("invalid barcode");
-    return;
-}
-var url = getInventoryUrl() + "/" + currentTransaction.productId;
-    	$.ajax({
-    	   url: url,
-    	   type: 'GET',
-    	   async:false,
-    	   success: function(data) {
-    	        let currentQuantity = currentTransaction.quantity? currentTransaction.quantity:0;
-    	        let price = $('#inputPrice').val();
-    	        if(currentOrder.length == 0){
-    	            if(currentQuantity < data.quantity){
-    	                currentOrder.push(currentTransaction);
-    	                total+=price*currentQuantity;
-    	                $('#total').text(total);
-    	                console.log(currentOrder);
-    	                currentTransaction = {};
-    	                resetOrder();
-    	                displayOrderList(currentOrder);
-    	                return;
-    	            }
-    	        }
-    	        for(var transaction of currentOrder){
-    	            if(transaction.productId === data.id){
-    	                if(transaction.quantity+currentQuantity <= data.quantity){
-    	                    alert("given quantity is larger than the inventory");
-    	                    return
-    	                }else{
-    	                    if(currentQuantity > 0){
-    	                    //duplicate entry
-                            transaction.quantity += currentQuantity;
-                            transaction.sellingPrice += currentQuantity*price;
-                            total += currentQuantity*price;
-                            currentTransaction = {};
-                            $('#total').text(total);
-                            displayOrderList(currentOrder);
-                            resetOrder();
-                            return
-    	                    }
-    	                }
-    	            }
-    	        };
-                //new entry of transaction
-                if(currentQuantity <= data.quantity){
+    if(currentTransaction.productId === undefined){
+        toastr.error("invalid barcode");
+        return;
+    }
+    var url = getInventoryUrl() + "/" + currentTransaction.productId;
+    $.ajax({
+       url: url,
+       type: 'GET',
+       async:false,
+       success: function(data) {
+            let currentQuantity = currentTransaction.quantity? currentTransaction.quantity:0;
+            let price = $('#inputPrice').val();
+            if(currentOrder.length == 0){
+                if(currentQuantity < data.quantity){
                     currentOrder.push(currentTransaction);
-                    total += currentQuantity*price;
-                }else{
-                    alert("given quantity is larger than the inventory");
+                    total+=price*currentQuantity;
+                    $('#total').text(total);
+                    currentTransaction = {};
+                    resetOrder();
+                    displayOrderList(currentOrder);
                     return;
                 }
-                currentTransaction = {};
-                $('#total').text(total);
-    	        displayOrderList(currentOrder);
-    	        resetOrder();
-    	   },
-    	   error: handleAjaxError
-    	});
+            }
+            for(var transaction of currentOrder){
+                if(transaction.productId === data.id){
+                    if(transaction.quantity+currentQuantity <= data.quantity){
+                        toastr.error("given quantity is larger than the inventory");
+                        return
+                    }else{
+                        if(currentQuantity > 0){
+                        //duplicate entry
+                        transaction.quantity += currentQuantity;
+                        transaction.sellingPrice += currentQuantity*price;
+                        total += currentQuantity*price;
+                        currentTransaction = {};
+                        $('#total').text(total);
+                        displayOrderList(currentOrder);
+                        resetOrder();
+                        return
+                        }
+                    }
+                }
+            };
+            //new entry of transaction
+            if(currentQuantity <= data.quantity){
+                currentOrder.push(currentTransaction);
+                total += currentQuantity*price;
+            }else{
+                toastr.error("given quantity is larger than the inventory");
+                return;
+            }
+            currentTransaction = {};
+            $('#total').text(total);
+            displayOrderList(currentOrder);
+            resetOrder();
+       },
+       error: handleAjaxError
+    });
 }
-
-//function updateOrder(event){
-//	$('#edit-order-modal').modal('toggle');
-//	//Get the ID
-//	var id = $("#order-edit-form input[name=id]").val();
-//	var url = getOrderUrl() + "/" + id;
-//
-//	//Set the values to update
-//	var $form = $("#order-edit-form");
-//	var json = toJson($form);
-//
-//	$.ajax({
-//	   url: url,
-//	   type: 'PUT',
-//	   data: json,
-//	   headers: {
-//       	'Content-Type': 'application/json'
-//       },
-//	   success: function(response) {
-//	   		getOrderList();
-//	   },
-//	   error: handleAjaxError
-//	});
-//
-//	return false;
-//}
-//function updateInventory(id,quantity,transaction){
-//    var url = getInventoryUrl() + "/" + id;
-//    var newInventory = {"id":id,"quantity":quantity};
-//    var newInventoryJson = JSON.stringify(newInventory);
-//    $.ajax({
-//       url: url,
-//       type: 'PUT',
-//       data: newInventoryJson,
-//       headers: {
-//            'Content-Type': 'application/json'
-//          },
-//       success: function(response) {
-//            var orderItemObject = {"productId":transaction.productId,"orderId":currentOrderId,"quantity":transaction.quantity,"sellingPrice":transaction.sellingPrice};
-//            var orderItemObjectJson = JSON.stringify(orderItemObject);
-//            var url = getOrderUrl()+"/order";
-//            $.ajax({
-//               url: url,
-//               type: 'POST',
-//               data: orderItemObjectJson,
-//               headers: {
-//                'Content-Type': 'application/json'
-//               },
-//               success: function(response) {
-//                    billedOrder.push(transaction);
-//               },
-//               error: handleAjaxError
-//            });
-//       },
-//       error: handleAjaxError
-//    });
-//}
-//function getProductInformation(){
-//    currentOrder.map(transaction=>{
-//        var url = getInventoryUrl() + "/" +transaction.productId;
-//        $.ajax({
-//           url: url,
-//           type: 'GET',
-//           success: function(data) {
-//                let newQuantity = data.quantity-transaction.quantity;
-//                if(newQuantity >= 0){
-//                    updateInventory(data.id,newQuantity,transaction);
-//                }else{
-//                    alert("insufficient inventory for "+transaction.name);
-//                }
-//           },
-//           error: handleAjaxError
-//        });
-//    });
-//    //disable add and enable invoice
-//    alert("success, refresh for new order or click invoice to download invoice");
-//    $('#get-invoice').show();
-//    $('#add-order').prop('disabled', true);
-//    $('#submit-order').prop('disabled', true);
-//}
+function deleteTransaction(barcode){
+    currentOrder = currentOrder.filter(transaction=>{
+        if(transaction.barcode === barcode){
+            total-=transaction.sellingPrice;
+            $('#total').text(total);
+            return false;
+        }
+        return true;
+    });
+    displayOrderList(currentOrder);
+}
 function submitOrder(){
     if(currentOrder.length == 0){
-        alert("please add items");
+        toastr.error("please add items");
         return
     }
     var url = getOrderUrl();
@@ -195,7 +125,7 @@ function makeOrder(){
         'Content-Type': 'application/json'
        },
        success: function(response) {
-            alert("Order placed, you can download the invoice");
+            toastr.success("Order placed, you can download the invoice");
             $('#get-invoice').show();
             $('#add-order').prop('disabled', true);
             $('#submit-order').prop('disabled', true);
@@ -222,10 +152,6 @@ function updatePrice(){
        success: function(data) {
            let price = $('#inputPrice').val();
            let sellingPrice = price*quantity;
-           if(data.mrp < price){
-                alert("Price cannot be greater than mrp");
-                return;
-           }
            $('#inputMrp').val(data.mrp);
            $('#inputName').val(data.name);
            $('#inputSellingPrice').val(sellingPrice);
@@ -247,17 +173,6 @@ var processCount = 0;
 
 
 //UI DISPLAY METHODS
-function deleteTransaction(barcode){
-    currentOrder = currentOrder.filter(transaction=>{
-        if(transaction.barcode === barcode){
-            total-=transaction.sellingPrice;
-            $('#total').text(total);
-            return false;
-        }
-        return true;
-    });
-    displayOrderList(currentOrder);
-}
 function displayOrderList(currentOrder){
     var $tbody = $('#order-table').find('tbody');
     $tbody.empty();
@@ -281,11 +196,11 @@ function getInvoice(){
             responseType: 'blob'
         },
        success: function(blob) {
-            console.log(blob.size);
             var link=document.createElement('a');
             link.href=window.URL.createObjectURL(blob);
             link.download="Invoice_" + new Date() + ".pdf";
             link.click();
+            toastr.info("Invoice is Downloading");
        },
        error: handleAjaxError
     });

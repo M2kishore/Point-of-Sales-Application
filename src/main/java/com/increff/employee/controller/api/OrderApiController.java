@@ -98,13 +98,6 @@ public class OrderApiController {
         return list2;
     }
 
-    private OrderInvoiceData convertPojoToData(OrderPojo orderPojo) {
-        OrderInvoiceData orderInvoiceData = new OrderInvoiceData();
-        orderInvoiceData.setId(orderPojo.getId());
-        orderInvoiceData.setDate(DateUtil.DateToMillisecond(orderPojo.getDate()));
-        return orderInvoiceData;
-    }
-
     @ApiOperation(value = "gets PDF of invoice")
     @RequestMapping(path = "api/order/pdf/{id}",method = RequestMethod.GET)
     protected void makePdf(@PathVariable int id, HttpServletRequest req, HttpServletResponse response) throws ServletException, IOException, ApiException {
@@ -183,6 +176,7 @@ public class OrderApiController {
         newOrderPojo.setDate(DateUtil.MillisecondToDate(orderForm.getDate()));
         return newOrderPojo;
     }
+
     private OrderItemData convertPojoToData(ProductPojo productPojo) {
         OrderItemData orderItemData = new OrderItemData();
         orderItemData.setName(productPojo.getName());
@@ -198,6 +192,12 @@ public class OrderApiController {
         orderData.setProductId(orderItemPojo.getProductId());
         orderData.setSellingPrice(orderItemPojo.getSellingPrice());
         return orderData;
+    }
+    private OrderInvoiceData convertPojoToData(OrderPojo orderPojo) {
+        OrderInvoiceData orderInvoiceData = new OrderInvoiceData();
+        orderInvoiceData.setId(orderPojo.getId());
+        orderInvoiceData.setDate(DateUtil.DateToMillisecond(orderPojo.getDate()));
+        return orderInvoiceData;
     }
 
     private void createPdf(BillFormList billFormList, HttpServletResponse response) throws IOException {

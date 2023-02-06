@@ -15,7 +15,7 @@ function toJson($form){
 
 function handleAjaxError(response){
 	var response = JSON.parse(response.responseText);
-	alert(response.message);
+	toastr.error(response.message);
 }
 
 function readFileData(file, callback){
@@ -52,3 +52,18 @@ function writeFileData(arr){
     tempLink.setAttribute('download', 'download.tsv');
     tempLink.click(); 
 }
+toastr.options = {
+  "closeButton": true,
+  "debug": false,
+  "progressBar": true,
+  "positionClass": "toast-top-right",
+  "showDuration": "none",
+  "hideDuration": "none",
+  "timeOut": "none",
+  "extendedTimeOut": "none",
+  "showEasing": "swing",
+  "hideEasing": "linear",
+  "showMethod": "fadeIn",
+  "hideMethod": "fadeOut",
+  "font-size":	"1.5rem"
+};

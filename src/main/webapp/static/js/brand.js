@@ -20,6 +20,7 @@ function addBrand(event){
        	'Content-Type': 'application/json'
        },
 	   success: function(response) {
+	        toastr.success("Brand Added Successfully");
 	   		getBrandList();
 	   },
 	   error: handleAjaxError
@@ -46,6 +47,7 @@ function updateBrand(event){
        	'Content-Type': 'application/json'
        },
 	   success: function(response) {
+	        toastr.success("Brand Updated Successfully");
 	   		getBrandList();
 	   },
 	   error: handleAjaxError
@@ -62,19 +64,6 @@ function getBrandList(){
 	   type: 'GET',
 	   success: function(data) {
 	   		displayBrandList(data);
-	   },
-	   error: handleAjaxError
-	});
-}
-
-function deleteBrand(id){
-	var url = getBrandUrl() + "/" + id;
-
-	$.ajax({
-	   url: url,
-	   type: 'DELETE',
-	   success: function(data) {
-	   		getBrandList();
 	   },
 	   error: handleAjaxError
 	});
@@ -99,7 +88,7 @@ function readFileDataCallback(results){
 function uploadRows(){
     //no of rows check
     if (fileData.length>5000){
-        alert("File Rows should be within 5000 rows");
+        toastr.error("File Rows should be within 5000 rows");
         return;
     }
 	//Update progress
@@ -114,7 +103,6 @@ function uploadRows(){
 	processCount++;
 
 	var json = JSON.stringify(row);
-	console.log(row)
 	var url = getBrandUrl();
 
 	//Make ajax call

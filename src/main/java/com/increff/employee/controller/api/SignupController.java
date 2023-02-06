@@ -25,8 +25,6 @@ public class SignupController {
     UserService userService;
     @Autowired
     private InfoData info;
-
-//    @Value("${arrayOfEmails}")
     @Value("#{'${arrayOfEmails}'.split(',')}")
     private List<String> arrayOfSupervisorEmails = new ArrayList<String>();
     @ApiOperation(value = "Adds a user")

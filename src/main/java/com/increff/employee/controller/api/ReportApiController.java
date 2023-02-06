@@ -24,12 +24,6 @@ import java.util.List;
 @RestController
 public class ReportApiController {
     @Autowired
-    private BrandService brandService;
-    @Autowired
-    private ProductService productService;
-    @Autowired
-    private InventoryService inventoryService;
-    @Autowired
     private OrderService orderService;
 
     @ApiOperation(value = "Gets list of all orders in the given time frame")

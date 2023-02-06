@@ -1,12 +1,10 @@
 let productList = [];
 let filteredProductList = [];
 function getInventoryUrl(){
-
 	var baseUrl = $("meta[name=baseUrl]").attr("content")
 	return baseUrl + "/api/inventory";
 }
 function getProductUrl(){
-
 	var baseUrl = $("meta[name=baseUrl]").attr("content")
 	return baseUrl + "/api/product";
 }
@@ -27,6 +25,7 @@ function updateInventory(event){
        	'Content-Type': 'application/json'
        },
 	   success: function(response) {
+	        toastr.success("Inventory Updated Successfully");
 	   		getInventoryList();
 	   },
 	   error: handleAjaxError
@@ -34,29 +33,6 @@ function updateInventory(event){
 
 	return false;
 }
-function addInventory(event){
-    var quantity = $('#inputQuantity').val();
-    var id = $('#product-select').children("option:selected").val();
-    var newInventory = {"id":id,"quantity":quantity};
-    var newInventoryJson = JSON.stringify(newInventory);
-    var url = getInventoryUrl();
-
-    $.ajax({
-       url: url,
-       type: 'POST',
-       data: newInventoryJson,
-       headers: {
-        'Content-Type': 'application/json'
-       },
-       success: function(response) {
-            getInventoryList();
-       },
-       error: handleAjaxError
-    });
-
-    return false;
-}
-
 
 function getInventoryList(){
 	var url = getInventoryUrl();
@@ -202,7 +178,7 @@ function displayInventoryList(productData,inventoryData){
 function resetUploadDialog(){
     //no of rows check
     if (fileData.length>5000){
-        alert("File Rows should be within 5000 rows");
+        toastr.error("File Rows should be within 5000 rows");
         return;
     }
 	//Reset file name
@@ -242,7 +218,6 @@ function displayInventory(data){
 //INITIALIZATION CODE
 function init(){
 	$('#update-inventory').click(updateInventory);
-	$('#add-inventory').click(addInventory);
 	$('#refresh-data').click(getInventoryList);
 	$('#upload-data').click(displayUploadData);
 	$('#process-data').click(processData);

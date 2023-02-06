@@ -4,11 +4,6 @@ function getProductUrl(){
 	var baseUrl = $("meta[name=baseUrl]").attr("content")
 	return baseUrl + "/api/product";
 }
-function getInventoryUrl(){
-
-	var baseUrl = $("meta[name=baseUrl]").attr("content")
-	return baseUrl + "/api/inventory";
-}
 function getBrandUrl(){
 
 	var baseUrl = $("meta[name=baseUrl]").attr("content")
@@ -25,7 +20,6 @@ function addProduct(event){
 	var brandCategory = $('#brand-category-select').children("option:selected").val();
 	var newProduct = {"barcode":barcode,"name":name,"mrp":mrp,"brandCategory":brandCategory};
 	var newProductJson = JSON.stringify(newProduct);
-	console.log(newProductJson);
 	$.ajax({
 	   url: url,
 	   type: 'POST',
@@ -34,7 +28,7 @@ function addProduct(event){
        	'Content-Type': 'application/json'
        },
 	   success: function(response) {
-	   console.log(response);
+	        toastr.success("Product Added Successfully");
 	   		getProductList();
 	   },
 	   error: handleAjaxError
@@ -60,6 +54,7 @@ function updateProduct(event){
        	'Content-Type': 'application/json'
        },
 	   success: function(response) {
+	        toastr.success("Product Updated Successfully");
 	   		getProductList();
 	   },
 	   error: handleAjaxError
@@ -76,19 +71,6 @@ function getProductList(){
 	   type: 'GET',
 	   success: function(data) {
 	   		displayProductList(data);
-	   },
-	   error: handleAjaxError
-	});
-}
-
-function deleteProduct(id){
-	var url = getProductUrl() + "/" + id;
-
-	$.ajax({
-	   url: url,
-	   type: 'DELETE',
-	   success: function(data) {
-	   		getProductList();
 	   },
 	   error: handleAjaxError
 	});
@@ -113,7 +95,7 @@ function readFileDataCallback(results){
 function uploadRows(){
     //no of rows check
     if (fileData.length>5000){
-        alert("File Rows should be within 5000 rows");
+        toastr.error("File Rows should be within 5000 rows");
         return;
     }
 	//Update progress
@@ -157,9 +139,7 @@ function downloadErrors(){
 //UI DISPLAY METHODS
 function displayBrandCategorySelect(brandCategoryList){
     var brandCategorySelect = $('#brand-category-select');
-    console.log("brand",brandCategoryList)
     for(brand of brandCategoryList){
-    console.log(brand);
         brandCategorySelect.append("<option value="+brand.id+">"+brand.brand+" "+brand.category+"</option>")
     }
 }
@@ -170,7 +150,6 @@ function setupBrandCategorySelect(){
        url: url,
        type: 'GET',
        success: function(brandData) {
-       console.log(brandData);
         brandList = [...brandData];
         displayBrandCategorySelect(brandData);
        },
