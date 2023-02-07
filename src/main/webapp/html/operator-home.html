@@ -1,0 +1,36 @@
+<!doctype html>
+
+<html lang="en">
+
+<head th:replace="snippets.html :: name_head"></head>
+
+<body>
+
+<nav th:replace="snippets.html :: name_app_navbar_operator"></nav>
+
+<div class="container">
+
+    <h3>Home</h3>
+
+    <!-- Top row with form-->
+    <div class="row my-2">
+        <div class="col-4">
+            <a th:href="@{/ui/report}" title="Report"> <i class="fas fa-chart-pie"></i></a><br>
+            Report
+        </div>
+        <div class="col-4">
+            <a th:href="@{/ui/scheduler}" title="Scheduler"> <i class="fas fa-clock"></i></a><br>
+            Scheduler
+        </div>
+    </div>
+
+
+
+</div> <!-- Container end-->
+
+<footer th:replace="snippets.html :: name_footer"></footer>
+
+
+</body>
+
+</html>
