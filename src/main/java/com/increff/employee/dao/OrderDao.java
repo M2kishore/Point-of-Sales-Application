@@ -16,8 +16,8 @@ import java.util.List;
 public class OrderDao extends AbstractDao{
     private static String select_id = "select orderPojo from OrderPojo orderPojo where id=:id";
 
-    private static String select_all = "SELECT orderPojo FROM OrderPojo AS orderPojo";
-    private static String filter_date = "SELECT orderPojo FROM OrderPojo AS orderPojo WHERE orderPojo.date BETWEEN :startDate AND :endDate ";
+    private static String select_all = "SELECT orderPojo FROM OrderPojo AS orderPojo ORDER BY orderPojo.id DESC";
+    private static String filter_date = "SELECT orderPojo FROM OrderPojo AS orderPojo WHERE orderPojo.date BETWEEN :startDate AND :endDate ORDER BY orderPojo.id DESC";
     @Transactional
     public int insert(OrderPojo orderPojo){
         entityManager().persist(orderPojo);

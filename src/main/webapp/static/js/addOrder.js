@@ -205,6 +205,13 @@ function getInvoice(){
        error: handleAjaxError
     });
 }
+//VALIDATION FUNCTIONS
+function limitDecimalPlaces(event) {
+  if (event.target.value.indexOf('.') == -1) { return; }
+  if ((event.target.value.length - event.target.value.indexOf('.')) > 2) {
+    event.target.value = parseFloat(event.target.value).toFixed(2);
+  }
+}
 
 //INITIALIZATION CODE
 function keyBinding(){
@@ -231,6 +238,7 @@ function init(){
 	$('#submit-order').click(submitOrder);
     $("#inputQuantity").on('input',updatePrice);
     $("#inputPrice").on('change',updatePrice);
+    $("#inputPrice").on('change',limitDecimalPlaces);
     $("#inputBarcode").on('change',updatePrice);
     keyBinding();
 }

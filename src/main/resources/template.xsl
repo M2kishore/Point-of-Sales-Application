@@ -34,7 +34,7 @@
                                 </fo:table-cell>
                                 <fo:table-cell
                                         xsl:use-attribute-sets="tableBorder">
-                                    <fo:block font-weight="bold">Mrp</fo:block>
+                                    <fo:block font-weight="bold">Price</fo:block>
                                 </fo:table-cell>
                                 <fo:table-cell
                                         xsl:use-attribute-sets="tableBorder">
@@ -71,7 +71,7 @@
             </fo:table-cell>
             <fo:table-cell xsl:use-attribute-sets="tableBorder">
                 <fo:block>
-                    <xsl:value-of select="mrp"/>
+                    <xsl:value-of select="price"/>
                 </fo:block>
             </fo:table-cell>
             <fo:table-cell>

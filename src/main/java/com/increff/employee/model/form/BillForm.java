@@ -2,7 +2,7 @@ package com.increff.employee.model.form;
 
 public class BillForm {
     private String barcode;
-    private double mrp;
+    private double price;
     private String name;
     private int productId;
     private int quantity;
@@ -16,12 +16,12 @@ public class BillForm {
         this.barcode = barcode;
     }
 
-    public double getMrp() {
-        return mrp;
+    public double getPrice() {
+        return price;
     }
 
-    public void setMrp(double mrp) {
-        this.mrp = mrp;
+    public void setPrice(double price) {
+        this.price = price;
     }
 
     public String getName() {

@@ -55,15 +55,15 @@ function writeFileData(arr){
 toastr.options = {
   "closeButton": true,
   "debug": false,
-  "progressBar": true,
+  "progressBar": false,
   "positionClass": "toast-top-right",
   "showDuration": "none",
   "hideDuration": "none",
-  "timeOut": "none",
+  "timeOut": 10000,
   "extendedTimeOut": "none",
   "showEasing": "swing",
   "hideEasing": "linear",
   "showMethod": "fadeIn",
   "hideMethod": "fadeOut",
-  "font-size":	"1.5rem"
+  "font-size":	"2rem"
 };

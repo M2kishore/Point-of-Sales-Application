@@ -66,11 +66,11 @@ public class OrderApiController {
             ProductPojo productPojo = productService.get(orderItemPojo.getProductId());
             BillForm billForm = new BillForm();
             billForm.setBarcode(productPojo.getBarcode());
-            billForm.setMrp(productPojo.getMrp());
             billForm.setName(productPojo.getName());
             billForm.setQuantity(orderItemPojo.getQuantity());
             billForm.setSellingPrice(orderItemPojo.getSellingPrice());
             billForm.setProductId(orderItemPojo.getProductId());
+            billForm.setPrice(orderItemPojo.getSellingPrice()/orderItemPojo.getQuantity());
 
             billFormList.add(billForm);
         }
@@ -120,11 +120,11 @@ public class OrderApiController {
             ProductPojo productPojo = productService.get(orderItemPojo.getProductId());
             BillForm billForm = new BillForm();
             billForm.setBarcode(productPojo.getBarcode());
-            billForm.setMrp(productPojo.getMrp());
             billForm.setName(productPojo.getName());
             billForm.setProductId(orderItemPojo.getProductId());
             billForm.setQuantity(orderItemPojo.getQuantity());
             billForm.setSellingPrice(orderItemPojo.getSellingPrice());
+            billForm.setPrice(orderItemPojo.getSellingPrice()/orderItemPojo.getQuantity());
             total+=orderItemPojo.getSellingPrice();
             billFormList.add(billForm);
         }
