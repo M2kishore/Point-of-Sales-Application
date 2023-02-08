@@ -136,7 +136,7 @@ function displayBrandList(data){
 	$tbody.empty();
 	for(var i in data){
 		var e = data[i];
-		var buttonHtml = ' <button onclick="displayEditBrand(' + e.id + ')">edit</button>'
+		var buttonHtml = ' <button class="btn btn-primary btn-sm" onclick="displayEditBrand(' + e.id + ')">edit</button>'
 		var row = '<tr>'
 		+ '<td>' + e.id + '</td>'
 		+ '<td>' + e.brand + '</td>'
@@ -198,6 +198,18 @@ function displayBrand(data){
 
 
 //INITIALIZATION CODE
+function keyBinding(){
+    $("#inputBrand").keypress(function(event) {
+        if (event.keyCode === 13) {
+            $("#add-brand").click();
+        }
+    });
+    $("#inputCategory").keypress(function(event) {
+        if (event.keyCode === 13) {
+            $("#add-brand").click();
+        }
+    });
+}
 function init(){
 	$('#add-brand').click(addBrand);
 	$('#update-brand').click(updateBrand);
@@ -206,6 +218,7 @@ function init(){
 	$('#process-data').click(processData);
 	$('#download-errors').click(downloadErrors);
     $('#brandFile').on('change', updateFileName)
+    keyBinding();
 }
 
 $(document).ready(init);

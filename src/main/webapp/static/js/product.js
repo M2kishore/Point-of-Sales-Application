@@ -163,7 +163,7 @@ function displayProductList(data){
 	$tbody.empty();
 	for(var i in data){
 		var e = data[i];
-		var buttonHtml =  '<button onclick="displayEditProduct(' + e.id + ')">edit</button>';
+		var buttonHtml =  '<button class="btn btn-primary btn-sm" onclick="displayEditProduct(' + e.id + ')">edit</button>';
 		var row = '<tr>'
 		+ '<td>' + e.id + '</td>'
 		+ '<td>' + e.barcode + '</td>'
@@ -229,6 +229,28 @@ function displayProduct(data){
 
 
 //INITIALIZATION CODE
+function keyBinding(){
+    $("#inputBarcode").keypress(function(event) {
+        if (event.keyCode === 13) {
+            $("#add-product").click();
+        }
+    });
+    $("#brand-category-select").keypress(function(event) {
+        if (event.keyCode === 13) {
+            $("#add-product").click();
+        }
+    });
+    $("#inputName").keypress(function(event) {
+        if (event.keyCode === 13) {
+            $("#add-product").click();
+        }
+    });
+    $("#inputMrp").keypress(function(event) {
+        if (event.keyCode === 13) {
+            $("#add-product").click();
+        }
+    });
+}
 function init(){
 	$('#add-product').click(addProduct);
 	$('#update-product').click(updateProduct);
@@ -237,6 +259,7 @@ function init(){
 	$('#process-data').click(processData);
 	$('#download-errors').click(downloadErrors);
     $('#productFile').on('change', updateFileName)
+    keyBinding();
 }
 
 $(document).ready(init);

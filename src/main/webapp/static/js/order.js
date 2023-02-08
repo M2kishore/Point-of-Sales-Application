@@ -69,8 +69,8 @@ function displayOrderList(){
 	    if(!idString.includes(searchString) || endDate < orderDate || startDate > orderDate){
 	        continue;
 	    }
-		var buttonHtml = ' <button onclick="getInvoice(' + id + ')">invoice</button>'
-		buttonHtml += ' <button onclick="showOrder(' + id + ')">details</button>'
+		var buttonHtml = ' <button class="btn btn-info btn-sm" onclick="getInvoice(' + id + ')">invoice</button>'
+		buttonHtml += ' <button class="btn btn-primary btn-sm" onclick="showOrder(' + id + ')">details</button>'
 		var orderDateString = new Date(orderDate).toString().substring(0,25);
 		var row = '<tr>'
 		+ '<td>' + idString + '</td>'
@@ -85,6 +85,7 @@ function displayOrderList(){
 //INITIALIZATION CODE
 function init(){
     $("#inputSearch").on('input',displayOrderList);
+    $('#add-order').focus();
     var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
     var nextDate = new Date();
     nextDate.setDate(today.getDate()+1);

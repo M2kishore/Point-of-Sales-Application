@@ -177,7 +177,7 @@ function displayOrderList(currentOrder){
     var $tbody = $('#order-table').find('tbody');
     $tbody.empty();
     for(var product of currentOrder){
-        var buttonHtml = `<button onclick="deleteTransaction('${product.barcode}')">delete</button>`
+        var buttonHtml = `<button class="btn btn-primary btn-sm" onclick="deleteTransaction('${product.barcode}')">delete</button>`
         var row = '<tr>'
         + '<td>' + product.name + '</td>'
         + '<td>'  + product.quantity + '</td>'
@@ -207,6 +207,23 @@ function getInvoice(){
 }
 
 //INITIALIZATION CODE
+function keyBinding(){
+    $("#inputBarcode").keypress(function(event) {
+        if (event.keyCode === 13) {
+            $("#add-order").click();
+        }
+    });
+    $("#inputQuantity").keypress(function(event) {
+        if (event.keyCode === 13) {
+            $("#add-order").click();
+        }
+    });
+    $("#inputPrice").keypress(function(event) {
+        if (event.keyCode === 13) {
+            $("#add-order").click();
+        }
+    });
+}
 function init(){
 	$('#add-order').click(addOrder);
 	$('#get-invoice').click(getInvoice);
@@ -215,6 +232,7 @@ function init(){
     $("#inputQuantity").on('input',updatePrice);
     $("#inputPrice").on('change',updatePrice);
     $("#inputBarcode").on('change',updatePrice);
+    keyBinding();
 }
 $(document).ready(init);
 

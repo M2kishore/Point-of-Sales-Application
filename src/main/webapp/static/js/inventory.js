@@ -216,6 +216,18 @@ function displayInventory(data){
 	$('#edit-inventory-modal').modal('toggle');
 }
 //INITIALIZATION CODE
+function keyBinding(){
+    $("#product-select").keypress(function(event) {
+        if (event.keyCode === 13) {
+            $("#update-inventory").click();
+        }
+    });
+    $("#inputQuantity").keypress(function(event) {
+        if (event.keyCode === 13) {
+            $("#update-inventory").click();
+        }
+    });
+}
 function init(){
 	$('#update-inventory').click(updateInventory);
 	$('#refresh-data').click(getInventoryList);
@@ -224,6 +236,10 @@ function init(){
 	$('#download-errors').click(downloadErrors);
     $('#inventoryFile').on('change', updateFileName);
     $('#inputSearch').on('change',filterSelect);
+    $('#product-select').focus(function(){
+        $('#update-inventory').prop('disabled', false);
+    });
+    keyBinding();
 }
 
 $(document).ready(init);
