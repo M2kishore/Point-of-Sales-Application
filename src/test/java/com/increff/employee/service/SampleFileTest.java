@@ -7,11 +7,10 @@ import java.io.InputStream;
 import org.junit.Test;
 
 public class SampleFileTest {
-
 	@Test
-	public void testEmployeeFile() {
+	public void testInventoryFile() {
 		InputStream is = null;
-		is = SampleFileTest.class.getResourceAsStream("/com/increff/employee/employee.tsv");
+		is = SampleFileTest.class.getResourceAsStream("/com/increff/employee/inventory.csv");
 		assertNotNull(is);
 	}
 	@Test
