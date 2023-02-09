@@ -125,7 +125,7 @@ function makeOrder(){
         'Content-Type': 'application/json'
        },
        success: function(response) {
-            toastr.success("Order placed, you can download the invoice");
+            toastr.success("Order placed, you can download the invoice","Success",{"timeOut": 5000,});
             $('#get-invoice').show();
             $('#add-order').prop('disabled', true);
             $('#submit-order').prop('disabled', true);
@@ -200,7 +200,7 @@ function getInvoice(){
             link.href=window.URL.createObjectURL(blob);
             link.download="Invoice_" + new Date() + ".pdf";
             link.click();
-            toastr.info("Invoice is Downloading");
+            toastr.info("Invoice is Downloading","Downloading",{"timeOut": 5000,});
        },
        error: handleAjaxError
     });

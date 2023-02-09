@@ -51,7 +51,7 @@
   </button>
   <div class="collapse navbar-collapse" id="navbarNav">
     <ul class="navbar-nav">
-      <li class="nav-item" th:classappend="${#httpServletRequest.getRequestURI() == '/pos/supervisor/home' ? 'active':''}">
+      <li class="nav-item" th:classappend="${#httpServletRequest.getRequestURI() == '/pos/ui/supervisor/home' ? 'active':''}">
         <a class="nav-link" th:href="@{/ui/supervisor/home}">Home</a>
       </li>
         <li class="nav-item" th:classappend="${#httpServletRequest.getRequestURI() == '/pos/ui/brand' ? 'active':''}">
@@ -98,7 +98,7 @@
   </button>
   <div class="collapse navbar-collapse" id="navbarNav">
     <ul class="navbar-nav">
-      <li class="nav-item" th:classappend="${#httpServletRequest.getRequestURI() == '/pos/operator/home' ? 'active':''}">
+      <li class="nav-item" th:classappend="${#httpServletRequest.getRequestURI() == '/pos/ui/operator/home' ? 'active':''}">
         <a class="nav-link" th:href="@{/ui/operator/home}">Home</a>
       </li>
       <li class="nav-item"th:classappend="${#httpServletRequest.getRequestURI() == '/pos/ui/report' ? 'active':''}">

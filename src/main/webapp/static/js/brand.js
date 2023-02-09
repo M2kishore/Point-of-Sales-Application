@@ -20,7 +20,7 @@ function addBrand(event){
        	'Content-Type': 'application/json'
        },
 	   success: function(response) {
-	        toastr.success("Brand Added Successfully");
+	        toastr.success("Brand Added Successfully","Success",{"timeOut": 5000,});
 	   		getBrandList();
 	   },
 	   error: handleAjaxError
@@ -47,7 +47,7 @@ function updateBrand(event){
        	'Content-Type': 'application/json'
        },
 	   success: function(response) {
-	        toastr.success("Brand Updated Successfully");
+	        toastr.success("Brand Updated Successfully","Success",{"timeOut": 5000,});
 	   		getBrandList();
 	   },
 	   error: handleAjaxError
@@ -140,7 +140,7 @@ function displayBrandList(data){
 	$tbody.empty();
 	for(var i in data){
 		var e = data[i];
-		var buttonHtml = ' <button class="btn btn-primary btn-sm" onclick="displayEditBrand(' + e.id + ')">edit</button>'
+		var buttonHtml = ' <button class="btn btn-primary btn-sm" onclick="displayEditBrand(' + e.id + ')">Edit</button>'
 		var row = '<tr>'
 		+ '<td>' + e.id + '</td>'
 		+ '<td>' + e.brand + '</td>'
@@ -221,7 +221,7 @@ function init(){
 	$('#upload-data').click(displayUploadData);
 	$('#process-data').click(processData);
 	$('#download-errors').click(downloadErrors);
-    $('#brandFile').on('change', updateFileName)
+    $('#brandFile').on('change', updateFileName);
     keyBinding();
 }
 

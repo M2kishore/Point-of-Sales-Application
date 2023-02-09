@@ -47,7 +47,7 @@ function getInvoice(id){
             link.href=window.URL.createObjectURL(blob);
             link.download="Invoice_" + new Date() + ".pdf";
             link.click();
-            toastr.info("Your Invoice is Downloading");
+            toastr.info("Your Invoice is Downloading","Downloading",{"timeOut": 5000,});
        },
        error: handleAjaxError
     });

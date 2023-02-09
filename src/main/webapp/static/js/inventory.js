@@ -25,7 +25,7 @@ function updateInventory(event){
        	'Content-Type': 'application/json'
        },
 	   success: function(response) {
-	        toastr.success("Inventory Updated Successfully");
+	        toastr.success("Inventory Updated Successfully","Success",{"timeOut": 5000,});
 	   		getInventoryList();
 	   },
 	   error: handleAjaxError
@@ -241,8 +241,7 @@ function init(){
     $('#inventoryFile').on('change', updateFileName);
     $('#inputSearch').on('change',filterSelect);
     $('#product-select').focus(function(){
-        $('#update-inventory').prop('disabled', false);
-    });
+    $('#update-inventory').prop('disabled', false);
     keyBinding();
 }
 

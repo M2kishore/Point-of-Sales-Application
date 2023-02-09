@@ -28,7 +28,7 @@ function addProduct(event){
        	'Content-Type': 'application/json'
        },
 	   success: function(response) {
-	        toastr.success("Product Added Successfully");
+	        toastr.success("Product Added Successfully","Success",{"timeOut": 5000,});
 	   		getProductList();
 	   },
 	   error: handleAjaxError
@@ -54,7 +54,7 @@ function updateProduct(event){
        	'Content-Type': 'application/json'
        },
 	   success: function(response) {
-	        toastr.success("Product Updated Successfully");
+	        toastr.success("Product Updated Successfully","Success",{"timeOut": 5000,});
 	   		getProductList();
 	   },
 	   error: handleAjaxError
@@ -167,7 +167,7 @@ function displayProductList(data){
 	$tbody.empty();
 	for(var i in data){
 		var e = data[i];
-		var buttonHtml =  '<button class="btn btn-primary btn-sm" onclick="displayEditProduct(' + e.id + ')">edit</button>';
+		var buttonHtml =  '<button class="btn btn-primary btn-sm" onclick="displayEditProduct(' + e.id + ')">Edit</button>';
 		var row = '<tr>'
 		+ '<td>' + e.id + '</td>'
 		+ '<td>' + e.barcode + '</td>'
