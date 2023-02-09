@@ -17,7 +17,7 @@ function getInventoryUrl(){
 //BUTTON ACTIONS
 function addOrder(){
     if(currentTransaction.productId === undefined){
-        toastr.error("invalid barcode");
+        toastr.error("invalid barcode","Error");
         return;
     }
     var url = getInventoryUrl() + "/" + currentTransaction.productId;
@@ -42,7 +42,7 @@ function addOrder(){
             for(var transaction of currentOrder){
                 if(transaction.productId === data.id){
                     if(transaction.quantity+currentQuantity <= data.quantity){
-                        toastr.error("given quantity is larger than the inventory");
+                        toastr.error("given quantity is larger than the inventory","Error");
                         return
                     }else{
                         if(currentQuantity > 0){
@@ -64,7 +64,7 @@ function addOrder(){
                 currentOrder.push(currentTransaction);
                 total += currentQuantity*price;
             }else{
-                toastr.error("given quantity is larger than the inventory");
+                toastr.error("given quantity is larger than the inventory","Error");
                 return;
             }
             currentTransaction = {};
@@ -88,7 +88,7 @@ function deleteTransaction(barcode){
 }
 function submitOrder(){
     if(currentOrder.length == 0){
-        toastr.error("please add items");
+        toastr.error("please add items","Error");
         return
     }
     var url = getOrderUrl();

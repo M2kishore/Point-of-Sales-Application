@@ -71,7 +71,7 @@ function displayOrderList(){
 	    }
 		var buttonHtml = ' <button class="btn btn-info btn-sm" onclick="getInvoice(' + id + ')">invoice</button>'
 		buttonHtml += ' <button class="btn btn-primary btn-sm" onclick="showOrder(' + id + ')">details</button>'
-		var orderDateString = new Date(orderDate).toString().substring(0,25);
+        var orderDateString = new Date(orderDate).toLocaleDateString('en-us', { weekday:"long", year:"numeric", month:"short", day:"numeric"}) ;
 		var row = '<tr>'
 		+ '<td>' + idString + '</td>'
 		+ '<td>' + orderDateString + '</td>'

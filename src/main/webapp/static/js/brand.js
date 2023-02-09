@@ -88,7 +88,7 @@ function readFileDataCallback(results){
 function uploadRows(){
     //no of rows check
     if (fileData.length>5000){
-        toastr.error("File Rows should be within 5000 rows");
+        toastr.error("File Rows should be within 5000 rows","Error");
         return;
     }
 	//Update progress

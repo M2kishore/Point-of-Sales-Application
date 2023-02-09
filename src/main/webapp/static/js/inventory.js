@@ -166,13 +166,14 @@ function displayInventoryList(productData,inventoryData){
 	var $tbody = $('#inventory-table').find('tbody');
 	var result = {};
     for (var i = 0; i < productData.length; i++) {
-      result[productData[i].id] = productData[i].name;
+      result[productData[i].id] = productData[i];
     }
 	$tbody.empty();
 	for(var i in inventoryData){
 		var e = inventoryData[i];
 		var row = '<tr>'
-		+ '<td>' + result[e.id] + '</td>'
+		+ '<td>' + result[e.id].barcode + '</td>'
+		+ '<td>' + result[e.id].name + '</td>'
 		+ '<td>'  + e.quantity + '</td>'
 		+ '</tr>';
         $tbody.append(row);
@@ -182,7 +183,7 @@ function displayInventoryList(productData,inventoryData){
 function resetUploadDialog(){
     //no of rows check
     if (fileData.length>5000){
-        toastr.error("File Rows should be within 5000 rows");
+        toastr.error("File Rows should be within 5000 rows","Error");
         return;
     }
 	//Reset file name
@@ -241,7 +242,8 @@ function init(){
     $('#inventoryFile').on('change', updateFileName);
     $('#inputSearch').on('change',filterSelect);
     $('#product-select').focus(function(){
-    $('#update-inventory').prop('disabled', false);
+        $('#update-inventory').prop('disabled', false);
+    });
     keyBinding();
 }
 

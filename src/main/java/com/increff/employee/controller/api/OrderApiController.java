@@ -38,6 +38,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.sax.SAXResult;
 import javax.xml.transform.stream.StreamSource;
 import java.io.*;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Api
@@ -113,7 +114,9 @@ public class OrderApiController {
 
     private BillFormList getBillFormList(int orderId,List<OrderItemPojo> orderItemPojoList) throws ApiException {
         List<BillForm> billFormList = new ArrayList<BillForm>();
-        String orderDate = orderService.getDate(orderId).toString();
+        Date orderDate = orderService.getDate(orderId);
+        SimpleDateFormat formatter = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss z");
+        String orderDateString = formatter.format(orderDate);
         double total = 0;
         for(OrderItemPojo orderItemPojo: orderItemPojoList){
             //get product details
@@ -132,7 +135,7 @@ public class OrderApiController {
         bill.setBillForm(billFormList);
         bill.setOrderId(orderId);
         bill.setTotal(total);
-        bill.setDate(orderDate);
+        bill.setDate(orderDateString);
         return bill;
     }
 
