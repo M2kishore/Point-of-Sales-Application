@@ -37,11 +37,14 @@ function init(){
     initialStartDate.setDate(today.getDate() - 90);
         var nextDate = new Date();
         nextDate.setDate(today.getDate()+1);
+        var minimumStartDate = new Date();
+        minimumStartDate.setDate(today.getDate()-365);
         $('#startDate').datepicker({
             uiLibrary: 'bootstrap4',
             iconsLibrary: 'fontawesome',
             format: 'mm/dd/yyyy',
-            maxDate: today
+            maxDate: today,
+            minDate: minimumStartDate
         });
         $('#endDate').datepicker({
             uiLibrary: 'bootstrap4',

@@ -89,6 +89,8 @@ function init(){
     var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
     var nextDate = new Date();
     nextDate.setDate(today.getDate()+1);
+    var minimumStartDate = new Date();
+    minimumStartDate.setDate(today.getDate()-365);
     var initialStartDate = new Date();
     var initialEndDate = new Date();
     initialStartDate.setDate(today.getDate() - 90);
@@ -97,7 +99,8 @@ function init(){
         uiLibrary: 'bootstrap4',
         iconsLibrary: 'fontawesome',
         format: 'mm/dd/yyyy',
-        maxDate: today
+        maxDate: today,
+        minDate: minimumStartDate
     });
     $('#endDate').datepicker({
         uiLibrary: 'bootstrap4',
