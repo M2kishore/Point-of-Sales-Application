@@ -55,8 +55,6 @@ public class ProductService {
     public void update(int id, ProductPojo newProductPojo) throws ApiException {
         normalize(newProductPojo);
         ProductPojo oldProductPojo = getCheck(id);
-        oldProductPojo.setBarcode(newProductPojo.getBarcode());
-        oldProductPojo.setBrandCategory(newProductPojo.getBrandCategory());
         oldProductPojo.setName(newProductPojo.getName());
         oldProductPojo.setMrp(newProductPojo.getMrp());
         productDao.update(oldProductPojo);
