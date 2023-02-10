@@ -1,11 +1,11 @@
-package com.increff.employee.dao;
+package com.increff.employee.service;
 
+import com.increff.employee.dao.*;
 import com.increff.employee.model.data.report.BrandReportData;
 import com.increff.employee.model.data.report.InventoryReportData;
 import com.increff.employee.model.data.report.SalesReportData;
 import com.increff.employee.model.form.ReportDateForm;
 import com.increff.employee.pojo.*;
-import com.increff.employee.service.AbstractUnitTest;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -14,15 +14,15 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
-public class ReportDaoTest extends AbstractUnitTest {
+public class ReportServiceTest extends AbstractUnitTest{
     @Autowired
-    private ReportDao reportDao;
+    private ReportService reportService;
     @Autowired
     private BrandDao brandDao;
     @Autowired
     private ProductDao productDao;
     @Autowired
-    private  InventoryDao inventoryDao;
+    private InventoryDao inventoryDao;
     @Autowired
     private OrderDao orderDao;
     @Autowired
@@ -39,7 +39,7 @@ public class ReportDaoTest extends AbstractUnitTest {
         reportDateForm.setStartDate(startDate.getTime());
         reportDateForm.setEndDate(endDate.getTime());
         //checking size
-        List<SalesReportData> salesReportDataList = reportDao.getSalesReport(reportDateForm,"","");
+        List<SalesReportData> salesReportDataList = reportService.getSalesReport(reportDateForm,"","");
         assertEquals(2,salesReportDataList.size());
         //checking actual data
         SalesReportData testSalesReportData1 = new SalesReportData("nike","shoe",10,200);
@@ -58,7 +58,7 @@ public class ReportDaoTest extends AbstractUnitTest {
         assertEquals(testSalesReportData2.getRevenue(),data2.getRevenue(),0.01);
 
         //checking size
-        List<SalesReportData> salesReportDataList1 = reportDao.getSalesReport(reportDateForm,"","");
+        List<SalesReportData> salesReportDataList1 = reportService.getSalesReport(reportDateForm,"","");
         assertEquals(2,salesReportDataList1.size());
         //checking actual data
         data1 = salesReportDataList.get(0);
@@ -81,7 +81,7 @@ public class ReportDaoTest extends AbstractUnitTest {
         reportDateForm.setStartDate(startDate.getTime());
         reportDateForm.setEndDate(endDate.getTime());
         //checking size
-        List<BrandReportData> brandReportDataList = reportDao.getBrandReport(reportDateForm,"","");
+        List<BrandReportData> brandReportDataList = reportService.getBrandReport(reportDateForm,"","");
         assertEquals(2,brandReportDataList.size());
         //checking actual data
         BrandReportData testBrandReportData1 = new BrandReportData("nike",10,200);
@@ -98,7 +98,7 @@ public class ReportDaoTest extends AbstractUnitTest {
         assertEquals(testBrandReportData2.getRevenue(),data2.getRevenue(),0.01);
 
         //check filter
-        List<BrandReportData> brandReportDataList1 = reportDao.getBrandReport(reportDateForm,"n","");
+        List<BrandReportData> brandReportDataList1 = reportService.getBrandReport(reportDateForm,"n","");
         assertEquals(1,brandReportDataList1.size());
         //checking actual data
         data1 = brandReportDataList1.get(0);
@@ -112,7 +112,7 @@ public class ReportDaoTest extends AbstractUnitTest {
     public void testInventoryReport(){
         setup();
         //checking size
-        List<InventoryReportData> inventoryReportDataList = reportDao.getInventoryReport("","");
+        List<InventoryReportData> inventoryReportDataList = reportService.getInventoryReport("","");
         assertEquals(2,inventoryReportDataList.size());
         //checking actual data
         InventoryReportData testInventoryReportData1 = new InventoryReportData("nike","shoe",5);
@@ -129,7 +129,7 @@ public class ReportDaoTest extends AbstractUnitTest {
         assertEquals(testInventoryReportData2.getQuantity(),data2.getQuantity());
 
         //check filter
-        List<InventoryReportData> inventoryReportDataList1 = reportDao.getInventoryReport("n","");
+        List<InventoryReportData> inventoryReportDataList1 = reportService.getInventoryReport("n","");
         assertEquals(1,inventoryReportDataList1.size());
         //checking actual data
         data1 = inventoryReportDataList1.get(0);

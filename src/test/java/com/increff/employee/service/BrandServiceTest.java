@@ -31,7 +31,7 @@ public class BrandServiceTest extends AbstractUnitTest {
         brandPojo.setCategory("");
         brandService.add(brandPojo);
         }catch (ApiException e){
-            assertEquals(e.getMessage(),"name or category cannot be empty");
+            assertEquals(e.getMessage(),"Brand name or Category name cannot be empty");
         }
     }
 
@@ -47,6 +47,22 @@ public class BrandServiceTest extends AbstractUnitTest {
         String category = brandPojo.getCategory();
         assertEquals("nike",brand);
         assertEquals("shoe",category);
+    }
+
+    @Test
+    public void testDuplicateEntry() throws ApiException{
+        BrandPojo brandPojo1 = new BrandPojo();
+        brandPojo1.setBrand("nike");
+        brandPojo1.setCategory("shoe");
+        brandService.add(brandPojo1);
+        BrandPojo brandPojo2 = new BrandPojo();
+        brandPojo2.setBrand("nike");
+        brandPojo2.setCategory("shoe");
+        try{
+            brandService.add(brandPojo2);
+        }catch (ApiException e){
+            assertEquals(e.getMessage(),"Brand and Category Combination is already present");
+        }
     }
     @Test
     public void testGetSingleNotPresent() throws ApiException{
