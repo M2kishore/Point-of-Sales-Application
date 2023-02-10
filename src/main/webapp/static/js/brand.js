@@ -1,4 +1,4 @@
-
+var brandData = [];
 function getBrandUrl(){
 
 	var baseUrl = $("meta[name=baseUrl]").attr("content")
@@ -11,7 +11,6 @@ function addBrand(event){
 	var $form = $("#brand-form");
 	var brandString = $("#inputBrand").val();
 	var categoryString = $("#inputCategory").val();
-	console.log(brandString,categoryString,"asd")
 	if(brandString.trim() === ""){
 	    toastr.warning("Brand Field is Empty","Warning");
 	    return;
@@ -74,7 +73,8 @@ function getBrandList(){
 	   url: url,
 	   type: 'GET',
 	   success: function(data) {
-	   		displayBrandList(data);
+	        brandData = [...data]
+	   		displayBrandList();
 	   },
 	   error: handleAjaxError
 	});
@@ -146,11 +146,15 @@ function downloadErrors(){
 
 //UI DISPLAY METHODS
 
-function displayBrandList(data){
+function displayBrandList(){
+    var searchString = $("#inputSearch").val();
 	var $tbody = $('#brand-table').find('tbody');
 	$tbody.empty();
-	for(var i in data){
-		var e = data[i];
+	for(var i in brandData){
+		var e = brandData[i];
+		if(!e.brand.includes(searchString) && !e.category.includes(searchString)){
+		    continue;
+		}
 		var buttonHtml = ' <button class="btn btn-primary btn-sm" onclick="displayEditBrand(' + e.id + ')">Edit</button>'
 		var row = '<tr>'
 		+ '<td>' + e.id + '</td>'
@@ -233,6 +237,7 @@ function init(){
 	$('#process-data').click(processData);
 	$('#download-errors').click(downloadErrors);
     $('#brandFile').on('change', updateFileName);
+    $("#inputSearch").on('input',displayBrandList);
     keyBinding();
 }
 

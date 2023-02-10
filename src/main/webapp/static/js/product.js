@@ -1,4 +1,5 @@
 let brandList = [];
+let productData = [];
 function getProductUrl(){
 
 	var baseUrl = $("meta[name=baseUrl]").attr("content")
@@ -89,7 +90,8 @@ function getProductList(){
 	   url: url,
 	   type: 'GET',
 	   success: function(data) {
-	   		displayProductList(data);
+	        productData = [...data];
+	   		displayProductList();
 	   },
 	   error: handleAjaxError
 	});
@@ -183,11 +185,15 @@ function setupBrandCategorySelect(){
 
 }
 
-function displayProductList(data){
+function displayProductList(){
+    var searchString = $('#inputSearch').val();
 	var $tbody = $('#product-table').find('tbody');
 	$tbody.empty();
-	for(var i in data){
-		var e = data[i];
+	for(var i in productData){
+		var e = productData[i];
+		if(!e.barcode.includes(searchString) && !e.name.includes(searchString)){
+            continue;
+        }
 		var buttonHtml =  '<button class="btn btn-primary btn-sm" onclick="displayEditProduct(' + e.id + ')">Edit</button>';
 		var row = '<tr>'
 		+ '<td>' + e.id + '</td>'
@@ -291,6 +297,7 @@ function init(){
 	$('#download-errors').click(downloadErrors);
     $('#productFile').on('change', updateFileName)
     $("#inputMrp").on('change',limitDecimalPlaces);
+    $("#inputSearch").on('input',displayProductList);
     keyBinding();
 }
 

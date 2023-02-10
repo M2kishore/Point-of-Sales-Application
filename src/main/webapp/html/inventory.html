@@ -4,9 +4,6 @@
 <body>
 <nav th:replace="snippets.html :: name_app_navbar"></nav>
 <div class="container">
-
-    <h3>Inventory</h3>
-
     <!-- Top row with form-->
     <div class="row">
         <div class="col-12">
@@ -66,8 +63,8 @@
     </div>
 
 
-    <!-- Inventory Edit Modal -->
-    <div class="modal" tabindex="-1" role="dialog" id="upload-inventory-modal">
+    <!-- Inventory Upload Modal -->
+    <div class="modal" tabindex="-1" role="dialog" id="upload-inventory-modal" data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
 

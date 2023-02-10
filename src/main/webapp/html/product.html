@@ -4,13 +4,19 @@
 <body>
 <nav th:replace="snippets.html :: name_app_navbar"></nav>
 <div class="container">
-
-    <h3>Product</h3>
-
     <!-- Top row with form-->
     <div class="row">
         <div class="col-12">
             <form class="form" id="product-form">
+                <div class="row">
+                    <div class="form-group col-6 form-inline">
+                        <label for="inputSearch" class="col-sm-2 col-form-label">Search</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="barcode" id="inputSearch" placeholder="Search Name or Barcode">
+                        </div>
+                    </div>
+                </div>
+                <hr>
                 <div class="row">
                     <div class="form-group col-6 form-inline">
                         <label for="inputBarcode" class="required col-sm-2 col-form-label">Barcode</label>
@@ -79,7 +85,7 @@
     </div>
 
     <!-- Product Edit Modal -->
-    <div class="modal" tabindex="-1" role="dialog" id="edit-product-modal">
+    <div class="modal" tabindex="-1" role="dialog" id="edit-product-modal" data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -126,8 +132,8 @@
     </div>
 
 
-    <!-- Product Edit Modal -->
-    <div class="modal" tabindex="-1" role="dialog" id="upload-product-modal">
+    <!-- Product Upload Modal -->
+    <div class="modal" tabindex="-1" role="dialog" id="upload-product-modal" data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
 
