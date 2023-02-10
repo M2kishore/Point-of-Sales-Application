@@ -13,11 +13,11 @@ function addBrand(event){
 	var categoryString = $("#inputCategory").val();
 	console.log(brandString,categoryString,"asd")
 	if(brandString.trim() === ""){
-	    toastr.warning("Brand name is empty","Error");
+	    toastr.warning("Brand name is empty","Warning");
 	    return;
 	}
 	if(categoryString.trim() === ""){
-        toastr.warning("Category name is empty","Error");
+        toastr.warning("Category name is empty","Warning");
         return;
     }
 	var json = toJson($form);
@@ -107,8 +107,8 @@ function uploadRows(){
 	//If everything processed then return
 	if(processCount==fileData.length){
 	    if(errorData.length > 0){
-            toastr.warning("Errors while processing the file");
-            toastr.warning("Download the Error File by Clicking the 'Download Errors' button");
+            toastr.warning("Errors while processing the file","Warning");
+            toastr.warning("Download the Error File by Clicking the 'Download Errors' button","Warning");
         }
 		return;
 	}

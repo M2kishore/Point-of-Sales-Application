@@ -103,8 +103,8 @@ function uploadRows(){
 	//If everything processed then return
 	if(processCount==fileData.length){
 	    if(errorData.length > 0){
-            toastr.warning("Errors while processing the file");
-            toastr.warning("Download the Error File by Clicking the 'Download Errors' button");
+            toastr.warning("Errors while processing the file","Warning");
+            toastr.warning("Download the Error File by Clicking the 'Download Errors' button","Warning");
         }
 		return;
 	}

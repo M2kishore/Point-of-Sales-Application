@@ -21,3 +21,7 @@ body {
 .fas{
     font-size: 4rem;
 }
+.required:after {
+    content:" *";
+    color: red;
+  }
