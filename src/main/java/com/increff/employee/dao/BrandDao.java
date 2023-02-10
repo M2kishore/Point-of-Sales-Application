@@ -11,8 +11,8 @@ import java.util.List;
 @Repository
 public class BrandDao extends AbstractDao {
     private static String select_id = "select brandPojo from BrandPojo brandPojo where id=:id";
-    private static String select_brand = "select brandPojo from BrandPojo brandPojo where brand=:brand";
     private static String select_all = "select brandPojo from BrandPojo brandPojo";
+    private static String check_duplicate = "select brandPojo from BrandPojo brandPojo where brand=:brand and category=:category";
 
     @Transactional
     public void insert(BrandPojo brandPojo) {
@@ -32,6 +32,11 @@ public class BrandDao extends AbstractDao {
 
     public void update(BrandPojo brandPojo) {
     }
-
+    public BrandPojo isDuplicate(String brand,String category){
+        TypedQuery<BrandPojo> query = getQuery(check_duplicate, BrandPojo.class);
+        query.setParameter("brand", brand);
+        query.setParameter("category", category);
+        return getSingle(query);
+    }
 
 }

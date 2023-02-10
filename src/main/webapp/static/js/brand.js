@@ -9,6 +9,17 @@ function getBrandUrl(){
 function addBrand(event){
 	//Set the values to update
 	var $form = $("#brand-form");
+	var brandString = $("#inputBrand").val();
+	var categoryString = $("#inputCategory").val();
+	console.log(brandString,categoryString,"asd")
+	if(brandString.trim() === ""){
+	    toastr.warning("Brand name is empty","Error");
+	    return;
+	}
+	if(categoryString.trim() === ""){
+        toastr.warning("Category name is empty","Error");
+        return;
+    }
 	var json = toJson($form);
 	var url = getBrandUrl();
 

@@ -17,7 +17,11 @@ public class BrandService {
     public void add(BrandPojo brandPojo) throws ApiException {
         normalize(brandPojo);
         if(StringUtil.isEmpty(brandPojo.getBrand()) || StringUtil.isEmpty(brandPojo.getCategory())) {
-            throw new ApiException("name or category cannot be empty");
+            throw new ApiException("Brand name or Category name cannot be empty");
+        }
+        BrandPojo duplicateBrandPojo = brandDao.isDuplicate(brandPojo.getBrand(),brandPojo.getCategory());
+        if(duplicateBrandPojo != null){
+            throw new ApiException("Brand and Category Combination is already present");
         }
         brandDao.insert(brandPojo);
     }
