@@ -12,6 +12,11 @@ function getProductUrl(){
 function updateInventory(event){
 	//Get the ID
 	var id = $('#product-select').children("option:selected").val();
+	if(id == "none"){
+	    toastr.warning("Please Select a Valid Product","Warning");
+	    $('#update-inventory').prop('disabled', true);
+	    return;
+	}
 	var url = getInventoryUrl() + "/" + id;
 	var quantity = $('#inputQuantity').val();
     var newInventory = {"id":id,"quantity":quantity};
@@ -152,11 +157,12 @@ function filterSelect(){
         return false;
     });
     displayProductSelect(filteredProductList);
-    $('#product-select').show().focus().click();
+    //$('#product-select').show().focus().click();
 }
 function displayProductSelect(productList){
     var productSelect = $('#product-select');
     productSelect.empty();
+    productSelect.append("<option value='none'>Choose ...</option>");
     for(product of productList){
         productSelect.append("<option value="+product.id+">"+product.name+"</option>");
     }

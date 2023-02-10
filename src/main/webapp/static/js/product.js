@@ -18,6 +18,7 @@ function addProduct(event){
 	var name = $('#inputName').val();
 	var mrp = $('#inputMrp').val();
 	var brandCategory = $('#brand-category-select').children("option:selected").val();
+	checkValidity(barcode,name,mrp,brandCategory);
 	var newProduct = {"barcode":barcode,"name":name,"mrp":mrp,"brandCategory":brandCategory};
 	var newProductJson = JSON.stringify(newProduct);
 	$.ajax({
@@ -35,7 +36,25 @@ function addProduct(event){
 	});
 	return false;
 }
-
+function checkValidity(barcode,name,mrp,brandCategory){
+    if(brandCategory == "none"){
+        toastr.warning("Please Select a Valid Brand Category Combination","Warning");
+        return false;
+    }
+    if(barcode == ""){
+        toastr.warning("Barcode is Empty","Warning");
+        return false;
+    }
+    if(name == ""){
+        toastr.warning("Name is Empty","Warning");
+        return false;
+    }
+    if(mrp == ""){
+        toastr.warning("Mrp is Empty","Warning");
+        return false;
+    }
+    return true;
+}
 function updateProduct(event){
 	$('#edit-product-modal').modal('toggle');
 	//Get the ID
@@ -143,6 +162,8 @@ function downloadErrors(){
 //UI DISPLAY METHODS
 function displayBrandCategorySelect(brandCategoryList){
     var brandCategorySelect = $('#brand-category-select');
+    brandCategorySelect.empty();
+    brandCategorySelect.append("<option value='none'>Choose ...</option>");
     for(brand of brandCategoryList){
         brandCategorySelect.append("<option value="+brand.id+">"+brand.brand+" "+brand.category+"</option>")
     }
@@ -255,6 +276,12 @@ function keyBinding(){
         }
     });
 }
+function limitDecimalPlaces(event) {
+  if (event.target.value.indexOf('.') == -1) { return; }
+  if ((event.target.value.length - event.target.value.indexOf('.')) > 2) {
+    event.target.value = parseFloat(event.target.value).toFixed(2);
+  }
+}
 function init(){
 	$('#add-product').click(addProduct);
 	$('#update-product').click(updateProduct);
@@ -263,6 +290,7 @@ function init(){
 	$('#process-data').click(processData);
 	$('#download-errors').click(downloadErrors);
     $('#productFile').on('change', updateFileName)
+    $("#inputMrp").on('change',limitDecimalPlaces);
     keyBinding();
 }
 

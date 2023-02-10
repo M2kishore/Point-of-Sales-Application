@@ -13,11 +13,11 @@ function addBrand(event){
 	var categoryString = $("#inputCategory").val();
 	console.log(brandString,categoryString,"asd")
 	if(brandString.trim() === ""){
-	    toastr.warning("Brand name is empty","Warning");
+	    toastr.warning("Brand Field is Empty","Warning");
 	    return;
 	}
 	if(categoryString.trim() === ""){
-        toastr.warning("Category name is empty","Warning");
+        toastr.warning("Category Field is Empty","Warning");
         return;
     }
 	var json = toJson($form);
