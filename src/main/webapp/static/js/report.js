@@ -185,6 +185,7 @@ function init(){
     var initialStartDate = new Date();
     var initialEndDate = new Date();
     initialStartDate.setDate(today.getDate() - 90);
+    initialEndDate.setDate(today.getDate() + 1);
     $('#startDate').datepicker({
         uiLibrary: 'bootstrap4',
         iconsLibrary: 'fontawesome',

@@ -121,12 +121,12 @@ function uploadRows(){
 	processCount++;
 
 	var json = JSON.stringify(row);
-	var url = getInventoryUrl();
-
+	var url = getInventoryUrl()+"/"+row.id;
+	console.log(json,url)
 	//Make ajax call
 	$.ajax({
 	   url: url,
-	   type: 'POST',
+	   type: 'PUT',
 	   data: json,
 	   headers: {
        	'Content-Type': 'application/json'

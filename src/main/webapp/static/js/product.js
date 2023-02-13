@@ -19,7 +19,9 @@ function addProduct(event){
 	var name = $('#inputName').val();
 	var mrp = $('#inputMrp').val();
 	var brandCategory = $('#brand-category-select').children("option:selected").val();
-	checkValidity(barcode,name,mrp,brandCategory);
+	if(!checkValidity(barcode,name,mrp,brandCategory)){
+	    return;
+	}
 	var newProduct = {"barcode":barcode,"name":name,"mrp":mrp,"brandCategory":brandCategory};
 	var newProductJson = JSON.stringify(newProduct);
 	$.ajax({
