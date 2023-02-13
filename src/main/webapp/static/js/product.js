@@ -38,7 +38,7 @@ function addProduct(event){
 	return false;
 }
 function checkValidity(barcode,name,mrp,brandCategory){
-    if(brandCategory == "none"){
+    if(brandCategory === 0){
         toastr.warning("Please Select a Valid Brand Category Combination","Warning");
         return false;
     }
@@ -165,7 +165,7 @@ function downloadErrors(){
 function displayBrandCategorySelect(brandCategoryList){
     var brandCategorySelect = $('#brand-category-select');
     brandCategorySelect.empty();
-    brandCategorySelect.append("<option value='none'>Choose ...</option>");
+    brandCategorySelect.append("<option value=0>Choose ...</option>");
     for(brand of brandCategoryList){
         brandCategorySelect.append("<option value="+brand.id+">"+brand.brand+" "+brand.category+"</option>")
     }

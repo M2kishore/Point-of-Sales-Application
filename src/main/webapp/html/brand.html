@@ -51,19 +51,20 @@
 
         <!-- Table -->
         <div class="col-12">
-            <table class="table table-striped" id="brand-table">
-                <thead>
-                <tr>
-                    <th scope="col">ID</th>
-                    <th scope="col">Brand</th>
-                    <th scope="col">Category</th>
-                    <th scope="col">Actions</th>
-                </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
-
+            <div class="table-responsive">
+                <table class="table table-striped" id="brand-table">
+                    <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Brand</th>
+                        <th scope="col">Category</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 
@@ -141,6 +142,5 @@
 <footer th:replace="snippets.html :: name_footer"></footer>
 
 <script th:src="@{/static/js/brand.js}"/></script>
-
 </body>
 </html>

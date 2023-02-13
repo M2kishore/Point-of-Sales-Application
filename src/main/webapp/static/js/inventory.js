@@ -157,7 +157,7 @@ function filterSelect(){
         return false;
     });
     displayProductSelect(filteredProductList);
-    //$('#product-select').show().focus().click();
+    getInventoryList();
 }
 function displayProductSelect(productList){
     var productSelect = $('#product-select');
@@ -169,6 +169,7 @@ function displayProductSelect(productList){
 }
 
 function displayInventoryList(productData,inventoryData){
+    var searchString = $('#inputSearch').val();
 	var $tbody = $('#inventory-table').find('tbody');
 	var result = {};
     for (var i = 0; i < productData.length; i++) {
@@ -177,6 +178,9 @@ function displayInventoryList(productData,inventoryData){
 	$tbody.empty();
 	for(var i in inventoryData){
 		var e = inventoryData[i];
+		if(!result[e.id].barcode.includes(searchString) && !result[e.id].name.includes(searchString)){
+            continue;
+        }
 		var row = '<tr>'
 		+ '<td>' + result[e.id].barcode + '</td>'
 		+ '<td>' + result[e.id].name + '</td>'
@@ -246,7 +250,7 @@ function init(){
 	$('#process-data').click(processData);
 	$('#download-errors').click(downloadErrors);
     $('#inventoryFile').on('change', updateFileName);
-    $('#inputSearch').on('change',filterSelect);
+    $('#inputSearch').on('input',filterSelect);
     $('#product-select').focus(function(){
         $('#update-inventory').prop('disabled', false);
     });

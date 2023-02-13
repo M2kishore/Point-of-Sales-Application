@@ -66,21 +66,22 @@
 
         <!-- Table -->
         <div class="col-12">
-            <table class="table table-striped" id="product-table">
-                <thead>
-                <tr>
-                    <th scope="col">ID</th>
-                    <th scope="col">Barcode</th>
-                    <th scope="col">Brand Category</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Mrp</th>
-                    <th scope="col">Actions</th>
-                </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
-
+            <div class="table-responsive">
+                <table class="table table-striped" id="product-table">
+                    <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Barcode</th>
+                        <th scope="col">Brand Category</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Mrp</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 
@@ -170,6 +171,5 @@
 <footer th:replace="snippets.html :: name_footer"></footer>
 
 <script th:src="@{/static/js/product.js}"/></script>
-
 </body>
 </html>
