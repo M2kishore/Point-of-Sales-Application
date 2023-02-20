@@ -28,6 +28,12 @@ public class ProductService {
         if (StringUtil.isEmpty(String.valueOf(newProductPojo.getMrp()))){
             throw new ApiException("Mrp cannot be empty");
         }
+        if (StringUtil.hasSpecialCharacter(newProductPojo.getBarcode())){
+            throw new ApiException("Special character in Barcode is not allowed");
+        }
+        if (StringUtil.hasSpecialCharacter(newProductPojo.getName())){
+            throw new ApiException("Special character in Product name is not allowed");
+        }
         if(StringUtil.isLongString(newProductPojo.getName())){
             throw new ApiException("Product name should be less than 20 characters");
         }

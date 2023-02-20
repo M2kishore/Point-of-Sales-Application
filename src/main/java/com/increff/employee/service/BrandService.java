@@ -52,6 +52,12 @@ public class BrandService {
         if(StringUtil.isEmpty(brandPojo.getBrand()) || StringUtil.isEmpty(brandPojo.getCategory())) {
             throw new ApiException("Brand name or Category name cannot be empty");
         }
+        if(StringUtil.hasSpecialCharacter(brandPojo.getBrand())){
+            throw new ApiException("Special character in Brand name is not allowed");
+        }
+        if(StringUtil.hasSpecialCharacter(brandPojo.getCategory())){
+            throw new ApiException("Special character in Category name is not allowed");
+        }
         if(StringUtil.isLongString(brandPojo.getBrand())){
             throw new ApiException("Brand name should be less than 20 characters");
         }
