@@ -9,14 +9,14 @@
 <div th:if="${info.getRole() == 'supervisor'}">
     <nav  th:replace="snippets.html :: name_app_navbar"></nav>
 </div>
-<div class="container">
+<div class="container col-10">
     <form>
         <div class="form-row">
             <div class="col form-inline">
-                Start Date:&nbsp;<input id="startDate" width="276" required/>
+                Start Date:&nbsp;<input id="startDate" readonly="true" required/>
             </div>
             <div class="col form-inline">
-                End Date:&nbsp;<input id="endDate" width="276" required/>
+                End Date:&nbsp;<input id="endDate" readonly="true" required/>
             </div>
         </div><br>
         <div class="form-row">

@@ -35,6 +35,7 @@ function init(){
     var initialStartDate = new Date();
     var initialEndDate = new Date();
     initialStartDate.setDate(today.getDate() - 90);
+    initialEndDate.setDate(today.getDate()+1)
         var nextDate = new Date();
         nextDate.setDate(today.getDate()+1);
         var minimumStartDate = new Date();

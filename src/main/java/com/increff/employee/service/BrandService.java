@@ -16,13 +16,7 @@ public class BrandService {
     @Transactional(rollbackOn = ApiException.class)
     public void add(BrandPojo brandPojo) throws ApiException {
         normalize(brandPojo);
-        if(StringUtil.isEmpty(brandPojo.getBrand()) || StringUtil.isEmpty(brandPojo.getCategory())) {
-            throw new ApiException("Brand name or Category name cannot be empty");
-        }
-        BrandPojo duplicateBrandPojo = brandDao.isDuplicate(brandPojo.getBrand(),brandPojo.getCategory());
-        if(duplicateBrandPojo != null){
-            throw new ApiException("Brand and Category Combination is already present");
-        }
+        checkValidity(brandPojo);
         brandDao.insert(brandPojo);
     }
     @Transactional(rollbackOn = ApiException.class)
@@ -42,15 +36,31 @@ public class BrandService {
         return brandDao.selectAll();
     }
     @Transactional(rollbackOn  = ApiException.class)
-    public void update(int id, BrandPojo p) throws ApiException {
-        normalize(p);
+    public void update(int id, BrandPojo newBrandPojo) throws ApiException {
+        normalize(newBrandPojo);
+        checkValidity(newBrandPojo);
         BrandPojo oldBrandPojo = getCheck(id);
-        oldBrandPojo.setBrand(p.getBrand());
-        oldBrandPojo.setCategory(p.getCategory());
+        oldBrandPojo.setBrand(newBrandPojo.getBrand());
+        oldBrandPojo.setCategory(newBrandPojo.getCategory());
         brandDao.update(oldBrandPojo);
     }
     public static void normalize(BrandPojo brandPojo) {
         brandPojo.setBrand(StringUtil.toLowerCase(brandPojo.getBrand()));
         brandPojo.setCategory(StringUtil.toLowerCase(brandPojo.getCategory()));
+    }
+    private void checkValidity(BrandPojo brandPojo) throws ApiException {
+        if(StringUtil.isEmpty(brandPojo.getBrand()) || StringUtil.isEmpty(brandPojo.getCategory())) {
+            throw new ApiException("Brand name or Category name cannot be empty");
+        }
+        if(StringUtil.isLongString(brandPojo.getBrand())){
+            throw new ApiException("Brand name should be less than 20 characters");
+        }
+        if(StringUtil.isLongString(brandPojo.getCategory())){
+            throw new ApiException("Category name should be less than 20 characters");
+        }
+        BrandPojo duplicateBrandPojo = brandDao.isDuplicate(brandPojo.getBrand(),brandPojo.getCategory());
+        if(duplicateBrandPojo != null){
+            throw new ApiException("Brand and Category Combination is already present");
+        }
     }
 }

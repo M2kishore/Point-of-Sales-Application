@@ -2,6 +2,7 @@ package com.increff.employee.service;
 
 import com.increff.employee.dao.ProductDao;
 import com.increff.employee.pojo.ProductPojo;
+import com.increff.employee.util.NumberUtil;
 import com.increff.employee.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,11 +16,29 @@ public class ProductService {
     @Transactional(rollbackOn = ApiException.class)
     public int add(ProductPojo newProductPojo) throws ApiException {
         normalize(newProductPojo);
-        if (StringUtil.isEmpty(newProductPojo.getBarcode()) ||
-                StringUtil.isEmpty(String.valueOf(newProductPojo.getBrandCategory())) ||
-                StringUtil.isEmpty(newProductPojo.getName()) ||
-                StringUtil.isEmpty(String.valueOf(newProductPojo.getMrp()))) {
-            throw new ApiException("empty string detected cannot be empty");
+        if (StringUtil.isEmpty(newProductPojo.getBarcode())){
+            throw new ApiException("Barcode cannot be empty");
+        }
+        if (StringUtil.isEmpty(String.valueOf(newProductPojo.getBrandCategory()))){
+            throw new ApiException("Brand Category cannot be empty");
+        }
+        if (StringUtil.isEmpty(newProductPojo.getName())){
+            throw new ApiException("Product name cannot be empty");
+        }
+        if (StringUtil.isEmpty(String.valueOf(newProductPojo.getMrp()))){
+            throw new ApiException("Mrp cannot be empty");
+        }
+        if(StringUtil.isLongString(newProductPojo.getName())){
+            throw new ApiException("Product name should be less than 20 characters");
+        }
+        if(StringUtil.isLongString(newProductPojo.getBarcode())){
+            throw new ApiException("Barcode name should be less than 20 characters");
+        }
+        if (NumberUtil.isNegative(newProductPojo.getMrp())){
+            throw new ApiException("Mrp cannot be negative");
+        }
+        if(!NumberUtil.has2DecimalPlaces(newProductPojo.getMrp())){
+            throw new ApiException("Mrp should have only 2 numbers after decimal point");
         }
         try {
             return productDao.insert(newProductPojo);
@@ -55,6 +74,21 @@ public class ProductService {
     public void update(int id, ProductPojo newProductPojo) throws ApiException {
         normalize(newProductPojo);
         ProductPojo oldProductPojo = getCheck(id);
+        if (StringUtil.isEmpty(newProductPojo.getName())){
+            throw new ApiException("Product name cannot be empty");
+        }
+        if (StringUtil.isEmpty(String.valueOf(newProductPojo.getMrp()))){
+            throw new ApiException("Mrp cannot be empty");
+        }
+        if(StringUtil.isLongString(newProductPojo.getName())){
+            throw new ApiException("Product name should be less than 20 characters");
+        }
+        if(NumberUtil.isNegative(newProductPojo.getMrp())){
+            throw new ApiException("Mrp cannot be negative");
+        }
+        if(!NumberUtil.has2DecimalPlaces(newProductPojo.getMrp())){
+            throw new ApiException("Mrp should have only 2 numbers after decimal point");
+        }
         oldProductPojo.setName(newProductPojo.getName());
         oldProductPojo.setMrp(newProductPojo.getMrp());
         productDao.update(oldProductPojo);

@@ -7,7 +7,6 @@ import com.increff.employee.pojo.OrderPojo;
 import com.increff.employee.pojo.SchedulerPojo;
 import com.increff.employee.service.OrderService;
 import com.increff.employee.service.SchedulerService;
-import org.hibernate.criterion.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -48,8 +47,8 @@ public class SchedulerConfig {
             System.out.println("No orders for today");
             return;
         }
-        OrderPojo startObject = orderPojoList.get(0);
-        OrderPojo endObject = orderPojoList.get(orderPojoList.size()-1);
+        OrderPojo endObject = orderPojoList.get(0);
+        OrderPojo startObject = orderPojoList.get(orderPojoList.size()-1);
         ReportOrderForm reportOrderForm = new ReportOrderForm();
         reportOrderForm.setStartId(startObject.getId());
         reportOrderForm.setEndId(endObject.getId());

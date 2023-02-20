@@ -27,6 +27,10 @@ function addOrder(){
        async:false,
        success: function(data) {
             let currentQuantity = currentTransaction.quantity? currentTransaction.quantity:0;
+            if((currentQuantity - Math.floor(currentQuantity)) != 0){
+                toastr.warning("Invalid Quantity","Warning");
+                return;
+            }
             let price = $('#inputPrice').val();
             if(currentOrder.length == 0){
                 if(currentQuantity < data.quantity){
@@ -41,7 +45,7 @@ function addOrder(){
             }
             for(var transaction of currentOrder){
                 if(transaction.productId === data.id){
-                    if(transaction.quantity+currentQuantity <= data.quantity){
+                    if((transaction.quantity+currentQuantity) <= data.quantity){
                         toastr.error("given quantity is larger than the inventory","Error");
                         return
                     }else{
@@ -129,6 +133,7 @@ function makeOrder(){
             $('#get-invoice').show();
             $('#add-order').prop('disabled', true);
             $('#submit-order').prop('disabled', true);
+            $(".delete").prop('disabled', true);
        },
        error: handleAjaxError
     });
@@ -177,7 +182,7 @@ function displayOrderList(currentOrder){
     var $tbody = $('#order-table').find('tbody');
     $tbody.empty();
     for(var product of currentOrder){
-        var buttonHtml = `<button class="btn btn-primary btn-sm" onclick="deleteTransaction('${product.barcode}')">delete</button>`
+        var buttonHtml = `<button class="btn btn-primary btn-sm delete" onclick="deleteTransaction('${product.barcode}')">delete</button>`
         var row = '<tr>'
         + '<td>' + product.name + '</td>'
         + '<td>'  + product.quantity + '</td>'

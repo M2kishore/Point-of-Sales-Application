@@ -6,6 +6,7 @@ import com.increff.employee.model.form.ReportDateForm;
 import com.increff.employee.model.form.ReportOrderForm;
 import com.increff.employee.pojo.OrderItemPojo;
 import com.increff.employee.pojo.OrderPojo;
+import com.increff.employee.util.NumberUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +26,8 @@ public class OrderService {
     }
 
     @Transactional(rollbackOn = ApiException.class)
-    public void add(OrderItemPojo newOrderItemPojo){
+    public void add(OrderItemPojo newOrderItemPojo) throws ApiException{
+        checkValidity(newOrderItemPojo);
         orderItemDao.insert(newOrderItemPojo);
     }
     @Transactional(rollbackOn = ApiException.class)
@@ -60,5 +62,20 @@ public class OrderService {
 
     public Date getDate(int orderId) {
         return orderDao.getDate(orderId);
+    }
+
+    private void checkValidity(OrderItemPojo newOrderItemPojo) throws ApiException {
+        if(NumberUtil.isNegative((double)newOrderItemPojo.getQuantity())){
+            throw new ApiException("Quantity cannot be negative or Zero(0)");
+        }
+        if(!NumberUtil.isWholeNumber((double)newOrderItemPojo.getQuantity())){
+            throw new ApiException("Quantity cannot be decimal value");
+        }
+        if(NumberUtil.isNegative(newOrderItemPojo.getSellingPrice())){
+            throw new ApiException("Selling Price cannot be negative or Zero(0)");
+        }
+        if(!NumberUtil.has2DecimalPlaces(newOrderItemPojo.getSellingPrice())){
+            throw new ApiException("Selling Price must have less than 2 decimal places");
+        }
     }
 }
