@@ -43,6 +43,7 @@ import java.util.*;
 
 @Api
 @RestController
+@RequestMapping(path = "/api/order")
 public class OrderApiController {
     private static Logger logger = Logger.getLogger(OrderApiController.class);
     @Autowired
@@ -53,13 +54,13 @@ public class OrderApiController {
     private InventoryService inventoryService;
 
     @ApiOperation(value="Gets a product by Barcode")
-    @RequestMapping(path="/api/order",method = RequestMethod.GET)
+    @RequestMapping(path="",method = RequestMethod.GET)
     public OrderItemData get(@RequestParam String barcode) throws ApiException {
         ProductPojo productPojo = productService.getBarcode(barcode);
         return convertPojoToData(productPojo);
     }
     @ApiOperation(value="Gets products by orderId")
-    @RequestMapping(path="/api/order/{id}",method = RequestMethod.GET)
+    @RequestMapping(path="/{id}",method = RequestMethod.GET)
     public List<BillForm> get(@PathVariable int id) throws ApiException {
         List<OrderItemPojo> orderItemPojoList = orderService.get(id);
         List<BillForm> billFormList = new ArrayList<BillForm>();
@@ -79,7 +80,7 @@ public class OrderApiController {
     }
 
     @ApiOperation(value = "Gets list of all Orders")
-    @RequestMapping(path = "/api/order/all", method = RequestMethod.GET)
+    @RequestMapping(path = "/all", method = RequestMethod.GET)
     public List<OrderData> getAll() {
         List<OrderItemPojo> list = orderService.getAll();
         List<OrderData> list2 = new ArrayList<OrderData>();
@@ -89,7 +90,7 @@ public class OrderApiController {
         return list2;
     }
     @ApiOperation(value = "Gets list of all Orders")
-    @RequestMapping(path = "/api/order/all/id", method = RequestMethod.GET)
+    @RequestMapping(path = "/all/id", method = RequestMethod.GET)
     public List<OrderInvoiceData> getAllIds() {
         List<OrderPojo> list = orderService.getAllIds();
         List<OrderInvoiceData> list2 = new ArrayList<OrderInvoiceData>();
@@ -100,7 +101,7 @@ public class OrderApiController {
     }
 
     @ApiOperation(value = "gets PDF of invoice")
-    @RequestMapping(path = "api/order/pdf/{id}",method = RequestMethod.GET)
+    @RequestMapping(path = "/pdf/{id}",method = RequestMethod.GET)
     protected void makePdf(@PathVariable int id, HttpServletRequest req, HttpServletResponse response) throws ServletException, IOException, ApiException {
         //get orders based on order id
         List<OrderItemPojo> orderItemPojoList = orderService.get(id);
@@ -140,14 +141,14 @@ public class OrderApiController {
     }
 
     @ApiOperation(value = "add date and time for orders")
-    @RequestMapping(path="/api/order",method = RequestMethod.POST)
+    @RequestMapping(path="",method = RequestMethod.POST)
     public int add(@RequestBody OrderForm form)throws ApiException{
         OrderPojo newOrderPojo = convertFormToPojo(form);
         return orderService.add(newOrderPojo);
     }
 
     @ApiOperation(value = "Place an order")
-    @RequestMapping(path = "/api/order/order",method = RequestMethod.POST)
+    @RequestMapping(path = "/order",method = RequestMethod.POST)
     public void add(@RequestBody List<OrderItemForm> orderItemForms)throws ApiException{
         for(OrderItemForm orderItemForm: orderItemForms) {
             InventoryPojo inventoryPojo = inventoryService.get(orderItemForm.getProductId());

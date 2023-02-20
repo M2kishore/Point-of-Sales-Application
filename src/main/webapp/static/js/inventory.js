@@ -217,6 +217,13 @@ function updateUploadDialog(){
 function updateFileName(){
 	var $file = $('#inventoryFile');
 	var fileName = $file.val();
+	var allowedExtensions = /(\.tsv|\.csv)$/i;
+    if (!allowedExtensions.exec(fileName)) {
+        toastr.error("Invalid File Type","Error");
+        $file.val('');
+        $('#brandFileName').html("");
+        return;
+    }
 	$('#inventoryFileName').html(fileName);
 }
 

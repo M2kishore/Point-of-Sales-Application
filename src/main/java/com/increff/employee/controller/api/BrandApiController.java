@@ -15,24 +15,25 @@ import java.util.List;
 
 @Api
 @RestController
+@RequestMapping(path = "/api/brand")
 public class BrandApiController {
     @Autowired
     private BrandService brandService;
 
     @ApiOperation(value = "Add a brand")
-    @RequestMapping(path = "/api/brand", method = RequestMethod.POST)
+    @RequestMapping(path = "", method = RequestMethod.POST)
     public void add(@RequestBody BrandForm form) throws ApiException {
         BrandPojo newBrandPojo = convertFormToPojo(form);
         brandService.add(newBrandPojo);
     }
     @ApiOperation(value = "Gets a brand by ID")
-    @RequestMapping(path ="/api/brand/{id}",method = RequestMethod.GET)
+    @RequestMapping(path ="/{id}",method = RequestMethod.GET)
     public BrandData get(@PathVariable int id) throws ApiException {
         BrandPojo brandPojo = brandService.get(id);
         return convertPojoToData(brandPojo);
     }
     @ApiOperation(value = "Gets list of all brands")
-    @RequestMapping(path = "/api/brand", method = RequestMethod.GET)
+    @RequestMapping(path = "", method = RequestMethod.GET)
     public List<BrandData> getAll() {
         List<BrandPojo> list = brandService.getAll();
         List<BrandData> list2 = new ArrayList<BrandData>();
@@ -42,7 +43,7 @@ public class BrandApiController {
         return list2;
     }
     @ApiOperation(value = "Updates a brand")
-    @RequestMapping(path = "/api/brand/{id}", method = RequestMethod.PUT)
+    @RequestMapping(path = "/{id}", method = RequestMethod.PUT)
     public void update(@PathVariable int id, @RequestBody BrandForm brandForm) throws ApiException {
         BrandPojo updatedBrandPojo = convertFormToPojo(brandForm);
         brandService.update(id, updatedBrandPojo);

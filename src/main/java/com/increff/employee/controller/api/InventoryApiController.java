@@ -15,12 +15,13 @@ import java.util.List;
 
 @Api
 @RestController
+@RequestMapping(path = "/api/inventory")
 public class InventoryApiController {
     @Autowired
     private InventoryService inventoryService;
 
     @ApiOperation(value = "Add a inventory")
-    @RequestMapping(path = "/api/inventory", method = RequestMethod.POST)
+    @RequestMapping(path = "", method = RequestMethod.POST)
     protected void add(@RequestBody InventoryForm form) throws ApiException {
         InventoryPojo newInventoryPojo = convertFormToPojo(form);
         //check if inventory is already present
@@ -32,13 +33,13 @@ public class InventoryApiController {
         throw new ApiException("Inventory already present try updating it");
     }
     @ApiOperation(value = "Gets a inventory by id")
-    @RequestMapping(path ="/api/inventory/{id}",method = RequestMethod.GET)
+    @RequestMapping(path ="/{id}",method = RequestMethod.GET)
     public InventoryData get(@PathVariable int id) throws ApiException {
         InventoryPojo inventoryPojo = inventoryService.get(id);
         return convertPojoToData(inventoryPojo);
     }
     @ApiOperation(value = "Gets list of all inventory")
-    @RequestMapping(path = "/api/inventory", method = RequestMethod.GET)
+    @RequestMapping(path = "", method = RequestMethod.GET)
     public List<InventoryData> getAll() {
         List<InventoryPojo> list = inventoryService.getAll();
         List<InventoryData> list2 = new ArrayList<InventoryData>();
@@ -48,7 +49,7 @@ public class InventoryApiController {
         return list2;
     }
     @ApiOperation(value = "Updates a inventory")
-    @RequestMapping(path = "/api/inventory/{id}", method = RequestMethod.PUT)
+    @RequestMapping(path = "/{id}", method = RequestMethod.PUT)
     public void update(@PathVariable int id, @RequestBody InventoryForm inventoryForm) throws ApiException {
         InventoryPojo updatedInventoryPojo = convertFormToPojo(inventoryForm);
         inventoryService.update(id, updatedInventoryPojo);

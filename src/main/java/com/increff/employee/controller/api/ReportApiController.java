@@ -14,22 +14,23 @@ import java.util.List;
 
 @Api
 @RestController
+@RequestMapping("/api/report")
 public class ReportApiController {
     @Autowired
     private ReportService reportService;
 
     @ApiOperation(value = "Get Sales Report")
-    @RequestMapping(path = "/api/report/sales", method = RequestMethod.POST)
+    @RequestMapping(path = "/sales", method = RequestMethod.POST)
     public List<SalesReportData> getSalesReport(@RequestBody ReportDateForm reportDateForm, @RequestParam String brand, @RequestParam String category){
         return reportService.getSalesReport(reportDateForm,brand,category);
     }
     @ApiOperation(value = "Get Brand Report")
-    @RequestMapping(path = "/api/report/brand", method = RequestMethod.POST)
+    @RequestMapping(path = "/brand", method = RequestMethod.POST)
     public List<BrandReportData> getBrandReport(@RequestBody ReportDateForm reportDateForm, @RequestParam String brand, @RequestParam String category){
         return reportService.getBrandReport(reportDateForm,brand,category);
     }
     @ApiOperation(value = "Get Inventory Report")
-    @RequestMapping(path = "/api/report/inventory", method = RequestMethod.POST)
+    @RequestMapping(path = "/inventory", method = RequestMethod.POST)
     public List<InventoryReportData> getInventoryReport(@RequestParam String brand, @RequestParam String category){
         return reportService.getInventoryReport(brand,category);
     }

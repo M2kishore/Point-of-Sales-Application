@@ -21,13 +21,14 @@ import io.swagger.annotations.ApiOperation;
 
 @Api
 @RestController
+@RequestMapping(path = "/api/employee")
 public class EmployeeApiController {
 
 	@Autowired
 	private EmployeeService employeeService;
 
 	@ApiOperation(value = "Adds an employee")
-	@RequestMapping(path = "/api/employee", method = RequestMethod.POST)
+	@RequestMapping(path = "", method = RequestMethod.POST)
 	public void add(@RequestBody EmployeeForm form) throws ApiException {
 		EmployeePojo p = convert(form);
 		employeeService.add(p);
@@ -35,21 +36,21 @@ public class EmployeeApiController {
 
 	
 	@ApiOperation(value = "Deletes an employee")
-	@RequestMapping(path = "/api/employee/{id}", method = RequestMethod.DELETE)
+	@RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
 	// /api/1
 	public void delete(@PathVariable int id) {
 		employeeService.delete(id);
 	}
 
 	@ApiOperation(value = "Gets an employee by ID")
-	@RequestMapping(path = "/api/employee/{id}", method = RequestMethod.GET)
+	@RequestMapping(path = "/{id}", method = RequestMethod.GET)
 	public EmployeeData get(@PathVariable int id) throws ApiException {
 		EmployeePojo p = employeeService.get(id);
 		return convert(p);
 	}
 
 	@ApiOperation(value = "Gets list of all employees")
-	@RequestMapping(path = "/api/employee", method = RequestMethod.GET)
+	@RequestMapping(path = "", method = RequestMethod.GET)
 	public List<EmployeeData> getAll() {
 		List<EmployeePojo> list = employeeService.getAll();
 		List<EmployeeData> list2 = new ArrayList<EmployeeData>();
@@ -60,7 +61,7 @@ public class EmployeeApiController {
 	}
 
 	@ApiOperation(value = "Updates an employee")
-	@RequestMapping(path = "/api/employee/{id}", method = RequestMethod.PUT)
+	@RequestMapping(path = "/{id}", method = RequestMethod.PUT)
 	public void update(@PathVariable int id, @RequestBody EmployeeForm f) throws ApiException {
 		EmployeePojo p = convert(f);
 		employeeService.update(id, p);

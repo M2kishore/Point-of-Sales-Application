@@ -17,13 +17,14 @@ import java.util.List;
 
 @Api
 @RestController
+@RequestMapping(path = "/api/product")
 public class ProductApiController {
     @Autowired
     private ProductService productService;
     @Autowired
     private InventoryService inventoryService;
     @ApiOperation(value = "Add a Product")
-    @RequestMapping(path = "/api/product", method = RequestMethod.POST)
+    @RequestMapping(path = "", method = RequestMethod.POST)
     public void add(@RequestBody ProductForm form) throws ApiException {
         ProductPojo newProductPojo = convertFormToPojo(form);
         int id = productService.add(newProductPojo);
@@ -33,13 +34,13 @@ public class ProductApiController {
         inventoryService.add(inventoryPojo);
     }
     @ApiOperation(value = "Gets a product by ID")
-    @RequestMapping(path ="/api/product/{id}",method = RequestMethod.GET)
+    @RequestMapping(path ="/{id}",method = RequestMethod.GET)
     public ProductData get(@PathVariable int id) throws ApiException {
         ProductPojo productPojo = productService.get(id);
         return convertPojoToData(productPojo);
     }
     @ApiOperation(value = "Gets list of all products")
-    @RequestMapping(path = "/api/product", method = RequestMethod.GET)
+    @RequestMapping(path = "", method = RequestMethod.GET)
     public List<ProductData> getAll() {
         List<ProductPojo> list = productService.getAll();
         List<ProductData> list2 = new ArrayList<ProductData>();
@@ -49,7 +50,7 @@ public class ProductApiController {
         return list2;
     }
     @ApiOperation(value = "Updates a product")
-    @RequestMapping(path = "/api/product/{id}", method = RequestMethod.PUT)
+    @RequestMapping(path = "/{id}", method = RequestMethod.PUT)
     public void update(@PathVariable int id, @RequestBody ProductForm productForm) throws ApiException {
         ProductPojo updatedProductPojo = convertFormToPojo(productForm);
         productService.update(id, updatedProductPojo);
