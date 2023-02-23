@@ -27,12 +27,23 @@ public class ProductServiceTest extends AbstractUnitTest {
         productService.add(productPojo);
     }
     @Test
-    public void testEmptyAdd() throws ApiException{
+    public void testEmptyBarcodeAdd() throws ApiException{
         ProductPojo productPojo = new ProductPojo();
         try{
             productService.add(productPojo);
         }catch (ApiException e){
-            assertEquals("empty string detected cannot be empty",e.getMessage());
+            assertEquals("Barcode cannot be empty",e.getMessage());
+        }
+    }
+    @Test
+    public void testEmptyProductAdd() throws ApiException{
+        ProductPojo productPojo = new ProductPojo();
+        productPojo.setBarcode("qwe123");
+        productPojo.setBrandCategory(1);
+        try{
+            productService.add(productPojo);
+        }catch (ApiException e){
+            assertEquals("Product name cannot be empty",e.getMessage());
         }
     }
     @Test

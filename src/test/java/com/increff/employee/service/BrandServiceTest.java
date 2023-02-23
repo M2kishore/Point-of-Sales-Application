@@ -34,7 +34,44 @@ public class BrandServiceTest extends AbstractUnitTest {
             assertEquals(e.getMessage(),"Brand name or Category name cannot be empty");
         }
     }
-
+    @Test
+    public void testSpecialCharacterAdd() throws ApiException{
+        try{
+            BrandPojo brandPojo = new BrandPojo();
+            brandPojo.setBrand("@Nuke");
+            brandPojo.setCategory("shoe");
+            brandService.add(brandPojo);
+        }catch (ApiException e){
+            assertEquals(e.getMessage(),"Special character in Brand name is not allowed");
+        }
+        try{
+            BrandPojo brandPojo = new BrandPojo();
+            brandPojo.setBrand("Nuke");
+            brandPojo.setCategory("$hoe");
+            brandService.add(brandPojo);
+        }catch (ApiException e){
+            assertEquals(e.getMessage(),"Special character in Category name is not allowed");
+        }
+    }
+    @Test
+    public void testLongNameAdd() throws ApiException{
+        try{
+            BrandPojo brandPojo = new BrandPojo();
+            brandPojo.setBrand("NukeNukeNukeNukeNukeNukeNukeNukeNukeNukeshoeshoe");
+            brandPojo.setCategory("shoe");
+            brandService.add(brandPojo);
+        }catch (ApiException e){
+            assertEquals(e.getMessage(),"Brand name should be less than 20 characters");
+        }
+        try{
+            BrandPojo brandPojo = new BrandPojo();
+            brandPojo.setBrand("Nuke");
+            brandPojo.setCategory("shoeshoeshoeshoeshoeshoeshoeshoeshoeshoeshoeshoe");
+            brandService.add(brandPojo);
+        }catch (ApiException e){
+            assertEquals(e.getMessage(),"Category name should be less than 20 characters");
+        }
+    }
     @Test
     public void testGetSingle() throws ApiException {
         BrandPojo brandPojo = new BrandPojo();
@@ -92,14 +129,14 @@ public class BrandServiceTest extends AbstractUnitTest {
     public void testUpdate() throws ApiException{
         //add
         BrandPojo brandPojo = new BrandPojo();
-        brandPojo.setBrand("nike");
-        brandPojo.setCategory("shoe");
+        brandPojo.setBrand("niky");
+        brandPojo.setCategory("sh");
         brandService.add(brandPojo);
         //update
-        brandPojo = brandService.getAll().get(0);
-        brandPojo.setBrand("nuke");
-        brandPojo.setCategory("shoes");
-        brandService.update(brandPojo.getId(),brandPojo);
+        BrandPojo brandPojo1 = new BrandPojo();
+        brandPojo1.setBrand("nuke");
+        brandPojo1.setCategory("shoes");
+        brandService.update(brandPojo.getId(),brandPojo1);
         //check updated pojo
         BrandPojo updatedBrandPojo = brandService.get(brandPojo.getId());
         assertEquals(updatedBrandPojo.getBrand(),"nuke");

@@ -68,9 +68,6 @@ public class OrderService {
         if(NumberUtil.isNegative((double)newOrderItemPojo.getQuantity())){
             throw new ApiException("Quantity cannot be negative or Zero(0)");
         }
-        if(!NumberUtil.isWholeNumber((double)newOrderItemPojo.getQuantity())){
-            throw new ApiException("Quantity cannot be decimal value");
-        }
         if(NumberUtil.isNegative(newOrderItemPojo.getSellingPrice())){
             throw new ApiException("Selling Price cannot be negative or Zero(0)");
         }

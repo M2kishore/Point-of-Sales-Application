@@ -32,6 +32,50 @@ public class OrderServiceTest extends AbstractUnitTest {
     }
 
     @Test
+    public void testCheckValidity() throws ApiException{
+        try {
+            OrderItemPojo orderItemPojo = new OrderItemPojo();
+            orderItemPojo.setOrderId(1);
+            orderItemPojo.setProductId(1);
+            orderItemPojo.setQuantity(-1);
+            orderItemPojo.setSellingPrice(100);
+            orderService.add(orderItemPojo);
+        }catch (ApiException e){
+            assertEquals("Quantity cannot be negative or Zero(0)",e.getMessage());
+        }
+        try {
+            OrderItemPojo orderItemPojo = new OrderItemPojo();
+            orderItemPojo.setOrderId(1);
+            orderItemPojo.setProductId(1);
+            orderItemPojo.setQuantity(1);
+            orderItemPojo.setSellingPrice(-100);
+            orderService.add(orderItemPojo);
+        }catch (ApiException e){
+            assertEquals("Selling Price cannot be negative or Zero(0)",e.getMessage());
+        }
+        try {
+            OrderItemPojo orderItemPojo = new OrderItemPojo();
+            orderItemPojo.setOrderId(1);
+            orderItemPojo.setProductId(1);
+            orderItemPojo.setQuantity(1);
+            orderItemPojo.setSellingPrice(-100);
+            orderService.add(orderItemPojo);
+        }catch (ApiException e){
+            assertEquals("Selling Price cannot be negative or Zero(0)",e.getMessage());
+        }
+        try {
+            OrderItemPojo orderItemPojo = new OrderItemPojo();
+            orderItemPojo.setOrderId(1);
+            orderItemPojo.setProductId(1);
+            orderItemPojo.setQuantity(1);
+            orderItemPojo.setSellingPrice(100.123);
+            orderService.add(orderItemPojo);
+        }catch (ApiException e){
+            assertEquals("Selling Price must have less than 2 decimal places",e.getMessage());
+        }
+    }
+
+    @Test
     public void testAddItem() throws ApiException{
         //get order id
         OrderPojo orderPojo = new OrderPojo();

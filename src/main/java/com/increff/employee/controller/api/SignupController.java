@@ -17,6 +17,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Api
 @RestController
@@ -33,13 +35,40 @@ public class SignupController {
         //check user presence
         boolean isPresent = checkUserPresence(signupForm.getEmail());
         if(isPresent){
-            return new ModelAndView("redirect:/site/login");
+            return new ModelAndView("redirect:/site/signup");
+        }
+        if(!isStrongPassword(signupForm.getPassword())){
+            return new ModelAndView("redirect:/site/signup");
         }
         UserPojo userPojo = convert(signupForm);
         userService.add(userPojo);
-        info.setSignupMessage("User Added, Now you can login");
+        info.setSignupMessage("");
+        info.setMessage("User Added, Now you can login");
         return new ModelAndView("redirect:/site/login");
     }
+
+    private boolean isStrongPassword(String password) throws ApiException {
+        if(password.length() < 8){
+            info.setSignupMessage("The password length is too short");
+            return false;
+        }
+        String regex = "^(?=.*[a-z])(?=."
+                + "*[A-Z])(?=.*\\d)"
+                + "(?=.*[-+_!@#$%^&*., ?]).+$";
+
+        // Compile the ReGex
+        Pattern p = Pattern.compile(regex);
+        Matcher m = p.matcher(password);
+
+        // Print Yes if string
+        // matches ReGex
+        if (m.matches()){
+            return true;
+        }
+        info.setSignupMessage("Make sure atleast there is 1 Uppercase, 1 Lowercase, 1 Number and 1 Special Character");
+        return false;
+    }
+
     private UserPojo convert(SignupForm signupForm) throws ApiException {
         //set the role
         String role = "operator";

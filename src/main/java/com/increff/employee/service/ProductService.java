@@ -19,7 +19,7 @@ public class ProductService {
         if (StringUtil.isEmpty(newProductPojo.getBarcode())){
             throw new ApiException("Barcode cannot be empty");
         }
-        if (StringUtil.isEmpty(String.valueOf(newProductPojo.getBrandCategory()))){
+        if (newProductPojo.getBrandCategory() == 0){
             throw new ApiException("Brand Category cannot be empty");
         }
         if (StringUtil.isEmpty(newProductPojo.getName())){
